@@ -1,70 +1,43 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">twitter-ui</h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+  <main class="min-h-screen">
+    <div class="grid grid-cols-2 h-screen">
+      <div class="flex items-center justify-center">
+        <ul>
+          <li>Follow your interests.</li>
+          <li>Hear what people are talking about.</li>
+          <li>Join the converstation.</li>
+        </ul>
+      </div>
+      <div>
+        <h1>See what's happening in the world right now</h1>
+
+        <sub>Join Twitter today.</sub>
+        <button>Sign Up</button>
+        <button>Log in</button>
       </div>
     </div>
-  </div>
+    <footer>
+      <ul>
+        <li>About</li>
+        <li>Help Center</li>
+        <li>Terms of Service</li>
+        <li>Privacy Policy</li>
+        <li>Cookie Policy</li>
+        <li>Ads Info</li>
+        <li>Blog</li>
+        <li>Status</li>
+        <li>Careers</li>
+        <li>Brand Resources</li>
+        <li>Advertising</li>
+        <li>Marketing</li>
+        <li>Twitter for Business</li>
+      </ul>
+    </footer>
+  </main>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue from 'vue';
 
-export default Vue.extend({})
+export default Vue.extend({});
 </script>
-
-<style>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-@apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
