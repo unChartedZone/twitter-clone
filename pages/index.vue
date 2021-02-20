@@ -12,12 +12,12 @@
         <h1>See what's happening in the world right now</h1>
 
         <sub>Join Twitter today.</sub>
-        <button>Sign Up</button>
-        <button>Log in</button>
+        <v-button>Sign Up</v-button>
+        <v-button>Log In</v-button>
       </div>
     </div>
-    <footer>
-      <ul>
+    <footer class="fixed bottom-0 w-full">
+      <ul class="flex justify-center space-x-8">
         <li>About</li>
         <li>Help Center</li>
         <li>Terms of Service</li>
@@ -39,5 +39,11 @@
 <script lang="ts">
 import Vue from 'vue';
 
-export default Vue.extend({});
+export default Vue.extend({
+  data() {
+    return {
+      showLoginForm: false,
+    };
+  },
+});
 </script>
