@@ -1,7 +1,7 @@
 <template>
-  <main class="min-h-screen">
-    <div class="grid grid-cols-2 h-screen">
-      <div class="flex items-center justify-center">
+  <main class="flex flex-col h-screen" style="border: 1px solid red">
+    <div class="grid grid-cols-2 flex-grow">
+      <div class="some">
         <ul>
           <li>Follow your interests.</li>
           <li>Hear what people are talking about.</li>
@@ -16,7 +16,7 @@
         <v-button>Log In</v-button>
       </div>
     </div>
-    <footer class="fixed bottom-0 w-full">
+    <footer class="w-full border border-red-500">
       <ul class="flex justify-center space-x-8">
         <li>About</li>
         <li>Help Center</li>
@@ -31,6 +31,10 @@
         <li>Advertising</li>
         <li>Marketing</li>
         <li>Twitter for Business</li>
+        <li>Developers</li>
+        <li>Directory</li>
+        <li>Settings</li>
+        <li>@{{ year }} Twitter, Inc.</li>
       </ul>
     </footer>
   </main>
@@ -45,5 +49,19 @@ export default Vue.extend({
       showLoginForm: false,
     };
   },
+  computed: {
+    year() {
+      return new Date().getFullYear();
+    },
+  },
 });
 </script>
+
+<style scoped lang="scss">
+.some {
+  background-image: url('https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png');
+  @apply flex;
+  @apply justify-center;
+  @apply items-center;
+}
+</style>

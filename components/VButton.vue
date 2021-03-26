@@ -9,5 +9,6 @@ button {
   @apply bg-blue-500;
   @apply px-4;
   @apply rounded-lg;
+  @apply text-white;
 }
 </style>
