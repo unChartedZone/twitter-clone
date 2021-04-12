@@ -1,23 +1,41 @@
 <template>
-  <main class="flex flex-col h-screen" style="border: 1px solid red">
+  <main class="flex flex-col h-screen bg-black text-white">
     <div class="grid grid-cols-2 flex-grow">
-      <div class="some">
-        <ul>
-          <li>Follow your interests.</li>
-          <li>Hear what people are talking about.</li>
-          <li>Join the converstation.</li>
-        </ul>
-      </div>
-      <div>
-        <h1>See what's happening in the world right now</h1>
+      <section class="left-pane">
+        <img
+          class="h-1/3"
+          src="~/assets/svg/bird.svg"
+          alt="Twitter Bird Icon"
+        />
+      </section>
 
-        <sub>Join Twitter today.</sub>
-        <v-button>Sign Up</v-button>
-        <v-button>Log In</v-button>
-      </div>
+      <section class="flex flex-col h-full p-4">
+        <div>
+          <input type="text" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <v-button outlined>Log In</v-button>
+        </div>
+
+        <div class="flex items-center flex-grow">
+          <div>
+            <img
+              class="h-20 mb-8"
+              src="~/assets/svg/bird.svg"
+              alt="Twitter Bird Icon"
+            />
+            <h1 class="text-6xl font-bold my-8">Happening Now</h1>
+            <h3 class="my-8">Join Twitter Today.</h3>
+            <v-button>Sign Up</v-button>
+            <v-button outlined>Log In</v-button>
+          </div>
+        </div>
+      </section>
     </div>
-    <footer class="w-full border border-red-500">
-      <ul class="flex justify-center space-x-8">
+
+    <footer class="w-full flex justify-center">
+      <ul
+        class="flex flex-wrap justify-center py-4 space-x-8 text-xs text-gray-500 mx-auto"
+      >
         <li>About</li>
         <li>Help Center</li>
         <li>Terms of Service</li>
@@ -58,7 +76,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-.some {
+.left-pane {
   background-image: url('https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png');
   @apply flex;
   @apply justify-center;
