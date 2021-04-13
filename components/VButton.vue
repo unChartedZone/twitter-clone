@@ -1,7 +1,7 @@
 <template>
   <button
     class="btn"
-    :class="{ 'btn--outline': outlined }"
+    :class="{ 'btn--outline': outlined, 'btn--block': block }"
     @click="$emit('click')"
   >
     <slot />
@@ -13,6 +13,10 @@ import Vue from 'vue';
 
 export default Vue.extend({
   props: {
+    block: {
+      default: false,
+      type: Boolean,
+    },
     outlined: {
       default: false,
       type: Boolean,
@@ -33,6 +37,11 @@ export default Vue.extend({
     @apply border;
     @apply border-blue-500;
     @apply bg-transparent;
+  }
+
+  &--block {
+    @apply block;
+    @apply w-full;
   }
 }
 </style>
