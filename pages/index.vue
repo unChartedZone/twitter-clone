@@ -9,7 +9,7 @@
         />
       </section>
 
-      <section class="flex flex-col h-full p-4">
+      <section class="flex flex-col h-full p-6">
         <div>
           <input type="text" placeholder="Email" />
           <input type="password" placeholder="Password" />
@@ -19,14 +19,16 @@
         <div class="flex items-center flex-grow">
           <div>
             <img
-              class="h-20 mb-8"
+              class="h-16 mb-8"
               src="~/assets/svg/bird.svg"
               alt="Twitter Bird Icon"
             />
             <h1 class="text-6xl font-bold my-8">Happening Now</h1>
-            <h3 class="my-8">Join Twitter Today.</h3>
-            <v-button>Sign Up</v-button>
-            <v-button outlined>Log In</v-button>
+            <h2 class="text-3xl font-bold my-8">Join Twitter Today.</h2>
+            <div class="flex flex-col gap-4">
+              <v-button>Sign Up</v-button>
+              <v-button outlined>Log In</v-button>
+            </div>
           </div>
         </div>
       </section>
