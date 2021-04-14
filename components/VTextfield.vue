@@ -2,9 +2,9 @@
   <div
     class="relative border border-gray-400 rounded-md p-4 focus-within:border-blue-500"
   >
-    <label class="absolute">{{ label }}</label>
+    <label class="textfield__label absolute pointer-events-none">{{ label }}</label>
     <input
-      class="w-full bg-transparent outline-none"
+      class="textfield__input w-full bg-transparent outline-none"
       :placeholder="placeholder"
       :type="type"
     />
@@ -30,3 +30,15 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.textfield {
+  &__input:placeholder-shown + &__label {
+    color: red !important;
+  } 
+}
+
+input:placeholder-shown + label {
+    color: red;
+}
+</style>

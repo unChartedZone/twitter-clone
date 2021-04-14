@@ -11,8 +11,8 @@
 
       <section class="flex flex-col h-full p-6">
         <div>
-          <input type="text" placeholder="Email" />
-          <input type="password" placeholder="Password" />
+          <v-textfield label="Email" type="text" />
+          <v-textfield label="Password" type="password" />
           <v-button outlined>Log In</v-button>
         </div>
 
@@ -27,7 +27,7 @@
             <h2 class="text-3xl font-bold my-8">Join Twitter Today.</h2>
             <div class="flex flex-col gap-4">
               <v-button>Sign Up</v-button>
-              <v-button outlined>Log In</v-button>
+              <v-button @click="$router.push('/login')" outlined>Log in</v-button>
             </div>
           </div>
         </div>
