@@ -1,13 +1,11 @@
 <template>
   <div
-    class="relative border border-gray-400 rounded-md p-4 focus-within:border-blue-500"
+    class="relative border border-gray-400 rounded-md pt-8 px-4 pb-4 focus-within:border-blue-500"
   >
-    <label class="textfield__label absolute pointer-events-none">{{ label }}</label>
-    <input
-      class="textfield__input w-full bg-transparent outline-none"
-      :placeholder="placeholder"
-      :type="type"
-    />
+    <input class="textfield__input" :placeholder="placeholder" :type="type" />
+    <label class="textfield__label">
+      {{ label }}
+    </label>
   </div>
 </template>
 
@@ -20,7 +18,7 @@ export default Vue.extend({
       type: String,
     },
     placeholder: {
-      default: '',
+      default: 'This is a textfield.',
       type: String,
     },
     type: {
@@ -33,12 +31,39 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .textfield {
-  &__input:placeholder-shown + &__label {
-    color: red !important;
-  } 
-}
+  &__label {
+    @apply absolute;
+    @apply pointer-events-none;
+    @apply left-4;
+    @apply transition-all;
 
-input:placeholder-shown + label {
-    color: red;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__input {
+    @apply w-full;
+    @apply bg-transparent;
+    @apply outline-none;
+
+    &:placeholder-shown + label {
+      @apply text-gray-500;
+    }
+
+    &:not(:focus) + label {
+      @apply text-gray-500;
+    }
+
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
+      @apply text-blue-500;
+      transform: translateY(-125%);
+      font-size: 0.85rem;
+    }
+
+    &::placeholder {
+      opacity: 0;
+    }
+  }
 }
 </style>
