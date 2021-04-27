@@ -5,7 +5,12 @@
       <h1 class="text-4xl font-bold">Log in to Twitter</h1>
       <v-textfield label="Phone, email, or username" placeholder="Phone" />
       <v-textfield label="Password" type="password" />
-      <v-button block>Log in</v-button>
+      <v-button disabled block>Log in</v-button>
+      <div class="flex justify-center gap-2">
+        <v-link>Forgot Password?</v-link>
+        <span>·</span>
+        <v-link>Sign up for Twitter</v-link>
+      </div>
     </div>
   </main>
 </template>

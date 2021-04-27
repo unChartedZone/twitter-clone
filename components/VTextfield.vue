@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative border border-gray-400 rounded-md pt-8 px-4 pb-4 focus-within:border-blue-500"
+    class="relative border border-gray-400 rounded-md focus-within:border-blue-500"
   >
     <input class="textfield__input" :placeholder="placeholder" :type="type" />
     <label class="textfield__label">
@@ -43,14 +43,14 @@ export default Vue.extend({
 
   &__input {
     @apply w-full;
+    @apply h-full;
     @apply bg-transparent;
     @apply outline-none;
+    @apply pt-6;
+    @apply px-4;
+    @apply pb-4;
 
     &:placeholder-shown + label {
-      @apply text-gray-500;
-    }
-
-    &:not(:focus) + label {
       @apply text-gray-500;
     }
 
@@ -59,6 +59,10 @@ export default Vue.extend({
       @apply text-blue-500;
       transform: translateY(-125%);
       font-size: 0.85rem;
+    }
+
+    &:not(:focus) + label {
+      @apply text-gray-500;
     }
 
     &::placeholder {

@@ -27,7 +27,9 @@
             <h2 class="text-3xl font-bold my-8">Join Twitter Today.</h2>
             <div class="flex flex-col gap-4">
               <v-button>Sign Up</v-button>
-              <v-button @click="$router.push('/login')" outlined>Log in</v-button>
+              <v-button outlined @click="$router.push('/login')">
+                Log in
+              </v-button>
             </div>
           </div>
         </div>

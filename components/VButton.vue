@@ -1,7 +1,11 @@
 <template>
   <button
     class="btn"
-    :class="{ 'btn--outline': outlined, 'btn--block': block }"
+    :class="{
+      'btn--disabled': disabled,
+      'btn--outline': outlined,
+      'btn--block': block,
+    }"
     @click="$emit('click')"
   >
     <slot />
@@ -14,6 +18,10 @@ import Vue from 'vue';
 export default Vue.extend({
   props: {
     block: {
+      default: false,
+      type: Boolean,
+    },
+    disabled: {
       default: false,
       type: Boolean,
     },
@@ -32,6 +40,11 @@ export default Vue.extend({
   @apply px-6;
   @apply rounded-3xl;
   @apply text-white;
+
+  &--disabled {
+    @apply bg-blue-900;
+    @apply cursor-not-allowed;
+  }
 
   &--outline {
     @apply border;
