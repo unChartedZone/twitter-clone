@@ -40,6 +40,11 @@ export default Vue.extend({
   @apply px-6;
   @apply rounded-3xl;
   @apply text-white;
+  @apply transition-colors;
+
+  &:hover {
+    @apply bg-blue-600;
+  }
 
   &--disabled {
     @apply bg-blue-900;
