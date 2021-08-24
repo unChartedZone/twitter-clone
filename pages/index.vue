@@ -2,11 +2,7 @@
   <main class="flex flex-col h-screen bg-black text-white">
     <div class="grid grid-cols-2 flex-grow">
       <section class="left-pane">
-        <img
-          class="h-1/3"
-          src="~/assets/svg/bird.svg"
-          alt="Twitter Bird Icon"
-        />
+        <img class="h-96" src="~/assets/svg/bird.svg" alt="Twitter Bird Icon" />
       </section>
 
       <section class="flex flex-col h-full p-6">

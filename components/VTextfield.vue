@@ -59,6 +59,7 @@ export default Vue.extend({
       @apply text-blue-500;
       transform: translateY(-125%);
       font-size: 0.85rem;
+      padding-bottom: 0.2rem;
     }
 
     &:not(:focus) + label {
