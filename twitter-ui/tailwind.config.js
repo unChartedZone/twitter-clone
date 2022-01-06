@@ -11,7 +11,12 @@ module.exports = {
     './nuxt.config.{js,ts}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        // Complex site-specific column configuration
+        'main-content': '1fr 2fr 1.5fr',
+      },
+    },
   },
   variants: {},
   plugins: [],

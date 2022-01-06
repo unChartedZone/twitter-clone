@@ -1,28 +1,21 @@
 <template>
   <main class="flex flex-col h-screen bg-black text-white">
     <div class="grid grid-cols-2 flex-grow">
-      <section class="left-pane">
-        <img
-          class="h-1/3"
-          src="~/assets/svg/bird.svg"
-          alt="Twitter Bird Icon"
-        />
+      <section class="left-pane h-full">
+        <div class="relative h-1/2 flex justify-center align-center">
+          <TwitterLogo class="h-full absolute fill-current" />
+        </div>
       </section>
-
       <section class="flex flex-col h-full p-6">
-        <div>
+        <!-- <div>
           <v-textfield label="Email" type="text" />
           <v-textfield label="Password" type="password" />
           <v-button outlined>Log In</v-button>
-        </div>
+        </div> -->
 
         <div class="flex items-center flex-grow">
           <div>
-            <img
-              class="h-16 mb-8"
-              src="~/assets/svg/bird.svg"
-              alt="Twitter Bird Icon"
-            />
+            <TwitterLogo class="h-16 mb-8 fill-current" />
             <h1 class="text-6xl font-bold my-8">Happening Now</h1>
             <h2 class="text-3xl font-bold my-8">Join Twitter Today.</h2>
             <div class="flex flex-col gap-4">
@@ -64,8 +57,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import TwitterLogo from '@/assets/svg/bird.svg';
 
 export default Vue.extend({
+  components: { TwitterLogo },
   data() {
     return {
       showLoginForm: false,
