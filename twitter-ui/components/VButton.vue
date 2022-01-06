@@ -35,15 +35,16 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .btn {
-  @apply bg-blue-500;
+  background-color: #1da1f2;
   @apply py-3;
   @apply px-6;
   @apply rounded-3xl;
   @apply text-white;
   @apply transition-colors;
+  @apply outline-none;
 
   &:hover {
-    @apply bg-blue-600;
+    background-color: rgba(26, 145, 218);
   }
 
   &--disabled {
@@ -55,6 +56,10 @@ export default Vue.extend({
     @apply border;
     @apply border-blue-500;
     @apply bg-transparent;
+
+    &:hover {
+      background-color: rgba(29, 161, 242, 0.1);
+    }
   }
 
   &--block {
