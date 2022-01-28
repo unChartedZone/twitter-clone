@@ -2,7 +2,13 @@
   <div
     class="relative border border-gray-400 rounded-md focus-within:border-blue-500"
   >
-    <input class="textfield__input" :placeholder="placeholder" :type="type" />
+    <input
+      class="textfield__input"
+      :placeholder="placeholder"
+      :type="type"
+      :value="value"
+      @input="updateValue($event.target.value)"
+    />
     <label class="textfield__label">
       {{ label }}
     </label>
@@ -24,6 +30,15 @@ export default Vue.extend({
     type: {
       default: 'text',
       type: String,
+    },
+    value: {
+      type: String,
+      default: '',
+    },
+  },
+  methods: {
+    updateValue(value: String) {
+      this.$emit('input', value);
     },
   },
 });
