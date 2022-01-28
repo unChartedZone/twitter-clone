@@ -1,6 +1,8 @@
 require "active_support/core_ext/integer/time"
+require 'dotenv/load'
 
 Rails.application.configure do
+  Dotenv.load '../../.env.development'
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
@@ -63,4 +65,7 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+
+  config.x.access_secret = ENV.fetch('ACCESS_SECRET')
+  config.x.refresh_secret = ENV.fetch('REFRESH_SECRET')
 end
