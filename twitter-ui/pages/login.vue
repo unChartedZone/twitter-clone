@@ -6,9 +6,22 @@
       </div>
       <!-- <img class="h-16" src="~/assets/svg/bird.svg" alt="Twitter Bird Icon" /> -->
       <h1 class="text-4xl font-bold">Log in to Twitter</h1>
-      <v-textfield label="Phone, email, or username" placeholder="Phone" />
-      <v-textfield label="Password" type="password" />
-      <v-button disabled block>Log in</v-button>
+
+      <form @submit.prevent="handleLoginSubmit">
+        <div class="space-y-4">
+          <v-textfield
+            v-model="user.email"
+            label="Phone, email, or username"
+            placeholder="Phone"
+          />
+          <v-textfield
+            v-model="user.password"
+            label="Password"
+            type="password"
+          />
+          <v-button block>Log in</v-button>
+        </div>
+      </form>
       <div class="flex justify-center gap-2">
         <v-link>Forgot Password?</v-link>
         <span>·</span>
@@ -24,5 +37,28 @@ import TwitterLogo from '@/assets/svg/bird.svg';
 
 export default Vue.extend({
   components: { TwitterLogo },
+  data() {
+    return {
+      user: {
+        email: '',
+        password: '',
+      },
+    };
+  },
+  methods: {
+    async handleLoginSubmit() {
+      try {
+        await this.$axios.post('/login', {
+          user: this.user,
+        });
+
+        // set user state from response
+
+        this.$router.push('/home');
+      } catch (e: any) {
+        console.log(e.message);
+      }
+    },
+  },
 });
 </script>
