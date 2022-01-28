@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   get 'potato', to: 'pages#potato'
   post 'signup', to: 'auth#signup'
   post 'login', to: 'auth#login'
+  get 'refresh_token', to: 'auth#refresh_current_token'
 end
