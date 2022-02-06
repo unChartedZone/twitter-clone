@@ -45,6 +45,31 @@ class AuthController < ApplicationController
 
     render json: { access_token: access_token, user: @user }
   end
+
+  def refresh_current_token
+    refresh_token = cookies[:refresh_token]
+
+    unless refresh_token
+      return render json: { access_token: '' }, status: :unauthorized
+    end
+
+    begin
+      decoded_refresh_token = JWT.decode(refresh_token, @refresh_secret, true)
+    rescue JWT::DecodeError
+      Rails.logger.warn  'Error decoding refresh jwt'
+      set_refresh_token_cookie('') # set an empty refresh token in the cookie
+      return render json: {message: 'SUPER NOT AUTHORIZED', access_token: ''}, status: :unauthorized
+    end
+
+    payload = decoded_refresh_token[0]
+    new_access_token = generate_access_jwt(payload)
+    new_refresh_token = generate_refresh_token(payload)
+
+    set_refresh_token_cookie(new_refresh_token)
+
+    render json: { access_token: new_access_token, refresh_token: new_refresh_token, message: 'Refreshed Token!' }
+  end
+
   def user
     pattern = /^Bearer /
     header  = request.headers['Authorization']
@@ -72,7 +97,7 @@ class AuthController < ApplicationController
 
   def generate_access_jwt(payload)
     JWT.encode(payload, @access_secret, 'HS256')
-    end
+  end
 
   def generate_refresh_token(payload)
     JWT.encode(payload, @refresh_secret, 'HS256')
