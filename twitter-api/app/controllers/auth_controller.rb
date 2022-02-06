@@ -45,6 +45,29 @@ class AuthController < ApplicationController
 
     render json: { access_token: access_token, user: @user }
   end
+  def user
+    pattern = /^Bearer /
+    header  = request.headers['Authorization']
+
+    # If they don't have an access token, then they're not authorized
+    unless header && header.match(pattern)
+      return render json: { message: 'Not authorized'}, status: :unauthorized
+    end
+
+    access_token = header.gsub(pattern, '')
+
+    begin
+      decoded_access_token = JWT.decode access_token, @access_secret, true
+    rescue JWT::DecodeError
+      Rails.logger.warn  'Error decoding jwt'
+      return render json: {message: 'Really not AUTHORIZED', access_token: ''}, status: :unauthorized
+    end
+
+    payload = decoded_access_token[0]
+    user_id = payload['user_id']
+    user = User.find(user_id)
+
+    render json: { user: user, message: 'Authorized' }
   end
 
   def generate_access_jwt(payload)
