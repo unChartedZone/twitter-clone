@@ -43,7 +43,8 @@ class AuthController < ApplicationController
       expires: 7.days.from_now
     }
 
-    render json: { access_token: access_token }
+    render json: { access_token: access_token, user: @user }
+  end
   end
 
   def generate_access_jwt(payload)
