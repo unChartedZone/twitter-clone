@@ -1,6 +1,14 @@
 class AuthController < ApplicationController
   require 'jwt'
 
+  before_action :setup_env
+
+  def setup_env
+    @access_secret = ENV['ACCESS_SECRET']
+    # @refresh_secret = Rails.configuration.x.refresh_secret
+    @refresh_secret = ENV['REFRESH_SECRET']
+  end
+
   def signup
     @user = User.new(user_params)
 
@@ -39,15 +47,11 @@ class AuthController < ApplicationController
   end
 
   def generate_access_jwt(payload)
-    access_secret = Rails.configuration.x.access_secret
-
-    JWT.encode(payload, access_secret, 'HS256')
+    JWT.encode(payload, @access_secret, 'HS256')
     end
 
   def generate_refresh_token(payload)
-    refresh_secret = Rails.configuration.x.refresh_secret
-
-    JWT.encode(payload, refresh_secret, 'HS256')
+    JWT.encode(payload, @refresh_secret, 'HS256')
   end
 
   def set_refresh_token_cookie(token)
