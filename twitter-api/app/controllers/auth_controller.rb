@@ -32,9 +32,11 @@ class AuthController < ApplicationController
       return render json: { message: 'Username or Password was incorrect.' }, status: :unauthorized
     end
 
-    payload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 15 * 60 }
-    access_token = generate_access_jwt(payload)
-    refresh_token = generate_refresh_token(payload)
+    accessPayload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 15 * 60 }
+    refreshPayload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 60 * 60 * 24 }
+
+    access_token = generate_access_jwt(accessPayload)
+    refresh_token = generate_refresh_token(refreshPayload)
     # set_refresh_token_cookie(refresh_token)
     cookies[:refresh_token] = {
       value: refresh_token,
@@ -62,12 +64,18 @@ class AuthController < ApplicationController
     end
 
     payload = decoded_refresh_token[0]
-    new_access_token = generate_access_jwt(payload)
-    new_refresh_token = generate_refresh_token(payload)
+    user_id = payload['user_id']
+    @user = User.find(user_id)
+
+    accessPayload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 15 * 60 }
+    refreshPayload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 60 * 60 * 24 }
+
+    new_access_token = generate_access_jwt(accessPayload)
+    new_refresh_token = generate_refresh_token(refreshPayload)
 
     set_refresh_token_cookie(new_refresh_token)
 
-    render json: { access_token: new_access_token, refresh_token: new_refresh_token, message: 'Refreshed Token!' }
+    render json: { access_token: new_access_token, user: @user, refresh_token: new_refresh_token, message: 'Refreshed Token!' }
   end
 
   def user
