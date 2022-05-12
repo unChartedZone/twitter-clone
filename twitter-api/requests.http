@@ -26,3 +26,26 @@ Content-Type: application/json
 }
 
 ###
+
+# @name getUser
+GET {{base-url}}/user
+Authorization: Bearer {{login.response.body.access_token}}
+
+##
+
+# @name fetchTweets
+GET {{base-url}}/tweets
+
+###
+
+# @name createTweet
+POST {{base-url}}/tweets
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access_token}}
+
+{
+  "tweet": {
+    "text": "My first tweet!"
+  }
+}
+###

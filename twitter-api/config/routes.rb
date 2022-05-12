@@ -8,5 +8,10 @@ Rails.application.routes.draw do
   post 'signup', to: 'auth#signup'
   post 'login', to: 'auth#login'
   post 'refresh_token', to: 'auth#refresh_current_token'
+
+  # User endpoints
   get 'user', to: 'auth#user'
+
+  # Tweet Endpoints
+  resources :tweets, only: %i[index create]
 end
