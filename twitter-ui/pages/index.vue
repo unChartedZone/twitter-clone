@@ -61,6 +61,7 @@ import TwitterLogo from '@/assets/svg/bird.svg';
 
 export default Vue.extend({
   components: { TwitterLogo },
+  layout: 'guest',
   data() {
     return {
       showLoginForm: false,

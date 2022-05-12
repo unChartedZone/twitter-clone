@@ -33,10 +33,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { mapMutations } from 'vuex';
 import TwitterLogo from '@/assets/svg/bird.svg';
 
 export default Vue.extend({
   components: { TwitterLogo },
+  layout: 'guest',
   data() {
     return {
       user: {
@@ -46,13 +48,16 @@ export default Vue.extend({
     };
   },
   methods: {
+    ...mapMutations({ setUser: 'auth/setUser' }),
     async handleLoginSubmit() {
       try {
-        await this.$axios.post('/login', {
+        const response = await this.$axios.post('/login', {
           user: this.user,
         });
 
         // set user state from response
+        const { user, access_token: accessToken } = response.data;
+        this.setUser({ user, accessToken });
 
         this.$router.push('/home');
       } catch (e: any) {
