@@ -1,59 +1,61 @@
 <template>
-  <aside class="h-screen py-4 pr-8">
-    <TwitterLogo class="h-8 mb-4 fill-current" />
-    <ul class="space-y-2 my-2">
-      <li class="list__item">
-        <a href="#" class="flex items-center">
-          <HomeIcon class="w-6 mr-2" />
-          Home
-        </a>
-      </li>
-      <li class="list__item">
-        <a href="#" class="flex items-center">
-          <PoundIcon class="w-6 mr-2" />
-          Explore
-        </a>
-      </li>
-      <li class="list__item">
-        <a href="#" class="flex items-center">
-          <BellIcon class="w-6 mr-2" />
-          Notifications
-        </a>
-      </li>
-      <li class="list__item">
-        <a href="#" class="flex items-center">
-          <MessageIcon class="w-6 mr-2" />
-          Messages
-        </a>
-      </li>
-      <li class="list__item">
-        <a href="#" class="flex items-center">
-          <BookmarkIcon class="w-6 mr-2" />
-          Bookmarks
-        </a>
-      </li>
-      <li class="list__item">
-        <a href="#" class="flex items-center">
-          <ListIcon class="w-6 mr-2" />
-          Lists
-        </a>
-      </li>
-      <li class="list__item">
-        <a href="#" class="flex items-center">
-          <PersonIcon class="w-6 mr-2" />
-          Profile
-        </a>
-      </li>
-      <li class="list__item">
-        <a href="#" class="flex items-center">
-          <MoreIcon class="w-6 mr-2" />
-          More
-        </a>
-      </li>
-    </ul>
-    <v-button block>Tweet</v-button>
+  <aside class="h-screen py-4 pr-8 flex flex-col justify-between">
+    <div>
+      <TwitterLogo class="h-8 mb-4 ml-2 fill-current" />
+      <ul class="space-y-2 my-2">
+        <li class="list__item">
+          <nuxt-link to="/home" class="flex items-center">
+            <HomeIcon class="w-6 mr-2" />
+            Home
+          </nuxt-link>
+        </li>
+        <li class="list__item">
+          <a href="#" class="flex items-center">
+            <PoundIcon class="w-6 mr-2" />
+            Explore
+          </a>
+        </li>
+        <li class="list__item">
+          <a href="#" class="flex items-center">
+            <BellIcon class="w-6 mr-2" />
+            Notifications
+          </a>
+        </li>
+        <li class="list__item">
+          <a href="#" class="flex items-center">
+            <MessageIcon class="w-6 mr-2" />
+            Messages
+          </a>
+        </li>
+        <li class="list__item">
+          <a href="#" class="flex items-center">
+            <BookmarkIcon class="w-6 mr-2" />
+            Bookmarks
+          </a>
+        </li>
+        <li class="list__item">
+          <a href="#" class="flex items-center">
+            <ListIcon class="w-6 mr-2" />
+            Lists
+          </a>
+        </li>
+        <li class="list__item">
+          <nuxt-link to="/profile" class="flex items-center">
+            <PersonIcon class="w-6 mr-2" />
+            Profile
+          </nuxt-link>
+        </li>
+        <li class="list__item">
+          <a href="#" class="flex items-center">
+            <MoreIcon class="w-6 mr-2" />
+            More
+          </a>
+        </li>
+      </ul>
+      <v-button block>Tweet</v-button>
+    </div>
     <div class="flex justify-between">
-      <div class="h-14 w-14 bg-red-600 rounded-full"></div>
+      <div class="h-14 w-14 bg-black rounded-full"></div>
       <div>
         <h3>Christian Valdez</h3>
         <p>@unchartedzones</p>
