@@ -40,6 +40,10 @@ export default {
     '@nuxtjs/pwa',
   ],
 
+  router: {
+    middleware: ['auth'],
+  },
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: 'http://localhost:8081',
