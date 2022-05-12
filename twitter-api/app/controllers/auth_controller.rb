@@ -32,11 +32,11 @@ class AuthController < ApplicationController
       return render json: { message: 'Username or Password was incorrect.' }, status: :unauthorized
     end
 
-    accessPayload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 15 * 60 }
-    refreshPayload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 60 * 60 * 24 }
+    access_payload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 15 * 60 }
+    refresh_payload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 60 * 60 * 24 }
 
-    access_token = generate_access_jwt(accessPayload)
-    refresh_token = generate_refresh_token(refreshPayload)
+    access_token = generate_access_jwt(access_payload)
+    refresh_token = generate_refresh_token(refresh_payload)
     # set_refresh_token_cookie(refresh_token)
     cookies[:refresh_token] = {
       value: refresh_token,
@@ -67,11 +67,11 @@ class AuthController < ApplicationController
     user_id = payload['user_id']
     @user = User.find(user_id)
 
-    accessPayload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 15 * 60 }
-    refreshPayload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 60 * 60 * 24 }
+    access_payload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 15 * 60 }
+    refresh_payload = { user_id: @user.id, email: @user.email, exp: Time.now.to_i + 60 * 60 * 24 }
 
-    new_access_token = generate_access_jwt(accessPayload)
-    new_refresh_token = generate_refresh_token(refreshPayload)
+    new_access_token = generate_access_jwt(access_payload)
+    new_refresh_token = generate_refresh_token(refresh_payload)
 
     set_refresh_token_cookie(new_refresh_token)
 
@@ -92,8 +92,8 @@ class AuthController < ApplicationController
     begin
       decoded_access_token = JWT.decode access_token, @access_secret, true
     rescue JWT::DecodeError
-      Rails.logger.warn  'Error decoding jwt'
-      return render json: {message: 'Really not AUTHORIZED', access_token: ''}, status: :unauthorized
+      Rails.logger.warn 'Error decoding jwt'
+      return render json: { message: 'Really not AUTHORIZED', access_token: '' }, status: :unauthorized
     end
 
     payload = decoded_access_token[0]
@@ -120,8 +120,9 @@ class AuthController < ApplicationController
     }
   end
 
+  # Filter parameters for new user request
   def user_params
-    params.require(:user).permit(:username, :email, :password)
+    params.require(:user).permit(:username, :email, :password, :name)
   end
 
   def login_params
