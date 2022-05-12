@@ -1,0 +1,28 @@
+@base-url=http://localhost:8081
+
+# @name login
+POST {{base-url}}/login
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "chris@test.com",
+    "password": "password123"
+  }
+}
+###
+
+# @name signup
+POST {{base-url}}/signup
+Content-Type: application/json
+
+{
+  "user": {
+    "username": "unchartedzone",
+    "email": "chris@test.com",
+    "password": "password123",
+    "name": "Christian Valdez"
+  }
+}
+
+###
