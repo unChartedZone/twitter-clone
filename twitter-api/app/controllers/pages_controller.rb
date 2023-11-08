@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   def index
-    render json: 'Hello World'
+    render json: {message: "Welcome to Twitter API"}
   end
 
   def potato

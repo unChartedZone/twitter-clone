@@ -8,7 +8,11 @@ module Authenticable
     pattern = /^Bearer /
     access_token = header.gsub(pattern, '') # Remove Bearer from auth header value
 
-    decoded = JsonWebToken.decode_access_token(access_token)
+    begin
+      decoded = JsonWebToken.decode_access_token(access_token)
+    rescue JWT::DecodeError => e
+      return head :unauthorized
+    end
     @current_user = User.find(decoded[:user_id]) rescue ActiveRecord::RecordNotFound
   end
 
