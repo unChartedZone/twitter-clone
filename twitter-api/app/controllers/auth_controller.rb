@@ -4,30 +4,25 @@ class AuthController < ApplicationController
   def signup
     @user = User.new(user_params)
 
-    if @user.save
+    if not @user.save
+      render json: @user.errors, status: :unprocessable_entity
+    else
       access_token = JsonWebToken.generate_access_token(@user)
       refresh_token = JsonWebToken.generate_refresh_token(@user)
-
       set_refresh_token_cookie(refresh_token)
-
-      render json: {access_token: access_token, user: @user}, status: :created
-    else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: { access_token: access_token, user: @user }, status: :created
     end
   end
 
   def login
     @user = User.find_by(email: login_params[:email])
-
-    unless @user.authenticate(login_params[:password])
+    unless @user&.authenticate(login_params[:password])
       return render json: { message: 'Username or Password was incorrect.' }, status: :unauthorized
     end
 
     access_token = JsonWebToken.generate_access_token(@user)
     refresh_token = JsonWebToken.generate_refresh_token(@user)
-
     set_refresh_token_cookie(refresh_token)
-
     render json: { access_token: access_token, user: @user }
   end
 
@@ -45,7 +40,7 @@ class AuthController < ApplicationController
     rescue JWT::DecodeError
       Rails.logger.warn 'Error decoding refresh jwt'
       set_refresh_token_cookie('') # set an empty refresh token in the cookie
-      return render json: { message: 'SUPER NOT AUTHORIZED', access_token: '' }, status: :unauthorized
+      return render json: { message: 'Not authorized', access_token: '' }, status: :unauthorized
     end
 
     user_id = decoded_refresh_token['user_id']
@@ -56,33 +51,10 @@ class AuthController < ApplicationController
 
     set_refresh_token_cookie(refresh_token)
 
-    render json: { access_token: access_token, user: @user, message: 'Refreshed Token!' }
+    render json: { access_token: access_token, user: @user }
   end
 
-  def user
-    pattern = /^Bearer /
-    header  = request.headers['Authorization']
-
-    # If they don't have an access token, then they're not authorized
-    unless header && header.match(pattern)
-      return render json: { message: 'Not authorized'}, status: :unauthorized
-    end
-
-    access_token = header.gsub(pattern, '')
-
-    begin
-      decoded_access_token = JWT.decode access_token, @access_secret, true
-    rescue JWT::DecodeError
-      Rails.logger.warn 'Error decoding jwt'
-      return render json: { message: 'Really not AUTHORIZED', access_token: '' }, status: :unauthorized
-    end
-
-    payload = decoded_access_token[0]
-    user_id = payload['user_id']
-    user = User.find(user_id)
-
-    render json: { user: user, message: 'Authorized' }
-  end
+  private
 
   def set_refresh_token_cookie(token)
     cookies[:refresh_token] = {
