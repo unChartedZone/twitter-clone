@@ -27,14 +27,21 @@ Content-Type: application/json
 
 ###
 
-# @name getUser
-GET {{base-url}}/user
+# @name refreshUser
+POST {{base-url}}/refresh
+Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImNocmlzQHRlc3QuY29tIiwiZXhwIjoxNjg3Mzg4NDczfQ.HK84ePZ16YksRXNoSFsOJtz0WYMmJ8HNp88l9uDCEng; path=/; expires=Wed, 21 Jun 2023 23:01:13 GMT; secure; HttpOnly; SameSite=Lax
+
+###
+
+# @name fetchMe
+GET {{base-url}}/me
 Authorization: Bearer {{login.response.body.access_token}}
 
-##
+###
 
 # @name fetchTweets
 GET {{base-url}}/tweets
+Authorization: Bearer {{login.response.body.access_token}}
 
 ###
 
@@ -45,7 +52,7 @@ Authorization: Bearer {{login.response.body.access_token}}
 
 {
   "tweet": {
-    "text": "My first tweet!"
+    "text": "another tweet!"
   }
 }
 ###
