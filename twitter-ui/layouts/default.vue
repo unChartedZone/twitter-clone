@@ -1,5 +1,11 @@
 <template>
-  <Nuxt />
+  <main class="container min-h-screen mx-auto grid grid-cols-main-content">
+    <Sidebar />
+    <Nuxt />
+    <section class="border border-red-500">
+      <v-textfield label="Search" />
+    </section>
+  </main>
 </template>
 
 <style>

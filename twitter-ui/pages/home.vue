@@ -1,25 +1,26 @@
 <template>
-  <main class="container min-h-screen mx-auto grid grid-cols-main-content">
-    <Sidebar />
+  <div>
+    <!-- Home Header -->
     <section>
-      <p>Home</p>
-      <Tweet v-for="tweet in 4" :key="tweet" :text="tempMessage" />
+      <div class="fixed py-2">
+        <h3 class="text-xl font-bold">Home</h3>
+      </div>
     </section>
-    <section class="border border-red-500">
-      <v-textfield label="Search" />
+    <!-- Tweet Form -->
+    <section></section>
+    <!-- Tweets -->
+    <section>
+      <div class="max-h-screen overflow-y-scroll pt-8">
+        <Tweet v-for="tweet in 80" :key="tweet" :text="tempMessage" />
+      </div>
     </section>
-  </main>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 
-import Sidebar from '@/components/Sidebar.vue';
-
 export default Vue.extend({
-  components: {
-    Sidebar,
-  },
   data() {
     return {
       tempMessage: `
