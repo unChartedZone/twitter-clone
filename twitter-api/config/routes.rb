@@ -14,4 +14,5 @@ Rails.application.routes.draw do
 
   # Tweet Endpoints
   resources :tweets, only: %i[index create]
+  resources :medium, only: %i[index create], path: :media
 end
