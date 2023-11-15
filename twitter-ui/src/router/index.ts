@@ -24,7 +24,8 @@ const router = createRouter({
       path: "/home",
       name: "home",
       component: () => import("../views/HomeView.vue"),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, layout: Default },
+    },
     },
   ],
 });
