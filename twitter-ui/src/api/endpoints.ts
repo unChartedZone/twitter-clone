@@ -13,8 +13,16 @@ export async function login(user: {
   return (await client.post<LoginResponse>("/login", { user })).data;
 }
 
-export async function refresh(): Promise<LoginResponse> {
-  return (await client.post("/refresh")).data;
+export async function refresh(): Promise<LoginResponse | undefined> {
+  try {
+    return (await client.post("/refresh")).data;
+  } catch (e) {
+    console.log("Failed to refresh user session");
+  }
+}
+
+export async function logout() {
+  return client.post("/logout");
 }
 
 export async function fetchUserTweets() {

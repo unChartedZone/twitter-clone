@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { login, refresh } from "@/api/endpoints";
+import { login, logout, refresh } from "@/api/endpoints";
 
 export interface User {
   id: string;
@@ -21,8 +21,16 @@ export const useAuthStore = defineStore("auth", () => {
 
   async function refreshUser() {
     const res = await refresh();
-    accessToken.value = res.accessToken;
-    user.value = res.user;
+    if (res) {
+      accessToken.value = res.accessToken;
+      user.value = res.user;
+    }
+  }
+
+  async function logoutUser() {
+    const res = await logout();
+    user.value = undefined;
+    accessToken.value = undefined;
   }
 
   return {
@@ -30,5 +38,6 @@ export const useAuthStore = defineStore("auth", () => {
     user,
     loginUser,
     refreshUser,
+    logoutUser,
   };
 });
