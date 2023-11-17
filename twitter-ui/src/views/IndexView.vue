@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import Button from "@/components/Button.vue";
-import Link from "@/components/Link.vue";
 
 const year = computed(() => new Date().getFullYear());
 </script>

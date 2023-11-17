@@ -9,7 +9,7 @@ interface IconProps {
 const props = withDefaults(defineProps<IconProps>(), { fill: "black" });
 
 const icon = defineAsyncComponent(
-  () => import(`../assets/svg/${props.name}.svg`)
+  () => import(`../../assets/svg/${props.name}.svg`)
 );
 </script>
 

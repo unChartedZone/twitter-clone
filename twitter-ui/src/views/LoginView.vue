@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import Button from "@/components/Button.vue";
-import Link from "@/components/Link.vue";
-import Icon from "@/components/Icon.vue";
-import Textfield from "@/components/Textfield.vue";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();

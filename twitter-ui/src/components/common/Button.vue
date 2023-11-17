@@ -20,6 +20,7 @@ const props = defineProps<{
   border-radius: 1.5rem;
   color: white;
   cursor: pointer;
+  font-size: 1.15rem;
   outline: none;
   padding: 0.75rem 1.5rem;
 
