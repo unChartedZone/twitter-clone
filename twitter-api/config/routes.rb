@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post 'signup', to: 'auth#signup'
   post 'login', to: 'auth#login'
   post 'refresh', to: 'auth#refresh_current_token'
+  post 'logout', to: 'auth#logout'
 
   # User endpoints
   get 'me', to: 'users#me'

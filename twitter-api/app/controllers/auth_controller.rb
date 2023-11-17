@@ -54,6 +54,11 @@ class AuthController < ApplicationController
     render json: { accessToken: access_token, user: @user }
   end
 
+  def logout
+    set_refresh_token_cookie('') # Clear refresh session token
+    render status: :no_content
+  end
+
   private
 
   def set_refresh_token_cookie(token)
