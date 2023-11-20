@@ -1,6 +1,7 @@
 import { setupAuthClient } from "@/api/client";
 import { useAuthStore } from "@/stores/auth";
 import { createRouter, createWebHistory } from "vue-router";
+import Default from "@/layouts/default.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
       component: () => import("../views/HomeView.vue"),
       meta: { requiresAuth: true, layout: Default },
     },
+    {
+      path: "/profile",
+      name: "profile",
+      component: () => import("../views/ProfileView.vue"),
+      meta: { requiresAuth: true, layout: Default },
     },
   ],
 });

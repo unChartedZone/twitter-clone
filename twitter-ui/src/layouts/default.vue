@@ -5,7 +5,9 @@ import Sidebar from "@/components/Sidebar.vue";
 <template>
   <main class="layout container">
     <Sidebar />
-    <slot />
+    <section>
+      <slot />
+    </section>
     <section>Search</section>
   </main>
 </template>

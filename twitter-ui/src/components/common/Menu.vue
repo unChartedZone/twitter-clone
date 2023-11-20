@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
-
 interface MenuProps {
   modelValue?: boolean;
 }
@@ -9,7 +7,6 @@ const props = defineProps<MenuProps>();
 const emit = defineEmits(["update:modelValue"]);
 
 function handleChange() {
-  // console.log("Clicked!");
   emit("update:modelValue", !props.modelValue);
 }
 </script>
@@ -30,7 +27,7 @@ function handleChange() {
 
   &__content {
     position: absolute;
-    top: -2rem;
+    top: -180%;
     z-index: 200;
   }
 
