@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
-import Icon from "./Icon.vue";
-import Button from "./Button.vue";
+import { ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+
+const router = useRouter();
+const authStore = useAuthStore();
+const toggleProfilePill = ref<boolean>(false);
 
 const links = [
   { text: "Home", to: "/home", icon: "home" },
@@ -11,11 +15,17 @@ const links = [
   { text: "Lists", to: "/home", icon: "list" },
   { text: "Profile", to: "/profile", icon: "person" },
 ];
+
+async function logout() {
+  await authStore.logoutUser();
+  router.push("/");
+}
 </script>
 
 <template>
   <aside class="sidebar">
     <section>
+      <Icon class="logo" name="bird" />
       <ul class="sidebar__list">
         <li v-for="link in links" class="sidebar__link">
           <RouterLink :to="link.to">
@@ -34,7 +44,31 @@ const links = [
       </ul>
       <Button block>Tweet</Button>
     </section>
-    <section></section>
+    <Menu v-model="toggleProfilePill">
+      <template v-slot:activator="{ onClick }">
+        <section class="profile-pill" @click="onClick">
+          <div class="profile-pill__content">
+            <img
+              class="profile-pill__pic"
+              :src="authStore.user?.profileImage"
+            />
+            <div>
+              <h3>{{ authStore.user?.name }}</h3>
+              <p>@{{ authStore.user?.username }}</p>
+            </div>
+          </div>
+          <Icon name="ellipsis" />
+        </section>
+      </template>
+      <div>
+        <List>
+          <ListItem> Add an existing account </ListItem>
+          <ListItem @click="logout"
+            >Log out for @{{ authStore.user?.username }}</ListItem
+          >
+        </List>
+      </div>
+    </Menu>
   </aside>
 </template>
 
@@ -55,20 +89,17 @@ const links = [
   }
 
   &__link {
+    cursor: pointer;
     font-size: 1.5rem;
     line-height: 1.7rem;
     padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
 
     &:hover {
       span {
-        background-color: rgba(229, 231, 235, 1);
+        background-color: $gray;
       }
-    }
-
-    a {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
     }
 
     span {
@@ -82,6 +113,47 @@ const links = [
     svg {
       width: 1.5rem;
     }
+  }
+}
+
+.logo {
+  height: 2rem;
+  margin: 0 0 0.75rem 0.5rem;
+}
+
+.profile-pill {
+  cursor: pointer;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+
+  &:hover {
+    background-color: $gray;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  &__pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: black;
+  }
+
+  h3 {
+    font-size: 0.95rem;
+  }
+
+  svg {
+    width: 1rem;
   }
 }
 </style>
