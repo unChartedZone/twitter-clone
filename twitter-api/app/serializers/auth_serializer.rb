@@ -1,13 +1,18 @@
-class UserSerializer
+class AuthSerializer
   include JSONAPI::Serializer
   include ActionView
 
-  attributes :email
+  set_key_transform :camel_lower
+
+  attributes :id, :email, :username, :name
   attribute :profile_image do |object|
     if object.profile_image.present?
       Rails.application.routes.url_helpers.url_for(object.profile_image)
     end
   end
 
-  cache_options store: Rails.cache, namespace: 'jsonapi-serializer', expires_in: 1.hour
+  attribute :access_token do |object, params|
+    params[:access_token]
+  end
+
 end

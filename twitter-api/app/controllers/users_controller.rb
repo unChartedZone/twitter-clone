@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :is_authenticated, only: [:me]
+  before_action :is_authenticated, only: [:me, :update_profile_image, :update, :destroy]
 
   # GET /users
   def index
@@ -43,18 +43,33 @@ class UsersController < ApplicationController
     render json: UserSerializer.new(@current_user)
   end
 
+  def update_profile_image
+    if (params[:image].present?)
+      @current_user.profile_image.attach(params[:image])
+      if @current_user.save
+        render json: UserSerializer.new(@current_user)
+      else
+        render json: { errors: @current_user.errors }, status: :bad_request
+      end
+    else
+      render json: { message: "Image required" }, status: :bad_request
+    end
+
+  end
+
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def user_params
-      params.require(:user).permit(:username, :password, :password_confirmation)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = User.find(params[:id])
+  end
 
-    def check_owner
-      head :forbidden unless @user.id == current_user&.id
-    end
+  # Only allow a list of trusted parameters through.
+  def user_params
+    params.require(:user).permit(:username, :password, :password_confirmation)
+  end
+
+  def check_owner
+    head :forbidden unless @user.id == current_user&.id
+  end
 end

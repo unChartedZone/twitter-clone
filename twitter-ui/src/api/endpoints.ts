@@ -1,9 +1,18 @@
-import type { User } from "@/stores/auth";
 import { authClient, client } from "./client";
+import type User from "@/models/User";
+import type Tweet from "@/models/Tweet";
 
 interface LoginResponse {
-  accessToken: string;
-  user: User;
+  data: {
+    attributes: User;
+  };
+}
+
+interface TweetResponse {
+  data: {
+    id: string;
+    attributes: Tweet;
+  }[];
 }
 
 export async function login(user: {
@@ -25,6 +34,14 @@ export async function logout() {
   return client.post("/logout");
 }
 
-export async function fetchUserTweets() {
-  return (await authClient.get("/tweets")).data;
+export async function fetchUserTweets(): Promise<Tweet[]> {
+  const res = (await authClient.get<TweetResponse>("/tweets")).data;
+  return res.data.map(
+    (i) =>
+      ({
+        id: i.id,
+        text: i.attributes.text,
+        medium: i.attributes.medium,
+      } as Tweet)
+  );
 }

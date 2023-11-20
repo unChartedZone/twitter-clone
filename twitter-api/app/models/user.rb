@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :tweets, dependent: :destroy
   has_many :media, dependent: :destroy
+  has_one_attached :profile_image
 
   # Remove password from user json serialization
   def as_json(options = {})
