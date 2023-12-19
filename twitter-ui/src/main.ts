@@ -6,6 +6,7 @@ import router from "./router";
 import "./styles/main.scss";
 
 import Button from "@/components/common/Button.vue";
+import Card from "@/components/common/Card.vue";
 import Icon from "@/components/common/Icon.vue";
 import Link from "@/components/common/Link.vue";
 import List from "@/components/common/List.vue";
@@ -22,6 +23,7 @@ app.use(createPinia());
 app.use(router);
 
 app.component("Button", Button);
+app.component("Card", Card);
 app.component("Icon", Icon);
 app.component("Link", Link);
 app.component("List", List);
