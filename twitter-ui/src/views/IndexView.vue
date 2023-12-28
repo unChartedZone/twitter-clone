@@ -7,8 +7,11 @@ const year = computed(() => new Date().getFullYear());
 <template>
   <main>
     <div class="main-section">
-      <section>Twitter Logo</section>
-      <section>
+      <section class="icon-section">
+        <Icon name="bird" />
+      </section>
+      <section class="action-section">
+        <Icon name="bird" />
         <h1>Happening Now</h1>
         <h2>Join Twitter Today.</h2>
         <div class="login-flow-options">
@@ -48,6 +51,30 @@ const year = computed(() => new Date().getFullYear());
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   height: 90vh;
+
+  section {
+    height: 100%;
+  }
+}
+
+.icon-section {
+  height: 50%;
+}
+
+.action-section {
+  svg {
+    height: 4rem;
+  }
+
+  h1 {
+    font-size: 3.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  h2 {
+    font-size: 1.875rem;
+  }
 }
 
 .login-flow-options {

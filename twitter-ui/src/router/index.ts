@@ -28,10 +28,55 @@ const router = createRouter({
       meta: { requiresAuth: true, layout: Default },
     },
     {
+      path: "/explore",
+      name: "explore",
+      component: () => import("../views/ExploreView.vue"),
+      meta: { requiresAuth: true, layout: Default },
+    },
+    {
+      path: "/notifications",
+      name: "notifications",
+      component: () => import("../views/NotificationsView.vue"),
+      meta: { requiresAuth: true, layout: Default },
+    },
+    {
+      path: "/bookmarks",
+      name: "bookmarks",
+      component: () => import("../views/BookmarksView.vue"),
+      meta: { requiresAuth: true, layout: Default },
+    },
+    {
+      path: "/lists",
+      name: "lists",
+      component: () => import("../views/ListsView.vue"),
+      meta: { requiresAuth: true, layout: Default },
+    },
+    {
       path: "/profile",
-      name: "profile",
       component: () => import("../views/ProfileView.vue"),
       meta: { requiresAuth: true, layout: Default },
+      children: [
+        {
+          name: "profile",
+          path: "",
+          component: () => import("../views/profile/ProfileTweetsView.vue"),
+        },
+        {
+          name: "replies",
+          path: "replies",
+          component: () => import("../views/profile/RepliesView.vue"),
+        },
+        {
+          name: "media",
+          path: "media",
+          component: () => import("../views/profile/MediaTweetsView.vue"),
+        },
+        {
+          name: "likes",
+          path: "likes",
+          component: () => import("../views/profile/LikedTweetsView.vue"),
+        },
+      ],
     },
   ],
 });
