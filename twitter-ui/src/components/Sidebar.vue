@@ -10,9 +10,9 @@ const toggleProfilePill = ref<boolean>(false);
 const links = [
   { text: "Home", to: "/home", icon: "home" },
   { text: "Explore", to: "/explore", icon: "pound" },
-  { text: "Notifications", to: "/home", icon: "bell" },
-  { text: "Bookmarks", to: "/home", icon: "bookmark" },
-  { text: "Lists", to: "/home", icon: "list" },
+  { text: "Notifications", to: "/notifications", icon: "bell" },
+  { text: "Bookmarks", to: "/bookmarks", icon: "bookmark" },
+  { text: "Lists", to: "/lists", icon: "list" },
   { text: "Profile", to: "/profile", icon: "person" },
 ];
 
@@ -24,61 +24,73 @@ async function logout() {
 
 <template>
   <aside class="sidebar">
-    <section>
-      <Icon class="logo" name="bird" />
-      <ul class="sidebar__list">
-        <li v-for="link in links" class="sidebar__link">
-          <RouterLink :to="link.to">
+    <div class="sidebar__content">
+      <section>
+        <Icon class="logo" name="bird" />
+        <ul class="sidebar__list">
+          <li v-for="link in links" class="sidebar__link">
+            <RouterLink :to="link.to">
+              <span>
+                <Icon :name="link.icon" />
+                {{ link.text }}
+              </span>
+            </RouterLink>
+          </li>
+          <li class="sidebar__link">
             <span>
-              <Icon :name="link.icon" />
-              {{ link.text }}
+              <Icon name="ellipsis" />
+              More
             </span>
-          </RouterLink>
-        </li>
-        <li class="sidebar__link">
-          <span>
-            <Icon name="ellipsis" />
-            More
-          </span>
-        </li>
-      </ul>
-      <Button block>Tweet</Button>
-    </section>
-    <Menu v-model="toggleProfilePill">
-      <template v-slot:activator="{ onClick }">
-        <section class="profile-pill" @click="onClick">
-          <div class="profile-pill__content">
-            <img
-              class="profile-pill__pic"
-              :src="authStore.user?.profileImage"
-            />
-            <div>
-              <h3>{{ authStore.user?.name }}</h3>
-              <p>@{{ authStore.user?.username }}</p>
+          </li>
+        </ul>
+        <div style="width: 90%">
+          <Button block>Tweet</Button>
+        </div>
+      </section>
+      <Menu v-model="toggleProfilePill">
+        <template v-slot:activator="{ onClick }">
+          <section class="profile-pill" @click="onClick">
+            <div class="profile-pill__content">
+              <img
+                class="profile-pill__pic"
+                :src="authStore.user?.profileImage"
+              />
+              <div>
+                <h3>{{ authStore.user?.name }}</h3>
+                <p>@{{ authStore.user?.username }}</p>
+              </div>
             </div>
-          </div>
-          <Icon name="ellipsis" />
-        </section>
-      </template>
-      <div>
-        <List>
-          <ListItem> Add an existing account </ListItem>
-          <ListItem @click="logout"
-            >Log out for @{{ authStore.user?.username }}</ListItem
-          >
-        </List>
-      </div>
-    </Menu>
+            <Icon name="ellipsis" />
+          </section>
+        </template>
+        <div>
+          <List>
+            <ListItem> Add an existing account </ListItem>
+            <ListItem @click="logout"
+              >Log out for @{{ authStore.user?.username }}</ListItem
+            >
+          </List>
+        </div>
+      </Menu>
+    </div>
   </aside>
 </template>
 
 <style scoped lang="scss">
 .sidebar {
+  position: relative;
   height: 100vh;
-  padding: 1rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  width: 17rem;
+
+  &__content {
+    position: fixed;
+    height: 100%;
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 0;
+  }
 
   &__list {
     margin: 0.5rem 0;
@@ -90,7 +102,8 @@ async function logout() {
 
   &__link {
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 400;
     line-height: 1.7rem;
     padding: 0.25rem 0;
     display: flex;

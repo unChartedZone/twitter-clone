@@ -3,13 +3,13 @@ import Sidebar from "@/components/Sidebar.vue";
 </script>
 
 <template>
-  <main class="layout container">
+  <div class="layout">
     <Sidebar />
-    <section>
+    <main class="main__content">
       <slot />
-    </section>
+    </main>
     <section>Search</section>
-  </main>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -17,6 +17,12 @@ import Sidebar from "@/components/Sidebar.vue";
   min-height: 100vh;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 2fr 1.5fr;
+  grid-template-columns: 1fr 2fr 1fr;
+  max-width: 1200px; // TODO: set responsive widths at smaller screen sizes
+}
+
+.main__content {
+  border-left: 1px solid $gray-100;
+  border-right: 1px solid $gray-100;
 }
 </style>
