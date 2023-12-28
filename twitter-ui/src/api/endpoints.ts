@@ -45,3 +45,10 @@ export async function fetchUserTweets(): Promise<Tweet[]> {
       } as Tweet)
   );
 }
+
+export async function updateBannerImage(payload: Blob) {
+  const form = new FormData();
+  form.append("image", payload);
+  const res = await authClient.post("/me/banner-image", form);
+  return res.data;
+}

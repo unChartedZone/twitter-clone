@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
 import { useProfileStore } from "@/stores/profile";
-import { onMounted } from "vue";
+import ProfileEditor from "@/components/ProfileEditor.vue";
 
 const authStore = useAuthStore();
 const profileStore = useProfileStore();
@@ -24,8 +24,8 @@ onMounted(async () => {
         :src="authStore.user?.profileImage"
         alt=""
       />
-      <div>
-        <Button outline>Edit profile</Button>
+      <div class="profile__edit-profile">
+        <ProfileEditor />
       </div>
       <div>
         <h3>{{ authStore.user?.name }}</h3>
