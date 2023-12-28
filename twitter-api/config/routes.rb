@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # User endpoints
   get 'me', to: 'users#me'
   post 'me/profile-image', to: 'users#update_profile_image'
+  post 'me/banner-image', to: 'users#update_banner_image'
 
   # Tweet Endpoints
   resources :tweets, only: %i[index create]

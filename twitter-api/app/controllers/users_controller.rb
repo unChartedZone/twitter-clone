@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :is_authenticated, only: [:me, :update_profile_image, :update, :destroy]
+  before_action :is_authenticated, only: [:me, :update_profile_image, :update_banner_image, :update, :destroy]
 
   # GET /users
   def index
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
   end
 
   def update_profile_image
-    if (params[:image].present?)
+    if params[:image].present?
       @current_user.profile_image.attach(params[:image])
       if @current_user.save
         render json: UserSerializer.new(@current_user)
@@ -55,6 +55,19 @@ class UsersController < ApplicationController
       render json: { message: "Image required" }, status: :bad_request
     end
 
+  end
+
+  def update_banner_image
+    if params[:image].present?
+      @current_user.banner_image.attach(params[:image])
+      if @current_user.save
+        render json: UserSerializer.new(@current_user)
+      else
+        render json: { errors: @current_user.errors }, status: :bad_request
+      end
+    else
+      render json: { message: "Image required" }, status: :bad_request
+    end
   end
 
   private
