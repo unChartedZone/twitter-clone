@@ -4,6 +4,9 @@
       <slot name="header" />
     </header>
     <slot />
+    <footer class="card__footer">
+      <slot name="footer" />
+    </footer>
   </div>
 </template>
 
@@ -12,12 +15,17 @@
   background-color: $white;
   border-radius: $rounded;
   min-width: 20rem;
+  overflow: hidden;
 
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.25rem 0.5rem;
+  }
+
+  &__footer {
+    min-height: 1rem;
   }
 }
 </style>

@@ -7,7 +7,7 @@
 <style scoped lang="scss">
 .list-item {
   cursor: pointer;
-  padding: 1rem 2rem;
+  padding: 1rem;
 
   &:hover {
     background-color: rgb(247, 249, 249);

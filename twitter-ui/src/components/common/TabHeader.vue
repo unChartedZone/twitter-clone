@@ -8,10 +8,10 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink, type RouterLinkProps } from "vue-router";
+import { RouterLink, type RouteLocationRaw } from "vue-router";
 
 interface TabHeaderProps {
-  to: RouterLinkProps;
+  to: RouteLocationRaw;
 }
 
 defineProps<TabHeaderProps>();
@@ -24,6 +24,7 @@ defineProps<TabHeaderProps>();
   padding: 1rem 2rem;
   flex: 1;
   text-align: center;
+  font-weight: 700;
 
   &:hover {
     background-color: $gray;

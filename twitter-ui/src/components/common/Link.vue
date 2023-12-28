@@ -1,21 +1,26 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, type RouteLocationRaw } from "vue-router";
 
 interface LinkProps {
-  to: string;
+  to: RouteLocationRaw | string;
+  icon?: boolean;
   outline?: boolean;
   text?: boolean;
 }
 
-withDefaults(defineProps<LinkProps>(), { to: "#" });
+withDefaults(defineProps<LinkProps>(), { to: "/" });
 </script>
 
 <template>
   <RouterLink
     :to="to"
     class="link"
-    :class="{ 'link--outline': outline, 'link--text': text }"
+    :class="{
+      'link--icon': icon,
+      'link--outline': outline,
+      'link--text': text,
+    }"
   >
     <slot />
   </RouterLink>
@@ -27,6 +32,7 @@ withDefaults(defineProps<LinkProps>(), { to: "#" });
   border: none;
   border-radius: $rounded;
   color: white;
+  font-weight: 700;
   display: inline-block;
   outline: none;
   padding: 0.75rem 1.5rem;
@@ -35,6 +41,18 @@ withDefaults(defineProps<LinkProps>(), { to: "#" });
 
   &:hover {
     background-color: rgba(26, 145, 218);
+  }
+
+  &--icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    padding: 0.5rem;
+
+    &:hover {
+      background-color: rgba($gray, 0.8);
+    }
   }
 
   &--outline {
