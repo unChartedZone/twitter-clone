@@ -8,6 +8,7 @@ import Menu from "@/components/common/Menu.vue";
 import Modal from "@/components/common/Modal.vue";
 import TabHeader from "@/components/common/TabHeader.vue";
 import Tabs from "@/components/common/Tabs.vue";
+import Textarea from "@/components/common/Textarea.vue";
 import Textfield from "@/components/common/Textfield.vue";
 
 declare module "@vue/runtime-core" {
@@ -22,6 +23,7 @@ declare module "@vue/runtime-core" {
     Modal: typeof Modal;
     Tabs: typeof Tabs;
     Textfield: typeof Textfield;
+    Textarea: typeof Textarea;
     TabHeader: typeof TabHeader;
   }
 }

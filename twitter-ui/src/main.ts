@@ -15,6 +15,7 @@ import Menu from "@/components/common/Menu.vue";
 import Modal from "@/components/common/Modal.vue";
 import TabHeader from "@/components/common/TabHeader.vue";
 import Tabs from "@/components/common/Tabs.vue";
+import Textarea from "./components/common/Textarea.vue";
 import Textfield from "@/components/common/Textfield.vue";
 
 const app = createApp(App);
@@ -32,6 +33,7 @@ app.component("Menu", Menu);
 app.component("Modal", Modal);
 app.component("TabHeader", TabHeader);
 app.component("Tabs", Tabs);
+app.component("Textarea", Textarea);
 app.component("Textfield", Textfield);
 
 app.mount("#app");
