@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :is_authenticated, only: [:me, :update_profile_image, :update_banner_image, :update, :destroy]
+  before_action :is_authenticated, only: [:me, :update_profile_image, :update_banner_image]
+  before_action :check_owner, only: [:update, :destroy]
 
   # GET /users
   def index
     @users = User.all
-
     render json: @users
   end
 
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
+    if @user.update(update_user_params)
       render json: @user
     else
       render json: @user.errors, status: :unprocessable_entity
@@ -80,6 +80,10 @@ class UsersController < ApplicationController
   # Only allow a list of trusted parameters through.
   def user_params
     params.require(:user).permit(:username, :password, :password_confirmation)
+  end
+
+  def update_user_params
+    params.require(:user).permit(:name, :banner_image)
   end
 
   def check_owner

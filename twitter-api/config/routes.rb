@@ -14,8 +14,9 @@ Rails.application.routes.draw do
   get 'me', to: 'users#me'
   post 'me/profile-image', to: 'users#update_profile_image'
   post 'me/banner-image', to: 'users#update_banner_image'
+  resources :users, only: %i[index show update]
 
   # Tweet Endpoints
-  resources :tweets, only: %i[index create]
-  resources :medium, only: %i[index create], path: :media
+  resources :tweets, only: [:index, :create]
+  resources :medium, only: [:index, :create], path: :media
 end
