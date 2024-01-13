@@ -1,4 +1,5 @@
 @base-url=http://localhost:8081
+@my-user-id=e296bfe6-89b6-4acb-ab29-be5c0fcf40bb
 
 # @name login
 POST {{base-url}}/login
@@ -6,7 +7,7 @@ Content-Type: application/json
 
 {
   "user": {
-    "email": "chris@test.com",
+    "email": "chris@example.com",
     "password": "password123"
   }
 }
@@ -35,9 +36,27 @@ Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImNocmlzQ
 
 # @name fetchMe
 GET {{base-url}}/me
-Authorization: Bearer {{login.response.body.access_token}}
+Authorization: Bearer {{login.response.body.data.attributes.accessToken}}
 
 ###
+
+# @name fetchUser
+GET {{base-url}}/users/{{my-user-id}}
+Authorization: Bearer {{login.response.body.data.attributes.accessToken}}
+
+### 
+
+# @name updateMe
+PATCH {{base-url}}/users/{{my-user-id}}
+Authorization: Bearer {{login.response.body.data.attributes.accessToken}}
+Content-Type: application/json
+
+{
+  "user": {
+    "name": "Christian Valdez"
+  }
+}
+### 
 
 # @name fetchTweets
 GET {{base-url}}/tweets
