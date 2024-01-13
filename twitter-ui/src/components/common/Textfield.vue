@@ -22,7 +22,7 @@ function handleChange(value: string) {
   <div class="textfield">
     <input
       class="textfield__input"
-      :placeholder="placeholder"
+      :placeholder="placeholder ? placeholder : label"
       :type="type"
       :value="modelValue"
       @input="(event: any) => handleChange(event.target.value)"
@@ -36,6 +36,7 @@ function handleChange(value: string) {
   position: relative;
   border: 1px solid rgba(156, 163, 175, 0.8);
   border-radius: 0.375rem;
+  overflow: hidden;
 
   &__label {
     position: absolute;
@@ -50,8 +51,10 @@ function handleChange(value: string) {
     width: 100%;
     height: 100%;
     background-color: $white;
+    border: none;
     outline: none;
     padding: 1.5rem 1rem 1rem;
+    font-size: 1.1rem;
 
     &:placeholder-shown + label {
       color: rgba(107, 114, 128, 1);

@@ -12,7 +12,6 @@ const user = reactive({
 });
 
 async function handleLoginSubmit() {
-  console.log("Access Token: ", authStore.accessToken);
   await authStore.loginUser({ email: user.email, password: user.password });
   router.push("/home");
 }

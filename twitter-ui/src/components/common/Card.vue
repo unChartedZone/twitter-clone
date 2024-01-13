@@ -14,7 +14,7 @@
 .card {
   background-color: $white;
   border-radius: $rounded;
-  min-width: 20rem;
+  min-width: 30rem;
   overflow: hidden;
 
   &__header {

@@ -4,6 +4,7 @@ import { RouterLink, type RouteLocationRaw } from "vue-router";
 
 interface LinkProps {
   to: RouteLocationRaw | string;
+  block?: boolean;
   icon?: boolean;
   outline?: boolean;
   text?: boolean;
@@ -17,6 +18,7 @@ withDefaults(defineProps<LinkProps>(), { to: "/" });
     :to="to"
     class="link"
     :class="{
+      'link--block': block,
       'link--icon': icon,
       'link--outline': outline,
       'link--text': text,
@@ -41,6 +43,12 @@ withDefaults(defineProps<LinkProps>(), { to: "/" });
 
   &:hover {
     background-color: rgba(26, 145, 218);
+  }
+
+  &--block {
+    display: block;
+    width: 100%;
+    text-align: center;
   }
 
   &--icon {

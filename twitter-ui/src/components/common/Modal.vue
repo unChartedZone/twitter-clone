@@ -1,6 +1,6 @@
 <template>
   <div class="modal">
-    <div class="modal__bg" v-if="modelValue" @click="handleClick" />
+    <div class="modal__bg" v-if="modelValue" @click="onClose" />
     <slot name="activator" :onClick="handleClick" />
     <div class="modal__content" v-if="modelValue">
       <slot />
@@ -15,12 +15,17 @@ interface ModalProps {
 }
 
 const props = defineProps<ModalProps>();
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "on-close"]);
 
 useScrollLock(props);
 
 function handleClick() {
   emit("update:modelValue", !props.modelValue);
+}
+
+function onClose() {
+  emit("update:modelValue", false);
+  emit("on-close");
 }
 </script>
 
