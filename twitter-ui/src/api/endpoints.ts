@@ -46,6 +46,15 @@ export async function fetchUserTweets(): Promise<Tweet[]> {
   );
 }
 
+export async function updateUser(user: {
+  id?: string;
+  name?: string;
+  bannerImage?: string;
+}): Promise<User> {
+  const res = await authClient.patch<User>(`/users/${user.id}`, { user });
+  return res.data;
+}
+
 export async function updateBannerImage(payload: Blob) {
   const form = new FormData();
   form.append("image", payload);
