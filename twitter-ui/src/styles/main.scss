@@ -61,3 +61,19 @@ ul {
     max-width: 1536px;
   }
 }
+
+@for $i from 1 through 12 {
+  .space-y-#{$i} {
+    & > * + * {
+      margin-top: $i * 0.25rem;
+    }
+  }
+}
+
+@for $i from 1 through 12 {
+  .space-x-#{$i} {
+    & > * + * {
+      margin-left: $i * 0.25rem;
+    }
+  }
+}
