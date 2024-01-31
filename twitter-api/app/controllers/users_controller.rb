@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(update_user_params)
-      render json: @user
+      render json: UserSerializer.new(@user)
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -83,7 +83,7 @@ class UsersController < ApplicationController
   end
 
   def update_user_params
-    params.require(:user).permit(:name, :banner_image)
+    params.require(:user).permit(:name, :banner_image, :date_of_birth)
   end
 
   def check_owner

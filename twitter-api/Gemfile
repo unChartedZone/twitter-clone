@@ -46,7 +46,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # S3
 gem 'aws-sdk-s3'
 
-# JSON Serialization
+# JSON
 gem "jsonapi-serializer", "~> 2.2"
 
 # Pagination

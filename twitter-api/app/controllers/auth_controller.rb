@@ -72,7 +72,7 @@ class AuthController < ApplicationController
 
   # Filter parameters for new user request
   def user_params
-    params.require(:user).permit(:username, :email, :password, :name)
+    params.require(:user).permit(:username, :email, :password, :name, :date_of_birth)
   end
 
   def login_params
