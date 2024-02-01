@@ -1,8 +1,6 @@
 require "active_support/core_ext/integer/time"
-require 'dotenv/load'
 
 Rails.application.configure do
-  Dotenv.load '../../.env.development'
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
