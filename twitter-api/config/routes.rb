@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # resources :users
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  get 'about', to: 'pages#index'
+  root to: 'pages#index'
   get 'potato', to: 'pages#potato'
 
   # Auth Endpoints
@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   resources :users, only: %i[index show update]
 
   # Tweet Endpoints
-  resources :tweets, only: [:index, :create]
+  resources :tweets, only: [:index, :create] do
+    post 'like', on: :member
+  end
+
   resources :medium, only: [:index, :create], path: :media
 end

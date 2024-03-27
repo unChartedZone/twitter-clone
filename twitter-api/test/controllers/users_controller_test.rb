@@ -24,7 +24,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     patch user_url(@user), params: { user: { name: "Another name", dateOfBirth: "10/10/1989" } }, headers: { Authorization: "Bearer #{JsonWebToken.generate_access_token(@user)}" }, as: :json
     assert_response :success
     json_response = JSON.parse(self.response.body, symbolize_names: true)
-    puts json_response
     assert_equal "Another name", json_response[:data][:attributes][:name]
     assert_equal "1989-10-10", json_response[:data][:attributes][:dateOfBirth]
   end

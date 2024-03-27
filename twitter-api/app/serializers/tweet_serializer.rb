@@ -4,7 +4,7 @@ class TweetSerializer
 
   has_many :medium, attributes: [:description]
   belongs_to :user
-  attributes :text
+  attributes :text, :total_likes
   attribute :medium do |object|
     object.medium.each do |o|
       if o.image.present?
