@@ -4,6 +4,8 @@ class TweetsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:one)
     @tweet = tweets(:one)
+    @token = JsonWebToken.generate_access_token(id: @user.id, email: @user.email)
+    @token_two = JsonWebToken.generate_access_token(id: users(:two).id, email: users(:two).email)
   end
 
   test "should forbid tweets for unlogged users" do
@@ -13,7 +15,7 @@ class TweetsControllerTest < ActionDispatch::IntegrationTest
 
   test "should show tweets" do
     get(tweets_url, headers: {
-      Authorization: "Bearer #{JsonWebToken.generate_access_token(id: users(:one).id, email: users(:one).email)}"
+      Authorization: "Bearer #{@token}"
     }, as: :json)
 
     assert_response :success
@@ -21,10 +23,9 @@ class TweetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should like a tweet" do
-    token = JsonWebToken.generate_access_token(id: @user.id, email: @user.email)
     assert_difference('Like.count', 1) do
       assert_difference('TweetLike.count', 1) do
-        post(like_tweet_url(@tweet), headers: { Authorization: "Bearer #{token}" }, as: :json)
+        post(like_tweet_url(@tweet), headers: { Authorization: "Bearer #{@token}" }, as: :json)
       end
     end
 
@@ -34,14 +35,31 @@ class TweetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not let user like a tweet they already liked" do
-    token = JsonWebToken.generate_access_token(id: @user.id, email: @user.email)
-    post(like_tweet_url(@tweet), headers: { Authorization: "Bearer #{token}" }, as: :json)
+    post(like_tweet_url(@tweet), headers: { Authorization: "Bearer #{@token}" }, as: :json)
     assert_no_difference('Like.count') do
       assert_no_difference('TweetLike.count') do
-        post(like_tweet_url(@tweet), headers: { Authorization: "Bearer #{token}" }, as: :json)
+        post(like_tweet_url(@tweet), headers: { Authorization: "Bearer #{@token}" }, as: :json)
       end
     end
 
     assert_response :conflict
+  end
+
+  test "should unlike a tweet" do
+    assert_difference('Like.count', 2) do
+      post(like_tweet_url(@tweet), headers: { Authorization: "Bearer #{@token}" }, as: :json)
+      post(like_tweet_url(@tweet), headers: { Authorization: "Bearer #{@token_two}" }, as: :json)
+    end
+
+    @tweet.reload
+    assert_equal 2, @tweet.total_likes
+
+    assert_difference('Like.count', -1) do
+      post(unlike_tweet_url(@tweet), headers: { Authorization: "Bearer #{@token}" }, as: :json)
+    end
+
+    @tweet.reload
+    assert_equal 1, @tweet.total_likes
+    assert_response :no_content
   end
 end

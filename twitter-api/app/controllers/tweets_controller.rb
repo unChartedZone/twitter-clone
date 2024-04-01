@@ -31,6 +31,16 @@ class TweetsController < ApplicationController
     end
   end
 
+  def unlike
+    tweet = Tweet.find(params[:id])
+    like = tweet.likes.find_by_user_id(current_user.id)
+    if like.destroy && tweet.save
+      head :no_content
+    else
+      render json: { message: 'error deleting' }, status: :bad_request
+    end
+  end
+
   private
 
   def tweet_params

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   # Tweet Endpoints
   resources :tweets, only: [:index, :create] do
     post 'like', on: :member
+    post 'unlike', on: :member
   end
 
   resources :medium, only: [:index, :create], path: :media
