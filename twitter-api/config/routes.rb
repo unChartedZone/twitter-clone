@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
   # Tweet Endpoints
   resources :tweets, only: [:index, :create] do
+    get 'liked', on: :collection, to: 'tweets#liked_tweets'
     post 'like', on: :member
     post 'unlike', on: :member
   end

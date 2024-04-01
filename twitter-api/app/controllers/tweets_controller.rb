@@ -1,10 +1,17 @@
 class TweetsController < ApplicationController
 
-  before_action :is_authenticated, only: [:create, :index, :like]
+  before_action :is_authenticated, only: [:create, :index, :liked_tweets, :like, :unlike]
 
   def index
-    tweets = current_user.tweets
-    render json: TweetSerializer.new(tweets)
+    tweets = current_user.tweets.includes([:medium])
+    render json: TweetSerializer.new(tweets).serializable_hash.to_json
+  end
+
+  def liked_tweets
+    tweets = Tweet.where(id:
+      TweetLike.select(:tweet_id).where.not(tweet_id: nil).where(like_id: current_user.likes)
+    )
+    render json: TweetSerializer.new(tweets).serializable_hash.to_json
   end
 
   def create
