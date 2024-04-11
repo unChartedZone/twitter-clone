@@ -62,4 +62,14 @@ class TweetsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, @tweet.total_likes
     assert_response :no_content
   end
+
+  test "should retweet a tweet" do
+    assert_difference('Retweet.count', 1) do
+      post(retweet_tweet_url(@tweet), headers: { Authorization: "Bearer #{@token_two}" }, as: :json)
+    end
+
+    @tweet.reload
+    assert_equal 1, @tweet.total_retweets
+    assert_response :created
+  end
 end

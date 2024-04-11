@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     get 'liked', on: :collection, to: 'tweets#liked_tweets'
     post 'like', on: :member
     post 'unlike', on: :member
+    post 'retweet', on: :member
+    post 'unretweet', on: :member, to: 'tweets#undo_retweet'
   end
 
   resources :medium, only: [:index, :create], path: :media

@@ -27,7 +27,7 @@ class TweetsController < ApplicationController
   def like
     tweet = Tweet.find(params[:id])
     if tweet.likes.find_by_user_id(current_user.id)
-      render json: { message: "Tweet already liked" }, status: :conflict
+      render json: { message: 'Tweet already liked' }, status: :conflict
     else
       tweet.build_tweet_like(current_user.id)
       if tweet.save
@@ -44,7 +44,31 @@ class TweetsController < ApplicationController
     if like.destroy && tweet.save
       head :no_content
     else
-      render json: { message: 'error deleting' }, status: :bad_request
+      render json: { message: 'Error unliking tweet' }, status: :bad_request
+    end
+  end
+
+  def retweet
+    tweet = Tweet.find(params[:id])
+    if tweet.retweets.find_by_user_id(current_user.id)
+      render json: { message: 'Tweet already retweeted' }, status: :conflict
+    else
+      tweet.build_retweet(current_user.id)
+      if tweet.save
+        render json: { tweet: tweet }, status: :created
+      else
+        render json: { errors: tweet.errors }, status: :unprocessable_entity
+      end
+    end
+  end
+
+  def undo_retweet
+    tweet = Tweet.find(params[:id])
+    retweet = tweet.retweets.find_by_user_id(current_user.id)
+    if retweet.destroy && tweet.save
+      head :no_content
+    else
+      render json: { errors: retweet.errors }, status: :unprocessable_entity
     end
   end
 
