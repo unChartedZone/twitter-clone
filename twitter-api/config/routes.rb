@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   resources :users, only: %i[index show update]
 
   # Tweet Endpoints
-  resources :tweets, only: [:index, :create] do
+  resources :tweets, only: [:index, :show, :create] do
+    get '/profile/:username/protected', on: :collection, to: 'tweets#protected_profile_tweets'
+    get '/profile/:username', on: :collection, to: 'tweets#profile_tweets'
     get 'liked', on: :collection, to: 'tweets#liked_tweets'
     post 'like', on: :member
     post 'unlike', on: :member

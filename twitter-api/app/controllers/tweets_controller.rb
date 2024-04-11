@@ -1,16 +1,29 @@
+# frozen_string_literal: true
 class TweetsController < ApplicationController
 
-  before_action :is_authenticated, only: [:create, :index, :liked_tweets, :like, :unlike]
+  before_action :is_authenticated, only: %i[create index liked_tweets like unlike retweet protected_profile_tweets]
 
   def index
     tweets = current_user.tweets.includes([:medium])
     render json: TweetSerializer.new(tweets).serializable_hash.to_json
   end
 
+  def show
+    render json: TweetSerializer.new(Tweet.find(params[:id])).serializable_hash.to_json
+  end
+
+  def protected_profile_tweets
+    tweets = fetch_user_tweets
+    render json: TweetSerializer.new(tweets, { include: [:user], params: { current_user: @current_user } }).serializable_hash.to_json
+  end
+
+  def profile_tweets
+    tweets = fetch_user_tweets
+    render json: TweetSerializer.new(tweets, { include: [:user] }).serializable_hash.to_json
+  end
+
   def liked_tweets
-    tweets = Tweet.where(id:
-      TweetLike.select(:tweet_id).where.not(tweet_id: nil).where(like_id: current_user.likes)
-    )
+    tweets = Tweet.where(id: TweetLike.select(:tweet_id).where.not(tweet_id: nil).where(like_id: current_user.likes))
     render json: TweetSerializer.new(tweets).serializable_hash.to_json
   end
 
@@ -76,5 +89,10 @@ class TweetsController < ApplicationController
 
   def tweet_params
     params.require(:tweet).permit(:text, medium_ids: [])
+  end
+
+  def fetch_user_tweets
+    user = User.find_by_username(params[:username])
+    Tweet.where(user_id: user.id).or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: user.id)))
   end
 end
