@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :tweets, dependent: :destroy
   has_many :media, dependent: :destroy
   has_many :likes, dependent: :destroy
+  has_many :retweets, dependent: :destroy
   has_one_attached :profile_image
   has_one_attached :banner_image
 

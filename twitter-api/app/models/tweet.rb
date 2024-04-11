@@ -5,6 +5,7 @@ class Tweet < ApplicationRecord
   has_many :medium, through: :tweet_media, dependent: :destroy
   has_many :tweet_likes, dependent: :destroy
   has_many :likes, through: :tweet_likes
+  has_many :retweets, dependent: :destroy
 
   def set_total_likes!
     self.total_likes = tweet_likes.length
