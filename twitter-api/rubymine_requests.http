@@ -1,11 +1,89 @@
+@base-url = http://localhost:8081
+@email-1 = chris@example.com
+@email-2 = bootsie@test.com
+@tweet-id = 05f3e895-0185-4338-88d3-25674522ad73
+@boots-username = bootsie
+@chris-username = unchartedzone
+
+
+# @name Login
 POST http://localhost:8081/login
 Content-Type: application/json
 
 {
   "user": {
-    "email": "chris@example.com",
+    "email": "{{email-1}}",
     "password": "password123"
   }
 }
+> {%
+    client.global.set("auth_token", response.body.data.attributes.accessToken);
+%}
+
+###
+
+# @name CreateTweet
+POST {{base-url}}/tweets
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "tweet": {
+    "text": "Meowwww"
+  }
+}
+
+###
+
+# @name LikeTweet
+POST {{base-url}}/tweets/{{tweet-id}}/like
+Authorization: Bearer {{auth_token}}
+
+###
+
+# @name UnlikeTweet
+POST {{base-url}}/tweets/{{tweet-id}}/unlike
+Authorization: Bearer {{auth_token}}
+
+###
+
+# @name FetchTweets
+GET {{base-url}}/tweets
+Authorization: Bearer {{auth_token}}
+
+###
+
+# @name FetchOwnProfileTweets
+GET {{base-url}}/tweets/profile/{{chris-username}}/protected
+Authorization: Bearer {{auth_token}}
+
+###
+
+# @name FetchProfileTweets
+GET {{base-url}}/tweets/profile/{{chris-username}}
+
+###
+
+# @name FetchSingleTweet
+GET {{base-url}}/tweets/{{tweet-id}}
+
+###
+
+# @name FetchLikedTweets
+GET {{base-url}}/tweets/liked
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+
+# @name RetweetTweet
+POST {{base-url}}/tweets/{{tweet-id}}/retweet
+Authorization: Bearer {{auth_token}}
+
+###
+
+# @name UndoRetweet
+POST {{base-url}}/tweets/{{tweet-id}}/unretweet
+Authorization: Bearer {{auth_token}}
 
 ###
