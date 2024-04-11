@@ -65,4 +65,9 @@ Rails.application.configure do
 
   # Set base host for urls (needed for media urls in tweets)
   routes.default_url_options[:host] = "http://localhost:8081"
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.rails_logger = true
+  end
 end
