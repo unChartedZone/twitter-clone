@@ -12,6 +12,7 @@ export type IconName =
   | "ellipsis"
   | "home"
   | "heart"
+  | "heart-outline"
   | "left-arrow"
   | "reply"
   | "retweet"
