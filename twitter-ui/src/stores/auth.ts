@@ -27,11 +27,16 @@ export const useAuthStore = defineStore("auth", () => {
     accessToken.value = undefined;
   }
 
+  function setUser(userValue: User) {
+    user.value = userValue;
+  }
+
   return {
     accessToken,
     user,
     loginUser,
     refreshUser,
     logoutUser,
+    setUser,
   };
 });
