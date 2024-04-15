@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed } from "vue";
+import SignupForm from "@/components/SignupForm.vue";
 
 const year = computed(() => new Date().getFullYear());
+const toggleSignupModal = ref<boolean>(false);
 </script>
 
 <template>
@@ -15,7 +17,7 @@ const year = computed(() => new Date().getFullYear());
         <h1>Happening now</h1>
         <h2>Join Twitter Today.</h2>
         <div class="action-section__links space-y-4">
-          <Button block>Sign up</Button>
+          <Button block @click="toggleSignupModal = true">Sign up</Button>
           <Link to="/login" block outline>Log in</Link>
         </div>
       </section>
@@ -42,6 +44,9 @@ const year = computed(() => new Date().getFullYear());
       </ul>
     </footer>
   </main>
+  <Modal v-model="toggleSignupModal">
+    <SignupForm />
+  </Modal>
 </template>
 
 <style scoped lang="scss">
