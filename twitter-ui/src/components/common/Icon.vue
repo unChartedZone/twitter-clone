@@ -6,6 +6,7 @@ export type IconName =
   | "bell"
   | "bird"
   | "bookmark"
+  | "bookmark-outline"
   | "camera-outline"
   | "cross"
   | "ellipsis"
@@ -13,7 +14,8 @@ export type IconName =
   | "heart"
   | "left-arrow"
   | "reply"
-  | "retweet";
+  | "retweet"
+  | "share";
 
 interface IconProps {
   name: IconName;
