@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_02_190852) do
+ActiveRecord::Schema.define(version: 2024_04_15_191856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,8 +91,8 @@ ActiveRecord::Schema.define(version: 2024_04_02_190852) do
     t.uuid "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.decimal "total_likes", default: "0.0"
-    t.decimal "total_retweets", default: "0.0"
+    t.integer "total_likes", default: 0
+    t.integer "total_retweets", default: 0
     t.index ["user_id"], name: "index_tweets_on_user_id"
   end
 
