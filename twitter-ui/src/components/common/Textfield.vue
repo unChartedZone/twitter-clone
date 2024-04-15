@@ -38,6 +38,10 @@ function handleChange(value: string) {
   border-radius: 0.375rem;
   overflow: hidden;
 
+  &:focus-within {
+    border-color: $primary;
+  }
+
   &__label {
     position: absolute;
     pointer-events: none;
