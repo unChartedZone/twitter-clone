@@ -10,7 +10,10 @@ export type IconName =
   | "cross"
   | "ellipsis"
   | "home"
-  | "left-arrow";
+  | "heart"
+  | "left-arrow"
+  | "reply"
+  | "retweet";
 
 interface IconProps {
   name: IconName;
