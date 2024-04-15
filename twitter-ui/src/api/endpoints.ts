@@ -1,6 +1,8 @@
 import { authClient, client } from "./client";
 import type User from "@/models/User";
 import type Tweet from "@/models/Tweet";
+import { type BaseTweet } from "@/models/Tweet";
+import type { BaseUser } from "@/models/User";
 
 interface LoginResponse {
   data: {
@@ -11,7 +13,19 @@ interface LoginResponse {
 interface TweetResponse {
   data: {
     id: string;
-    attributes: Tweet;
+    attributes: BaseTweet;
+    relationships: {
+      user: {
+        data: {
+          id: string;
+          type: string;
+        };
+      };
+    };
+  }[];
+  included: {
+    id: string;
+    attributes: BaseUser;
   }[];
 }
 
@@ -46,6 +60,28 @@ export async function fetchUserTweets(): Promise<Tweet[]> {
   );
 }
 
+export async function fetchProtectedProfileTweets(
+  username: string
+): Promise<Tweet[] | undefined> {
+  const res = (
+    await authClient.get<TweetResponse>(`/tweets/profile/${username}/protected`)
+  ).data;
+  return transformTweetResponse(res);
+}
+
+// TODO: allow tweets of profile to be viewed in the future
+export async function fetchProfileTweets(
+  username: string
+): Promise<Tweet[] | undefined> {
+  try {
+    const res = (await client.get<TweetResponse>(`/tweets/profile/${username}`))
+      .data;
+    return transformTweetResponse(res);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export async function updateUser(user: {
   id?: string;
   name?: string;
@@ -60,4 +96,29 @@ export async function updateBannerImage(payload: Blob) {
   form.append("image", payload);
   const res = await authClient.post("/me/banner-image", form);
   return res.data;
+}
+
+// TODO: maybe mobe this to profile store?
+function transformTweetResponse(res: TweetResponse) {
+  const userMap: { [key: string]: BaseUser } = res.included.reduce(
+    (acc, value) => {
+      return {
+        [`${value.id}`]: {
+          ...value.attributes,
+          id: value.id,
+        },
+        ...acc,
+      };
+    },
+    {}
+  );
+
+  return res.data.map(
+    (i) =>
+      ({
+        ...i.attributes,
+        id: i.id,
+        user: userMap[i.relationships.user.data.id],
+      } as Tweet)
+  );
 }
