@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 class TweetSerializer
   include JSONAPI::Serializer
-  include ActionView
+  include DateHelper
 
   set_key_transform :camel_lower
 
@@ -15,6 +16,10 @@ class TweetSerializer
         o.url = Rails.application.routes.url_helpers.url_for(o.image)
       end
     end
+  end
+
+  attribute :created_at do |object|
+    DateHelper.time_since(object.created_at)
   end
 
   attribute :liked do |object, params|

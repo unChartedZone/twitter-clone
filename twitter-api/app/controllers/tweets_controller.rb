@@ -93,6 +93,6 @@ class TweetsController < ApplicationController
 
   def fetch_user_tweets
     user = User.find_by_username(params[:username])
-    Tweet.where(user_id: user.id).or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: user.id)))
+    Tweet.where(user_id: user.id).or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: user.id))).sort_by(&:created_at).reverse
   end
 end
