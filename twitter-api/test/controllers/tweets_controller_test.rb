@@ -19,7 +19,13 @@ class TweetsControllerTest < ActionDispatch::IntegrationTest
     }, as: :json)
 
     assert_response :success
-    json_resposne = JSON.parse(response.body, symbolize_names: true)
+    json_response = JSON.parse(response.body, symbolize_names: true)
+  end
+
+  test "should fetch owner profile tweets" do
+    skip("need to figure out url for tweets profile endpoint")
+    get tweets_profile_url(@user)
+    assert_response :success
   end
 
   test "should like a tweet" do
