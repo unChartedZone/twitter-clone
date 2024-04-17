@@ -1,5 +1,7 @@
 @base-url=http://localhost:8081
 @my-user-id=e296bfe6-89b6-4acb-ab29-be5c0fcf40bb
+@user-1 = "chris@example.com"
+@user-2 = "bootsie@test.com"
 
 # @name login
 POST {{base-url}}/login
@@ -7,7 +9,7 @@ Content-Type: application/json
 
 {
   "user": {
-    "email": "chris@example.com",
+    "email": {{user-1}},
     "password": "password123"
   }
 }
@@ -19,10 +21,11 @@ Content-Type: application/json
 
 {
   "user": {
-    "username": "unchartedzone",
-    "email": "chris@test.com",
+    "username": "bootsie",
+    "email": "bootsie@test.com",
     "password": "password123",
-    "name": "Christian Valdez"
+    "name": "Bootsie Valdez",
+    "dateOfBirth": "8/17/2015"
   }
 }
 
@@ -46,22 +49,34 @@ Authorization: Bearer {{login.response.body.data.attributes.accessToken}}
 
 ### 
 
-# @name updateMe
-PATCH {{base-url}}/users/{{my-user-id}}
+# @name updateMyself
+PATCH {{base-url}}/users/{{login.response.body.data.id}}
 Authorization: Bearer {{login.response.body.data.attributes.accessToken}}
 Content-Type: application/json
 
 {
   "user": {
-    "name": "Christian Valdez"
+    "dateOfBirth": "17-10-2015"
   }
 }
 ### 
 
 # @name fetchTweets
 GET {{base-url}}/tweets
-Authorization: Bearer {{login.response.body.access_token}}
+Authorization: Bearer {{login.response.body.data.attributes.accessToken}}
 
+###
+
+
+# @name createMedia
+POST {{base-url}}/media
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="1.png"
+Content-Type: image/png
+
+< ../../
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ###
 
 # @name createTweet
@@ -74,4 +89,11 @@ Authorization: Bearer {{login.response.body.access_token}}
     "text": "another tweet!"
   }
 }
+###
+
+# @name LikeTweet
+POST {{base-url}}/tweets/e485b8f5-6b3f-4572-bd46-5f5a470d611f/like
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.data.attributes.accessToken}}
+
 ###
