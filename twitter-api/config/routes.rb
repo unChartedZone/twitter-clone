@@ -12,9 +12,9 @@ Rails.application.routes.draw do
 
   # User endpoints
   get 'me', to: 'users#me'
-  post 'me/profile-image', to: 'users#update_profile_image'
-  post 'me/banner-image', to: 'users#update_banner_image'
-  resources :users, only: %i[index show update]
+  resources :users, only: %i[index show update] do
+    patch 'update-image', on: :collection, to: 'users#update_image'
+  end
 
   # Tweet Endpoints
   resources :tweets, only: [:index, :show, :create] do

@@ -4,7 +4,8 @@ class AuthSerializer
 
   set_key_transform :camel_lower
 
-  attributes :id, :email, :username, :name
+  attributes :id, :email, :username, :name, :location
+
   attribute :profile_image do |object|
     if object.profile_image.present?
       Rails.application.routes.url_helpers.url_for(object.profile_image.representation(resize_to_limit: [500, 500]).processed.url)

@@ -91,10 +91,15 @@ export async function updateUser(user: {
   return res.data;
 }
 
-export async function updateBannerImage(payload: Blob) {
+// TODO: add typing for response
+export async function updateUserImage(
+  field: "banner_image" | "profile_image",
+  image: Blob
+): Promise<any> {
   const form = new FormData();
-  form.append("image", payload);
-  const res = await authClient.post("/me/banner-image", form);
+  form.append("field", field);
+  form.append("image", image);
+  const res = await authClient.patch("/users/update-image", form);
   return res.data;
 }
 

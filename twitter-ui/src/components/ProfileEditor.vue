@@ -88,11 +88,12 @@ async function saveProfile() {
   closeProfileEditor();
 }
 
-function handleBannerImageSelected(event: Event) {
-  const target = event.target as HTMLInputElement;
-  const files = !target.files ? [] : Array.from(target.files);
-  selectedBannerImage.value = files[0];
-  editingMedia.value = true;
+async function uploadImage() {
+  if (!!selectedBannerImage.value) {
+    await updateUserImage("banner_image", selectedBannerImage.value);
+  } else {
+    await updateUserImage("profile_image", selectedProfileImage.value!);
+  }
 }
 
 async function uploadBannerImage() {

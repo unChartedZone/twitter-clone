@@ -22,6 +22,26 @@ Content-Type: application/json
 
 ###
 
+# @name UpdateImage
+PATCH {{base-url}}/users/update-image
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer {{auth_token}}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="field"
+Content-Type: text/plain
+
+banner_image
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="bootsie.jpg"
+Content-Type: image/jpeg
+
+< ../../../../Pictures/bootsie/bootsie.jpg
+
+--WebAppBoundary--
+
+###
+
 # @name CreateTweet
 POST {{base-url}}/tweets
 Content-Type: application/json
