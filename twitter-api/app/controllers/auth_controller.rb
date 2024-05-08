@@ -2,7 +2,7 @@ class AuthController < ApplicationController
   require 'jwt'
 
   def signup
-    @user = User.new(user_params)
+    @user = User.create(user_params)
 
     if not @user.save
       render json: @user.errors, status: :unprocessable_entity

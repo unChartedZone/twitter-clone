@@ -28,7 +28,7 @@ class TweetsController < ApplicationController
   end
 
   def create
-    tweet = Tweet.new(tweet_params)
+    tweet = Tweet.create(tweet_params)
     tweet.user = current_user
     if tweet.save
       render json: { tweet: tweet }, status: :created
