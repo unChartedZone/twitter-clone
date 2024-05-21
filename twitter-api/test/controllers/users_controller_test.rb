@@ -44,10 +44,4 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get me_url, as: :json
     assert_response :unauthorized
   end
-
-  # TODO: implement these tests
-  test "update profile image" do
-  end
-  test "update banner image" do
-  end
 end

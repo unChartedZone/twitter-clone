@@ -4,7 +4,7 @@ class AuthSerializer
 
   set_key_transform :camel_lower
 
-  attributes :id, :email, :username, :name, :location
+  attributes :id, :bio, :email, :username, :name, :location
 
   attribute :profile_image do |object|
     if object.profile_image.present?
@@ -22,4 +22,5 @@ class AuthSerializer
     params[:access_token]
   end
 
+  cache_options store: Rails.cache, namespace: 'jsonapi-serializer', expires_in: 1.hour
 end

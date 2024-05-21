@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :is_authenticated, only: [:me, :update_image]
+  before_action :is_authenticated, only: [:me, :update, :destroy, :update_image]
   before_action :check_owner, only: [:update, :destroy]
 
   # GET /users
@@ -43,27 +43,6 @@ class UsersController < ApplicationController
     render json: UserSerializer.new(@current_user)
   end
 
-  def update_image
-    field = update_image_params[:field]
-    image = update_image_params[:image]
-
-    if ['banner_image', 'profile_image'].include?(field)
-      if field == 'banner_image'
-        @current_user.banner_image.attach(image)
-      else
-        @current_user.profile_image.attach(image)
-      end
-
-      if @current_user.save
-        render json: UserSerializer.new(@current_user)
-      else
-        render json: { errors: @current_user.errors }, status: :bad_request
-      end
-    else
-      render json: { message: "Invalid image field specified" }, status: :bad_request
-    end
-  end
-
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -77,14 +56,10 @@ class UsersController < ApplicationController
   end
 
   def update_user_params
-    params.require(:user).permit(:name, :banner_image, :date_of_birth, :location)
-  end
-
-  def update_image_params
-    params.permit(:field, :image)
+    params.require(:user).permit(:name, :bio, :location, :username, :banner_image, :profile_image)
   end
 
   def check_owner
-    head :forbidden unless @user.id == current_user&.id
+    head :forbidden unless @user&.id == current_user&.id
   end
 end
