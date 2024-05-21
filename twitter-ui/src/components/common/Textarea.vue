@@ -3,7 +3,7 @@
     <textarea
       class="textarea__input"
       :value="modelValue"
-      @input="(event: any) => handleChange"
+      @input="(event: any) => handleChange(event.target.value)"
     />
     <label class="textarea__label">{{ label }}</label>
   </div>
@@ -50,8 +50,10 @@ function handleChange(value: string) {
     padding: 1.5rem 0.55rem 1rem;
     font-family: "Chirp", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       Helvetica, Arial, sans-serif;
+    font-size: 1rem;
 
-    &:focus + label {
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
       transform: translateY(-110%);
       font-size: 0.85rem;
     }
