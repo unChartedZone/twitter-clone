@@ -4,6 +4,7 @@ one:
   name: One Oney
   password_digest: <%= BCrypt::Password.create('password123') %>
   date_of_birth: "10-9-2000"
+  bio: I like to take long walks on the beach
 
 two:
   username: two
@@ -11,3 +12,4 @@ two:
   name: Two Twoey
   password_digest: <%= BCrypt::Password.create('twoisbetter123') %>
   date_of_birth: "10-9-2001"
+  bio: Licking door knobs on other planets is illegal
