@@ -23,7 +23,7 @@ class AuthController < ApplicationController
     access_token = JsonWebToken.generate_access_token(@user)
     refresh_token = JsonWebToken.generate_refresh_token(@user)
     set_refresh_token_cookie(refresh_token)
-    render json: AuthSerializer.new(@user, { params: { access_token: access_token } })
+    render json: UserSerializer.new(@user, { params: { access_token: access_token } })
   end
 
   def refresh_current_token
@@ -51,7 +51,7 @@ class AuthController < ApplicationController
 
     set_refresh_token_cookie(refresh_token)
 
-    render json: AuthSerializer.new(@user, { params: { access_token: access_token } })
+    render json: UserSerializer.new(@user, { params: { access_token: access_token } })
   end
 
   def logout
