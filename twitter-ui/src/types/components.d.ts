@@ -1,6 +1,7 @@
 import Button from "@/components/common/Button.vue";
 import Card from "@/components/common/Card.vue";
 import CardHeader from "@/components/common/card/CardHeader.vue";
+import FileInput from "@/components/common/FileInput.vue";
 import Icon from "@/components/common/Icon.vue";
 import Link from "@/components/common/Link.vue";
 import List from "@/components/common/List.vue";
@@ -18,6 +19,7 @@ declare module "@vue/runtime-core" {
     Button: typeof Button;
     Card: typeof Card;
     CardHeader: typeof CardHeader;
+    FileInput: typeof FileInput;
     Icon: typeof Icon;
     Link: typeof Link;
     List: typeof List;
