@@ -22,6 +22,31 @@ Content-Type: application/json
 
 ###
 
+# @name FetchMyself
+GET {{base-url}}/me
+Authorization: Bearer {{auth_token}}
+
+###
+
+# @name UpdateUser
+PATCH {{base-url}}/users/e296bfe6-89b6-4acb-ab29-be5c0fcf40bb
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+
+--WebAppBoundary
+Content-Disposition: form-data; name="user"
+Content-Type: application/json
+
+{
+"user": {
+  "name": "Bobby Light"
+}
+}
+--WebAppBoundary--
+
+###
+
 # @name UpdateImage
 PATCH {{base-url}}/users/update-image
 Content-Type: multipart/form-data; boundary=WebAppBoundary
