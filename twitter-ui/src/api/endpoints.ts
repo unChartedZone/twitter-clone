@@ -2,32 +2,12 @@ import { authClient, client } from "./client";
 import type User from "@/models/User";
 import type Tweet from "@/models/Tweet";
 import { type BaseTweet } from "@/models/Tweet";
-import type { BaseUser } from "@/models/User";
-
-interface LoginResponse {
-  data: {
-    attributes: User;
-  };
-}
-
-interface TweetResponse {
-  data: {
-    id: string;
-    attributes: BaseTweet;
-    relationships: {
-      user: {
-        data: {
-          id: string;
-          type: string;
-        };
-      };
-    };
-  }[];
-  included: {
-    id: string;
-    attributes: BaseUser;
-  }[];
-}
+import type { BaseUser, UserPatch } from "@/models/User";
+import type {
+  LoginResponse,
+  UserResponse,
+  TweetResponse,
+} from "@/types/ResponseTypes";
 
 export async function login(user: {
   email: string;
@@ -82,48 +62,52 @@ export async function fetchProfileTweets(
   }
 }
 
-export async function updateUser(user: {
-  id?: string;
-  name?: string;
-  bannerImage?: string;
-}): Promise<User> {
-  const res = await authClient.patch<User>(`/users/${user.id}`, { user });
-  return res.data;
+export async function patchUser(
+  userId: string,
+  userPatch: UserPatch,
+  bannerImage?: File,
+  profileImage?: File
+): Promise<BaseUser> {
+  const formData = new FormData();
+
+  // Add images to form data if they exist
+  !!bannerImage && formData.append("user[banner_image]", bannerImage);
+  !!profileImage && formData.append("user[profile_image]", profileImage);
+
+  // Add and text fields from user patch
+  Object.keys(userPatch).forEach((key) => {
+    const value = userPatch[key as keyof UserPatch];
+    value && formData.append(`user[${key}]`, value);
+  });
+
+  // Dont make a request if no data was modified
+  if (
+    Array.from(formData.entries()).length == 0 &&
+    !bannerImage &&
+    !profileImage
+  )
+    return Promise.reject("Empty update user payload");
+
+  const res = await authClient.patch<UserResponse>(
+    `/users/${userId}`,
+    formData
+  );
+  return res.data.data.attributes;
 }
 
-// TODO: add typing for response
-export async function updateUserImage(
-  field: "banner_image" | "profile_image",
-  image: Blob
-): Promise<any> {
-  const form = new FormData();
-  form.append("field", field);
-  form.append("image", image);
-  const res = await authClient.patch("/users/update-image", form);
-  return res.data;
-}
+// TODO: maybe move this to profile store?
+function transformTweetResponse(res: TweetResponse): Tweet[] {
+  const userMap: Map<string, BaseUser> = res.included.reduce((acc, value) => {
+    acc.set(value.id, {
+      ...value.attributes,
+      id: value.id,
+    });
+    return acc;
+  }, new Map<string, BaseUser>());
 
-// TODO: maybe mobe this to profile store?
-function transformTweetResponse(res: TweetResponse) {
-  const userMap: { [key: string]: BaseUser } = res.included.reduce(
-    (acc, value) => {
-      return {
-        [`${value.id}`]: {
-          ...value.attributes,
-          id: value.id,
-        },
-        ...acc,
-      };
-    },
-    {}
-  );
-
-  return res.data.map(
-    (i) =>
-      ({
-        ...i.attributes,
-        id: i.id,
-        user: userMap[i.relationships.user.data.id],
-      } as Tweet)
-  );
+  return res.data.map((tweet) => ({
+    ...tweet.attributes,
+    id: tweet.id,
+    user: userMap.get(tweet.relationships?.user.data.id ?? ""),
+  }));
 }
