@@ -1,114 +1,157 @@
 <template>
-  <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">
-    <template v-slot:activator="{ onClick }">
-      <Button @click="onClick" outline>Edit profile</Button>
+  <MediaEditor
+    v-if="profileMediaState.showMediaEditor"
+    :imageUrl="
+      profileMediaState.mediaType == 'profile'
+        ? profileImageSrc
+        : bannerImageSrc
+    "
+    @onCancel="profileMediaState.showMediaEditor = false"
+    @onApplyImage="profileMediaState.showMediaEditor = false"
+  />
+  <!-- default card -->
+  <Card v-else>
+    <template v-slot:header>
+      <div class="profile-editor__header">
+        <Button @click="closeProfileEditor" icon="cross" />
+        <h1>Edit Profile</h1>
+      </div>
+      <Button @click="saveProfile" outline>Save</Button>
     </template>
-    <Card v-if="editingMedia">
-      <template v-slot:header>
-        <div class="profile-editor__header">
-          <Button @click="editingMedia = false" icon="left-arrow" />
-          <h1>Edit media</h1>
-        </div>
-        <Button @click="uploadBannerImage">Apply</Button>
-      </template>
-      <img style="width: 100%" :src="selectedBannerImageUrl" alt="" />
-    </Card>
-    <!-- default card -->
-    <Card v-else>
-      <template v-slot:header>
-        <div class="profile-editor__header">
-          <Button @click="closeProfileEditor" icon="cross" />
-          <h1>Edit Profile</h1>
-        </div>
-        <Button @click="saveProfile" outline>Save</Button>
-      </template>
-      <div class="profile-editor__media">
-        <section class="profile-editor__banner-image">
-          <img
-            v-if="!!profileFormState.bannerImageUrl"
-            :src="profileFormState.bannerImageUrl"
-            alt=""
-          />
-          <input
-            ref="fileInputRef"
-            type="file"
-            hidden
-            accept=".png, .jpg, .jpeg"
-            @change="handleBannerImageSelected"
-          />
-          <Button @click="fileInputRef?.click()" icon="camera-outline" tonal />
-          <Button @click="clearBannerImage" icon="cross" tonal />
-        </section>
-        <section class="profile-editor__profile-image">
-          <Button @click="fileInputRef?.click()" icon="camera-outline" tonal />
-          <img :src="profileFormState.profileImageUrl" alt="" />
-        </section>
-      </div>
-      <div class="profile-editor__form">
-        <section class="space-y-4">
-          <Textfield v-model="profileFormState.name" label="Name" />
-          <Textarea label="Bio" />
-          <Textfield label="Location" />
-          <Textfield label="Website" />
-        </section>
-      </div>
-    </Card>
-  </Modal>
+    <div class="profile-editor__media">
+      <section class="profile-editor__banner-image">
+        <img v-if="!!bannerImageSrc" :src="bannerImageSrc" alt="" />
+        <FileInput
+          v-model="profileMediaState.selectedBannerImage"
+          accept=".png, .jpg, .jpeg"
+        >
+          <template v-slot="{ onClick }">
+            <Button @click="onClick" icon="camera-outline" tonal />
+          </template>
+        </FileInput>
+        <Button
+          @click="
+            profileMediaState.bannerImage = undefined;
+            profileMediaState.selectedBannerImage = undefined;
+          "
+          icon="cross"
+          tonal
+        />
+      </section>
+      <section class="profile-editor__profile-image">
+        <FileInput
+          v-model="profileMediaState.selectedProfileImage"
+          accept=".png, .jpg, .jpeg"
+        >
+          <template v-slot="{ onClick }">
+            <Button @click="onClick" icon="camera-outline" tonal />
+          </template>
+        </FileInput>
+        <img :src="profileImageSrc" alt="" />
+      </section>
+    </div>
+    <div class="profile-editor__form">
+      <section class="space-y-4">
+        <Textfield label="Name" v-model="profileFormState.name" />
+        <Textarea label="Bio" v-model="profileFormState.bio" />
+        <Textfield label="Location" v-model="profileFormState.location" />
+        <Textfield label="Website" v-model="profileFormState.website" />
+      </section>
+    </div>
+  </Card>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
-import { updateBannerImage, updateUser } from "@/api/endpoints";
+import { ref, reactive, computed, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import MediaEditor from "./profile-editor/MediaEditor.vue";
+import type { UserPatch } from "@/models/User";
 
 const authStore = useAuthStore();
-const showProfileEditor = ref<boolean>(false);
-const editingMedia = ref<boolean>(false);
-const fileInputRef = ref<HTMLInputElement | null>(null);
-const selectedBannerImage = ref<Blob>();
 
-const profileFormState = reactive({
+const emit = defineEmits(["onClose"]);
+
+const profileMediaState = reactive<{
+  bannerImage?: string;
+  profileImage?: string;
+  selectedBannerImage?: File;
+  selectedProfileImage?: File;
+  mediaType?: "banner" | "profile";
+  showMediaEditor: boolean;
+}>({
+  bannerImage: authStore.user?.bannerImage,
+  profileImage: authStore.user?.profileImage,
+  showMediaEditor: false,
+});
+
+const profileFormState = reactive<UserPatch>({
   name: authStore.user?.name,
-  bannerImageUrl: authStore.user?.bannerImage,
-  profileImageUrl: authStore.user?.profileImage,
-  location: "",
-  website: "",
+  bio: authStore.user?.bio,
+  location: authStore.user?.location,
+  website: authStore.user?.website,
 });
 
-const selectedBannerImageUrl = computed(() => {
-  return URL.createObjectURL(selectedBannerImage.value!);
+const profileImageSrc = computed(() => {
+  return !!profileMediaState.selectedProfileImage
+    ? URL.createObjectURL(profileMediaState.selectedProfileImage)
+    : profileMediaState.profileImage;
 });
+
+const bannerImageSrc = computed(() => {
+  return !!profileMediaState.selectedBannerImage
+    ? URL.createObjectURL(profileMediaState.selectedBannerImage)
+    : profileMediaState.bannerImage;
+});
+
+watch(
+  [
+    profileMediaState.selectedProfileImage,
+    profileMediaState.selectedBannerImage,
+  ],
+  ([newProfileImage, newBannerImg], [oldProfileImage, oldBannerImg]) => {
+    if (!!newProfileImage && newProfileImage != oldProfileImage) {
+      profileMediaState.showMediaEditor = true;
+      profileMediaState.mediaType = "profile";
+    } else if (!!newBannerImg && newBannerImg != oldBannerImg) {
+      profileMediaState.showMediaEditor = true;
+      profileMediaState.mediaType = "banner";
+    } else {
+      profileMediaState.showMediaEditor = false;
+    }
+  }
+);
 
 async function saveProfile() {
-  const user = await updateUser({
-    id: authStore.user?.id,
-    name: profileFormState.name,
-    bannerImage: profileFormState.bannerImageUrl,
-  });
+  if (!authStore.user) return;
+
+
+  const patch = Object.keys(profileFormState)
+    .filter((key) => {
+      // @ts-ignore
+      return profileFormState[key] != authStore.user[key];
+    })
+    .reduce((acc: UserPatch, key) => {
+      return {
+        ...acc,
+        // @ts-ignore
+        [`${key}`]: profileFormState[key],
+      };
+    }, {});
+
+  try {
+    await authStore.updateUser(
+      patch,
+      profileMediaState.selectedBannerImage,
+      profileMediaState.selectedProfileImage
+    );
+  } catch (e) {
+    console.log(e);
+  }
   closeProfileEditor();
 }
 
-async function uploadImage() {
-  if (!!selectedBannerImage.value) {
-    await updateUserImage("banner_image", selectedBannerImage.value);
-  } else {
-    await updateUserImage("profile_image", selectedProfileImage.value!);
-  }
-}
-
-async function uploadBannerImage() {
-  if (!selectedBannerImage.value) return;
-  await updateBannerImage(selectedBannerImage.value);
-}
-
-function clearBannerImage() {
-  profileFormState.bannerImageUrl = "";
-}
-
 function closeProfileEditor() {
-  selectedBannerImage.value = undefined;
-  editingMedia.value = false;
-  showProfileEditor.value = false;
+  emit("onClose");
 }
 </script>
 

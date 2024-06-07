@@ -18,12 +18,22 @@ export const useProfileStore = defineStore("profile", () => {
       authStore.user?.username
     );
     if (profileTweets) {
-      tweets.value = profileTweets;
+      setTweets(profileTweets);
     }
+  }
+
+  function setTweets(tweetList: Tweet[]): void {
+    tweets.value = tweetList;
+  }
+
+  function $reset() {
+    tweets.value = [];
   }
 
   return {
     tweets,
     loadProfileTweets,
+    setTweets,
+    $reset,
   };
 });

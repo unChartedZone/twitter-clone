@@ -1,11 +1,15 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { login, logout, refresh } from "@/api/endpoints";
+import { login, logout, refresh, patchUser } from "@/api/endpoints";
 import type User from "@/models/User";
+import { useProfileStore } from "./profile";
+import type { BaseUser, UserPatch } from "@/models/User";
+import type Tweet from "@/models/Tweet";
 
 export const useAuthStore = defineStore("auth", () => {
   const accessToken = ref<string>();
   const user = ref<User>();
+  const profileStore = useProfileStore();
 
   async function loginUser(payload: { email: string; password: string }) {
     const res = await login(payload);
@@ -22,13 +26,54 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function logoutUser() {
-    const res = await logout();
-    user.value = undefined;
-    accessToken.value = undefined;
+    await logout();
+    $reset();
+    profileStore.$reset();
   }
 
   function setUser(userValue: User) {
     user.value = userValue;
+  }
+
+  async function updateUser(
+    userPatch: UserPatch,
+    bannerImage?: File,
+    profileImage?: File
+  ) {
+    if (!user.value) return;
+
+    const updatedUser = await patchUser(
+      user.value?.id,
+      { ...userPatch },
+      bannerImage,
+      profileImage
+    );
+
+    // If name was updated we should update any tweets of the user to match new name
+    if (userPatch.name) {
+      const modifiedTweets: Tweet[] = profileStore.tweets.map((tweet) => {
+        return tweet.user?.name == user.value?.name
+          ? ({
+              ...tweet,
+              user: {
+                ...tweet.user,
+                name: userPatch.name,
+              },
+            } as Tweet)
+          : tweet;
+      });
+      profileStore.setTweets(modifiedTweets);
+    }
+
+    user.value = {
+      ...user.value!,
+      ...updatedUser,
+    };
+  }
+
+  function $reset() {
+    user.value = undefined;
+    accessToken.value = undefined;
   }
 
   return {
@@ -38,5 +83,6 @@ export const useAuthStore = defineStore("auth", () => {
     refreshUser,
     logoutUser,
     setUser,
+    updateUser,
   };
 });

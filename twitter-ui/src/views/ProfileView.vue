@@ -11,6 +11,12 @@ const profileStore = useProfileStore();
 onMounted(async () => {
   await profileStore.loadProfileTweets();
 });
+
+const showProfileEditor = ref<boolean>(false);
+
+function closeProfileEditor() {
+  showProfileEditor.value = false;
+}
 </script>
 
 <template>
@@ -26,7 +32,6 @@ onMounted(async () => {
         </div>
       </div>
     </header>
-    <!--TODO:  -->
     <img
       class="profile__banner-image"
       :src="authStore.user?.bannerImage"
@@ -39,14 +44,19 @@ onMounted(async () => {
         alt=""
       />
       <div class="profile__edit-profile">
-        <ProfileEditor />
+        <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">
+          <template v-slot:activator="{ onClick }">
+            <Button @click="onClick" outline>Edit profile</Button>
+          </template>
+          <ProfileEditor @onClose="closeProfileEditor" />
+        </Modal>
       </div>
       <div class="profile__name">
         <h3>{{ authStore.user?.name }}</h3>
         <p>@{{ authStore.user?.username }}</p>
       </div>
       <div class="profile__info">
-        <span>San Diego, CA</span>
+        <span>{{ authStore.user?.location }}</span>
         <span>
           <a href="https://chrisvaldez.dev">chrisvaldez.dev</a>
         </span>
@@ -106,6 +116,11 @@ onMounted(async () => {
     width: 100%;
     height: 15rem;
     object-fit: cover;
+  }
+
+  &__info {
+    display: flex;
+    gap: 0.5rem;
   }
 
   &__content {
