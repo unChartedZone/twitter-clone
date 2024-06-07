@@ -5,8 +5,10 @@ import type { IconName } from "./Icon.vue";
 interface ButtonProps {
   block?: boolean;
   icon?: IconName;
+  // Have button be clear and display a border around button
   outline?: boolean;
   color?: "primary" | "secondary" | string;
+  // TODO: add documentation on what this does...
   tonal?: boolean;
   type?: "button" | "submit" | "reset";
 }

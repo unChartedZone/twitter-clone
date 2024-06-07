@@ -3,7 +3,7 @@ import { defineProps } from "vue";
 import { RouterLink, type RouteLocationRaw } from "vue-router";
 
 interface LinkProps {
-  to: RouteLocationRaw | string;
+  to?: RouteLocationRaw | string;
   block?: boolean;
   icon?: boolean;
   outline?: boolean;

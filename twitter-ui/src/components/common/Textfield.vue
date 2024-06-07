@@ -46,7 +46,7 @@ function handleChange(value: string) {
     position: absolute;
     pointer-events: none;
     top: 50%;
-    left: 1rem;
+    left: 0.5rem;
     transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
     transform: translateY(-50%);
   }
@@ -57,8 +57,8 @@ function handleChange(value: string) {
     background-color: $white;
     border: none;
     outline: none;
-    padding: 1.5rem 1rem 1rem;
-    font-size: 1.1rem;
+    padding: 1.5rem 0.55rem 1rem;
+    font-size: 1rem;
 
     &:placeholder-shown + label {
       color: rgba(107, 114, 128, 1);
