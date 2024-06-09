@@ -104,7 +104,7 @@ const bannerImageSrc = computed(() => {
 });
 
 watch(
-  [
+  () => [
     profileMediaState.selectedProfileImage,
     profileMediaState.selectedBannerImage,
   ],
