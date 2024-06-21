@@ -3,17 +3,21 @@ import { defineAsyncComponent, computed } from "vue";
 
 // I think this is a good idea...
 export type IconName =
+  | "balloon"
   | "bell"
   | "bird"
   | "bookmark"
   | "bookmark-outline"
   | "camera-outline"
+  | "calendar"
+  | "chain"
   | "cross"
   | "ellipsis"
   | "home"
   | "heart"
   | "heart-outline"
   | "left-arrow"
+  | "location"
   | "reply"
   | "retweet"
   | "share";
