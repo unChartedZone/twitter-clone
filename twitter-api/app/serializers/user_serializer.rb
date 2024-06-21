@@ -4,7 +4,12 @@ class UserSerializer
 
   set_key_transform :camel_lower
 
-  attributes :id, :username, :email, :name, :bio, :email, :date_of_birth, :location, :website
+  attributes :id, :username, :email, :name, :bio, :email, :birth_date, :location, :website
+
+  attribute :join_date do |object|
+    object.created_at
+  end
+
   attribute :profile_image do |object|
     if object.profile_image.present?
       Rails.application.routes.url_helpers.url_for(object.profile_image.representation(resize_to_limit: [500, 500]).processed.url)

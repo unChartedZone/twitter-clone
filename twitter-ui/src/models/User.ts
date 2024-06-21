@@ -4,7 +4,8 @@ export interface BaseUser {
   username: string;
   name: string;
   bio?: string;
-  dateOfBirth?: string;
+  birthDate?: Date;
+  joinDate: Date;
   location?: string;
   website?: string;
   profileImage?: string;
@@ -15,7 +16,7 @@ export interface BaseUser {
 export interface UserPatch {
   name?: string;
   bio?: string;
-  dateOfBirth?: string;
+  birthDate?: Date;
   location?: string;
   website?: string;
 }

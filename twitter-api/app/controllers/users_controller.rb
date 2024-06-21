@@ -56,7 +56,7 @@ class UsersController < ApplicationController
   end
 
   def update_user_params
-    params.require(:user).permit(:name, :bio, :location, :website,:date_of_birth, :banner_image, :profile_image)
+    params.require(:user).permit(:name, :bio, :location, :website,:birth_date, :banner_image, :profile_image)
   end
 
   def check_owner
