@@ -5,8 +5,19 @@
       class="select__input"
       @change="(event: any) => handleChange(event.target.value)"
     >
-      <option value="" disabled selected></option>
-      <option v-for="option in options" :value="option">{{ option }}</option>
+      <option
+        v-if="modelValue == '' || !modelValue"
+        value=""
+        disabled
+        selected
+      ></option>
+      <option
+        v-for="option in options"
+        :value="option"
+        :selected="option == modelValue"
+      >
+        {{ option }}
+      </option>
     </select>
   </div>
 </template>
@@ -36,12 +47,17 @@ function handleChange(value: SelectValue) {
 <style scoped lang="scss">
 .select {
   border: 1px solid $gray;
+  border-radius: 0.375rem;
   position: relative;
   display: block;
   width: 100%;
+  overflow: hidden;
 
   &__label {
     position: absolute;
+    font-size: 0.8rem;
+    top: 10%;
+    left: 0.55rem;
   }
 
   &__input {
@@ -51,7 +67,8 @@ function handleChange(value: SelectValue) {
     appearance: none;
     outline: none;
     width: 100%;
-    padding: 0.5rem;
+    padding: 1.5rem 0.55rem 0.55rem;
+    font-size: 1rem;
   }
 }
 </style>
