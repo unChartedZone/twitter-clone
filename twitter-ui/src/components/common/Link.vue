@@ -71,7 +71,15 @@ withDefaults(defineProps<LinkProps>(), { to: "/" });
 
   &--text {
     background-color: transparent;
+    color: $primary;
+    font-weight: 500;
+    font-size: 1rem;
     padding: 0;
+
+    &:hover {
+      text-decoration: underline;
+      background: transparent;
+    }
   }
 }
 </style>
