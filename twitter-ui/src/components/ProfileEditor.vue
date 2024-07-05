@@ -56,6 +56,7 @@
         <Textarea label="Bio" v-model="profileFormState.bio" />
         <Textfield label="Location" v-model="profileFormState.location" />
         <Textfield label="Website" v-model="profileFormState.website" />
+        <DateSelector v-model="profileFormState.birthDate" />
       </section>
     </div>
   </Card>
@@ -65,6 +66,7 @@
 import { ref, reactive, computed, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import MediaEditor from "./profile-editor/MediaEditor.vue";
+import DateSelector from "./DateSelector.vue";
 import type { UserPatch } from "@/models/User";
 
 const authStore = useAuthStore();
@@ -89,6 +91,7 @@ const profileFormState = reactive<UserPatch>({
   bio: authStore.user?.bio,
   location: authStore.user?.location,
   website: authStore.user?.website,
+  birthDate: authStore.user?.birthDate,
 });
 
 const profileImageSrc = computed(() => {
@@ -123,7 +126,6 @@ watch(
 
 async function saveProfile() {
   if (!authStore.user) return;
-
 
   const patch = Object.keys(profileFormState)
     .filter((key) => {

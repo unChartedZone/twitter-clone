@@ -1,18 +1,28 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { RouterView } from "vue-router";
+import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
 import { useProfileStore } from "@/stores/profile";
 import ProfileEditor from "@/components/ProfileEditor.vue";
 
 const authStore = useAuthStore();
 const profileStore = useProfileStore();
+const iconSize = 1.2;
+
+const showProfileEditor = ref<boolean>(false);
+
+const birthDate = computed(() =>
+  dayjs(authStore.user?.birthDate).format("MMM D, YYYY")
+);
+
+const joinDate = computed(() =>
+  dayjs(authStore.user?.joinDate).format("MMMM YYYY")
+);
 
 onMounted(async () => {
   await profileStore.loadProfileTweets();
 });
-
-const showProfileEditor = ref<boolean>(false);
 
 function closeProfileEditor() {
   showProfileEditor.value = false;
@@ -56,11 +66,24 @@ function closeProfileEditor() {
         <p>@{{ authStore.user?.username }}</p>
       </div>
       <div class="profile__info">
-        <span>{{ authStore.user?.location }}</span>
         <span>
-          <a href="https://chrisvaldez.dev">chrisvaldez.dev</a>
+          <Icon name="location" :size="iconSize" />
+          {{ authStore.user?.location }}
         </span>
-        <span>Joined November 2013</span>
+        <span>
+          <Icon name="chain" :size="iconSize" />
+          <Link text :href="authStore.user?.website" target="_blank">{{
+            authStore.user?.website?.replace(/^https?:\/\//, "")
+          }}</Link>
+        </span>
+        <span>
+          <Icon name="balloon" :size="iconSize" />
+          Born {{ birthDate }}
+        </span>
+        <span>
+          <Icon name="calendar" :size="iconSize" />
+          Joined {{ joinDate }}
+        </span>
       </div>
       <div class="profile__following">
         <span>335 Following</span>
@@ -121,6 +144,13 @@ function closeProfileEditor() {
   &__info {
     display: flex;
     gap: 0.5rem;
+    font-size: 0.9rem;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
   }
 
   &__content {
