@@ -9,8 +9,9 @@ import ListItem from "@/components/common/ListItem.vue";
 import Menu from "@/components/common/Menu.vue";
 import Modal from "@/components/common/Modal.vue";
 import Select from "@/components/common/Select.vue";
-import TabHeader from "@/components/common/TabHeader.vue";
-import Tabs from "@/components/common/Tabs.vue";
+import TabHeader from "@/components/common/tab/TabHeader.vue";
+import TabRow from "@/components/common/tab/TabRow.vue";
+import Tabs from "@/components/common/tab/Tabs.vue";
 import Textarea from "@/components/common/Textarea.vue";
 import Textfield from "@/components/common/Textfield.vue";
 
@@ -27,9 +28,10 @@ declare module "@vue/runtime-core" {
     Menu: typeof Menu;
     Modal: typeof Modal;
     Select: typeof Select;
-    Tabs: typeof Tabs;
     Textfield: typeof Textfield;
     Textarea: typeof Textarea;
     TabHeader: typeof TabHeader;
+    TabRow: typeof TabRow;
+    Tabs: typeof Tabs;
   }
 }
