@@ -33,10 +33,12 @@ const months = Array.from({ length: 12 }, (_item, i) =>
 );
 
 const days = computed(() => {
-  const daysInMonth = dayjs(
-    `${dateState.year}-${dateState.month}-${dateState.day}`
-  ).daysInMonth();
-  return Array.from({ length: daysInMonth }, (_, index) => index + 1);
+  const dayCount = new Date(
+    !dateState.year ? new Date().getFullYear() : dateState.year,
+    months.findIndex((x) => x == dateState.month) + 1,
+    0
+  ).getDate();
+  return Array.from({ length: dayCount }, (_, index) => index + 1);
 });
 
 const years = Array.from(
