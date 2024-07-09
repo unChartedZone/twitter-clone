@@ -10,6 +10,8 @@ export interface BaseUser {
   website?: string;
   profileImage?: string;
   bannerImage?: string;
+  totalFollowing: number;
+  totalFollowers: number;
 }
 
 // User fields that are typically modified

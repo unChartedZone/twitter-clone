@@ -86,17 +86,21 @@ function closeProfileEditor() {
         </span>
       </div>
       <div class="profile__following">
-        <span>335 Following</span>
-        <span>30 Followers</span>
+        <span>
+          <strong>{{ authStore.user?.totalFollowing }}</strong> Following
+        </span>
+        <span>
+          <strong>{{ authStore.user?.totalFollowers }}</strong> Followers
+        </span>
       </div>
     </section>
     <section>
-      <div class="tab-row">
+      <TabRow>
         <TabHeader :to="{ name: 'profile' }">Tweets</TabHeader>
         <TabHeader :to="{ name: 'replies' }">Replies</TabHeader>
         <TabHeader :to="{ name: 'media' }">Media</TabHeader>
         <TabHeader :to="{ name: 'likes' }">Likes</TabHeader>
-      </div>
+      </TabRow>
       <RouterView />
     </section>
   </main>
@@ -175,11 +179,11 @@ function closeProfileEditor() {
     justify-content: end;
     padding: 0.5rem 0 2.5rem;
   }
-}
 
-.tab-row {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid $gray-100;
+  &__following {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
 }
 </style>
