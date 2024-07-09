@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
-  before_action :is_authenticated, only: [:me, :update, :destroy, :update_image]
+  before_action :set_user, only: [:show, :update, :destroy, :follow_user]
+  before_action :is_authenticated, only: [:me, :update, :destroy, :following, :followers, :follow_user]
   before_action :check_owner, only: [:update, :destroy]
 
   # GET /users
@@ -43,6 +43,25 @@ class UsersController < ApplicationController
     render json: UserSerializer.new(@current_user)
   end
 
+  def followers
+    followers = @current_user.followers
+    render json: UserSerializer.new(followers), status: :ok
+  end
+
+  def following
+    following = @current_user.following
+    render json: UserSerializer.new(following), status: :ok
+  end
+
+  def follow_user
+    follow = Follower.new({ followed_user: @user, user_id: current_user.id })
+    if follow.save && @current_user.save && @user.save # this feels stupid...
+      render json: follow, status: :created
+    else
+      render json: follow.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -56,7 +75,7 @@ class UsersController < ApplicationController
   end
 
   def update_user_params
-    params.require(:user).permit(:name, :bio, :location, :website,:birth_date, :banner_image, :profile_image)
+    params.require(:user).permit(:name, :bio, :location, :website, :birth_date, :banner_image, :profile_image)
   end
 
   def check_owner

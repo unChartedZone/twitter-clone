@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   # User endpoints
   get 'me', to: 'users#me'
   resources :users, only: %i[index show update] do
+    get 'following', on: :collection, to: 'users#following'
+    get 'followers', on: :collection, to: 'users#followers'
+    post 'follow/:id', on: :collection, to: 'users#follow_user'
     patch 'update-image', on: :collection, to: 'users#update_image'
   end
 

@@ -4,7 +4,7 @@ class UserSerializer
 
   set_key_transform :camel_lower
 
-  attributes :id, :username, :email, :name, :bio, :email, :birth_date, :location, :website
+  attributes :id, :username, :email, :name, :bio, :email, :birth_date, :location, :website, :total_following, :total_followers
 
   attribute :join_date do |object|
     object.created_at
