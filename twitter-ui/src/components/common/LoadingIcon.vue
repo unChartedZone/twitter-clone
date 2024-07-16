@@ -19,15 +19,11 @@ withDefaults(defineProps<{ size?: number }>(), { size: 30 });
 .lds-ring {
   display: inline-block;
   position: relative;
-  // width: 80px;
-  // height: 80px;
 }
 .lds-ring div {
   box-sizing: border-box;
   display: block;
   position: absolute;
-  // width: 64px;
-  // height: 64px;
   width: 80%;
   height: 80%;
   margin: 2px;

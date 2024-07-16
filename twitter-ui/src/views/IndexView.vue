@@ -72,12 +72,14 @@ const toggleSignupModal = ref<boolean>(false);
     ul {
       display: flex;
       justify-content: center;
-      flex-wrap: 1;
+      flex-wrap: wrap;
       gap: 0.5rem;
     }
 
     li {
       list-style: none;
+      text-wrap: nowrap;
+      font-size: 0.9rem;
     }
   }
 }
