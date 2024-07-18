@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 import type { IconName } from "./Icon.vue";
+import LoadingIcon from "@/components/common/LoadingIcon.vue";
 
 interface ButtonProps {
   block?: boolean;
   icon?: IconName;
+  loading?: boolean;
   // Have button be clear and display a border around button
   outline?: boolean;
   color?: "primary" | "secondary" | string;
@@ -30,8 +32,11 @@ withDefaults(defineProps<ButtonProps>(), {
     }"
     :type="type"
   >
-    <Icon v-if="!!icon" :name="icon" :fill="tonal ? 'white' : 'black'" />
-    <slot v-else />
+    <LoadingIcon v-if="loading" :size="15" />
+    <div v-else>
+      <Icon v-if="!!icon" :name="icon" :fill="tonal ? 'white' : 'black'" />
+      <slot v-else />
+    </div>
   </button>
 </template>
 
