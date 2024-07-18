@@ -36,6 +36,13 @@ module TwitterApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # create logger with file as a logging target
+    config.logger = Logger.new('log/logs.log')
+    #setup minimum log level
+    config.log_level = :warn
+
+    # Setup use of cookies in requests and responses
     config.middleware.use ActionDispatch::Cookies
   end
 end
