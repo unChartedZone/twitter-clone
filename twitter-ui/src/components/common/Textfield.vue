@@ -5,6 +5,7 @@ interface TextfieldProps {
   name?: string;
   placeholder?: string;
   type?: string;
+  autocomplete?: boolean;
 }
 
 withDefaults(defineProps<TextfieldProps>(), {
@@ -22,10 +23,12 @@ function handleChange(value: string) {
   <div class="textfield">
     <input
       class="textfield__input"
+      :name="name?.toLowerCase() ?? label?.toLowerCase()"
       :placeholder="placeholder ? placeholder : label"
       :type="type"
       :value="modelValue"
       @input="(event: any) => handleChange(event.target.value)"
+      :autocomplete="!autocomplete ? 'off' : 'on'"
     />
     <label class="textfield__label">{{ label }}</label>
   </div>
