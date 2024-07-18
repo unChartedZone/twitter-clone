@@ -67,6 +67,10 @@ withDefaults(defineProps<LinkProps>(), { to: "/" });
     background-color: $white;
     border: 1px solid $primary;
     color: $primary;
+
+    &:hover {
+      background-color: rgba(15, 20, 25, 0.1);
+    }
   }
 
   &--text {
