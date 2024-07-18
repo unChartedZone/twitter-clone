@@ -27,6 +27,10 @@ onMounted(async () => {
 function closeProfileEditor() {
   showProfileEditor.value = false;
 }
+
+function formatLink(link: string): string {
+  return link.replace(/^https?:\/\//, "");
+}
 </script>
 
 <template>
@@ -66,14 +70,14 @@ function closeProfileEditor() {
         <p>@{{ authStore.user?.username }}</p>
       </div>
       <div class="profile__info">
-        <span>
+        <span v-if="authStore.user?.location">
           <Icon name="location" :size="iconSize" />
           {{ authStore.user?.location }}
         </span>
-        <span>
+        <span v-if="authStore.user?.website">
           <Icon name="chain" :size="iconSize" />
           <Link text :href="authStore.user?.website" target="_blank">{{
-            authStore.user?.website?.replace(/^https?:\/\//, "")
+            formatLink(authStore.user.website)
           }}</Link>
         </span>
         <span>

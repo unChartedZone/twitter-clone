@@ -39,6 +39,11 @@ export async function logout() {
   return client.post("/logout");
 }
 
+export async function fetchFeed(): Promise<Tweet[]> {
+  const res = await authClient.get<TweetResponse>("/tweets/feed");
+  return transformTweetResponse(res.data);
+}
+
 export async function fetchUserTweets(): Promise<Tweet[]> {
   const res = (await authClient.get<TweetResponse>("/tweets")).data;
   return res.data.map(
