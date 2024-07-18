@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get '/profile/:username/protected', on: :collection, to: 'tweets#protected_profile_tweets'
     get '/profile/:username', on: :collection, to: 'tweets#profile_tweets'
     get 'liked', on: :collection, to: 'tweets#liked_tweets'
+    get 'feed', on: :collection, to: 'tweets#feed'
     post 'like', on: :member
     post 'unlike', on: :member
     post 'retweet', on: :member

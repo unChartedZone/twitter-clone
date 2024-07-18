@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class TweetsController < ApplicationController
 
-  before_action :is_authenticated, only: %i[create index liked_tweets like unlike retweet protected_profile_tweets]
+  before_action :is_authenticated, only: %i[create index feed liked_tweets like unlike retweet protected_profile_tweets]
 
   def index
     tweets = current_user.tweets.includes([:medium])
@@ -10,6 +10,12 @@ class TweetsController < ApplicationController
 
   def show
     render json: TweetSerializer.new(Tweet.find(params[:id])).serializable_hash.to_json
+  end
+
+  def feed
+    following = @current_user.following
+    tweets = Tweet.where(:user_id => following).or(Tweet.where(id: Retweet.select(:tweet_id).where(:user_id => following))).sort_by(&:created_at).reverse
+    render json: TweetSerializer.new(tweets, { include: [:user], params: { current_user: @current_user } }).serializable_hash.to_json
   end
 
   def protected_profile_tweets
