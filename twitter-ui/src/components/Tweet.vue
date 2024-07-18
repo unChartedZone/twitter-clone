@@ -43,9 +43,11 @@ defineProps<TweetProps>();
   &__profile-pic {
     display: flex;
     justify-content: center;
+
     img {
       width: 30px;
       height: 30px;
+      object-fit: cover;
       border-radius: 50%;
     }
   }
