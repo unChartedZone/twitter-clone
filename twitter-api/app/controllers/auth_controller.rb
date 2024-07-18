@@ -11,6 +11,7 @@ class AuthController < ApplicationController
       refresh_token = JsonWebToken.generate_refresh_token(@user)
       set_refresh_token_cookie(refresh_token)
       Rails.logger.info 'Signing up user #{@user.username}'
+      render json: UserSerializer.new(@user, { params: { access_token: access_token } }), status: :created
     end
   end
 
@@ -73,7 +74,7 @@ class AuthController < ApplicationController
 
   # Filter parameters for new user request
   def user_params
-    params.require(:user).permit(:username, :email, :password, :name, :date_of_birth)
+    params.require(:user).permit(:username, :email, :password, :name, :birth_date)
   end
 
   def login_params
