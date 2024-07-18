@@ -1,28 +1,32 @@
 <template>
   <Card>
-    <CardHeader>
+    <CardHeader center>
       <Icon name="bird" />
-      <Button>Next</Button>
     </CardHeader>
     <CardBody>
       <div>
         <h2>Create new account</h2>
-        <div class="space-y-4">
-          <Textfield label="Name" />
-          <Textfield label="Email" />
-        </div>
-        <div>
-          <h4>Date of birth</h4>
-          <div style="display: flex; gap: 1rem">
-            <Select
-              v-model="dateOfBirth.month"
-              label="Month"
-              :options="months"
+        <form @submit.prevent="signupUser">
+          <div class="space-y-4">
+            <Textfield v-model="formState.username" label="Username" />
+            <Textfield v-model="formState.name" label="Name" />
+            <Textfield v-model="formState.email" label="Email" type="email" />
+            <Textfield
+              v-model="formState.password"
+              label="Password"
+              type="password"
             />
-            <Select v-model="dateOfBirth.day" label="Day" :options="days" />
-            <Select v-model="dateOfBirth.year" label="Year" :options="years" />
           </div>
-        </div>
+          <div class="birth-date-field">
+            <h4>Date of birth</h4>
+            <p>
+              This will not be shown publicly. Confirm your own age, even if
+              this account is for a business, a pet, or something else
+            </p>
+            <DateSelector v-model="formState.birthDate" />
+          </div>
+          <Button block :loading="loading" type="submit">Signup</Button>
+        </form>
       </div>
     </CardBody>
   </Card>
@@ -30,29 +34,44 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from "vue";
+import * as api from "@/api/endpoints";
+import router from "@/router";
+import DateSelector from "./DateSelector.vue";
 import CardBody from "./common/card/CardBody.vue";
+import { useAuthStore } from "@/stores/auth";
 
-const dateOfBirth = reactive({
-  month: "",
-  day: "",
-  year: "",
+const authStore = useAuthStore();
+
+const formState = reactive({
+  username: "",
+  name: "",
+  email: "",
+  password: "",
+  birthDate: new Date(),
 });
 
-const months = Array.from({ length: 12 }, (item, i) =>
-  new Date(0, i).toLocaleDateString("en-US", { month: "long" })
-);
+const loading = ref(false);
 
-const days = computed(() => {
-  const dayCount = new Date(
-    !dateOfBirth.year ? new Date().getFullYear() : parseInt(dateOfBirth.year),
-    months.findIndex((x) => x == dateOfBirth.month) + 1,
-    0
-  ).getDate();
-  return Array.from({ length: dayCount }, (_, index) => index + 1);
-});
-
-const years = Array.from(
-  { length: new Date().getFullYear() - 1900 },
-  (_, index) => 1901 + index
-).reverse();
+async function signupUser() {
+  loading.value = true;
+  try {
+    const res = await api.signupUser(formState);
+    const user = res.data.attributes;
+    authStore.setUser(user);
+    router.push("/home");
+  } catch (e) {
+    console.log(e);
+  } finally {
+    loading.value = false;
+  }
+}
 </script>
+
+<style scoped lang="scss">
+.birth-date-field {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+</style>

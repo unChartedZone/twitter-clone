@@ -16,6 +16,17 @@ export async function login(user: {
   return (await client.post<LoginResponse>("/login", { user })).data;
 }
 
+export async function signupUser(payload: {
+  username: string;
+  name: string;
+  email: string;
+  password: string;
+  birthDate: Date;
+}) {
+  const res = await client.post<LoginResponse>("/signup", { user: payload });
+  return res.data;
+}
+
 export async function refresh(): Promise<LoginResponse | undefined> {
   try {
     return (await client.post("/refresh")).data;
