@@ -8,11 +8,9 @@ import type {
   UserResponse,
   TweetResponse,
 } from "@/types/ResponseTypes";
+import type { LoginPayload } from "@/types/RequestPayloads";
 
-export async function login(user: {
-  email: string;
-  password: string;
-}): Promise<LoginResponse> {
+export async function login(user: LoginPayload): Promise<LoginResponse> {
   return (await client.post<LoginResponse>("/login", { user })).data;
 }
 

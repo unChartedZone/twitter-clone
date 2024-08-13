@@ -5,13 +5,14 @@ import type User from "@/models/User";
 import { useProfileStore } from "./profile";
 import type { BaseUser, UserPatch } from "@/models/User";
 import type Tweet from "@/models/Tweet";
+import type { LoginPayload } from "@/types/RequestPayloads";
 
 export const useAuthStore = defineStore("auth", () => {
   const accessToken = ref<string>();
   const user = ref<User>();
   const profileStore = useProfileStore();
 
-  async function loginUser(payload: { email: string; password: string }) {
+  async function loginUser(payload: LoginPayload) {
     const res = await login(payload);
     accessToken.value = res.data.attributes.accessToken;
     user.value = res.data.attributes;

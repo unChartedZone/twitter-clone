@@ -7,13 +7,31 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const user = reactive({
-  email: "",
+  identifier: "",
   password: "",
 });
 
 async function handleLoginSubmit() {
-  await authStore.loginUser({ email: user.email, password: user.password });
+  const identifier = user.identifier;
+  if (isValidEmail(identifier)) {
+    await authStore.loginUser({ email: identifier, password: user.password });
+  } else {
+    // Assume they typed in their username
+    await authStore.loginUser({
+      username: identifier,
+      password: user.password,
+    });
+  }
+
   router.push("/home");
+}
+
+function isValidEmail(email: string): boolean {
+  // Regular expression for validating an email address
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Test the email against the regex
+  return emailRegex.test(email);
 }
 </script>
 
@@ -27,7 +45,7 @@ async function handleLoginSubmit() {
 
       <form @submit.prevent="handleLoginSubmit">
         <Textfield
-          v-model="user.email"
+          v-model="user.identifier"
           label="Phone, email, or username"
           placeholder="Phone"
         />
