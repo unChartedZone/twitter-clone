@@ -1,5 +1,6 @@
 class AuthController < ApplicationController
   require 'jwt'
+  DOMAIN = Rails.application.credentials.domain.to_s
 
   def signup
     @user = User.create(user_params)
@@ -68,7 +69,8 @@ class AuthController < ApplicationController
       value: token,
       httponly: true,
       secure: true,
-      expires: 7.days.from_now
+      expires: 7.days.from_now,
+      domain: DOMAIN
     }
   end
 
