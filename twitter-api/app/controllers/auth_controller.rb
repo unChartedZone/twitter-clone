@@ -70,7 +70,8 @@ class AuthController < ApplicationController
       httponly: true,
       secure: true,
       expires: 7.days.from_now,
-      domain: DOMAIN
+      domain: DOMAIN,
+      path: '/'
     }
   end
 
