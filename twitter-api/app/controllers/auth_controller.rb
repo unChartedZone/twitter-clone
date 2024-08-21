@@ -17,7 +17,7 @@ class AuthController < ApplicationController
   end
 
   def login
-    @user = User.find_by(email: login_params[:email])
+    @user = User.where(username: login_params[:username]).or(User.where(email: login_params[:email])).first
     unless @user&.authenticate(login_params[:password])
       return render json: { message: 'Username or Password was incorrect.' }, status: :unauthorized
     end
@@ -81,6 +81,6 @@ class AuthController < ApplicationController
   end
 
   def login_params
-    params.require(:user).permit(:email, :password)
+    params.require(:user).permit(:email, :username, :password)
   end
 end
