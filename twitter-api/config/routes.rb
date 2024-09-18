@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :users, only: %i[index show update] do
     get 'following', on: :collection, to: 'users#following'
     get 'followers', on: :collection, to: 'users#followers'
+    get 'explore', on: :collection, to: 'users#explore_users'
     post 'follow/:id', on: :collection, to: 'users#follow_user'
     patch 'update-image', on: :collection, to: 'users#update_image'
   end
@@ -25,6 +26,7 @@ Rails.application.routes.draw do
     get '/profile/:username', on: :collection, to: 'tweets#profile_tweets'
     get 'liked', on: :collection, to: 'tweets#liked_tweets'
     get 'feed', on: :collection, to: 'tweets#feed'
+    get 'explore', on: :collection, to: 'tweets#explore_user_tweets'
     post 'like', on: :member
     post 'unlike', on: :member
     post 'retweet', on: :member

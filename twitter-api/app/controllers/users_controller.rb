@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy, :follow_user]
-  before_action :is_authenticated, only: [:me, :update, :destroy, :following, :followers, :follow_user]
+  before_action :is_authenticated, only: [:me, :update, :destroy, :following, :followers, :follow_user, :explore_users]
   before_action :check_owner, only: [:update, :destroy]
 
   # GET /users
@@ -61,6 +61,14 @@ class UsersController < ApplicationController
       render json: follow.errors, status: :unprocessable_entity
     end
   end
+
+  def explore_users
+    # Return users that you are not following
+    users = User.where.not(id: current_user.following.pluck(:id)).where.not(id: current_user.id)
+    render json: UserSerializer.new(users), status: :ok
+  end
+
+  # TODO: create unfollow user endpoint
 
   private
 

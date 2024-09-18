@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class TweetsController < ApplicationController
 
-  before_action :is_authenticated, only: %i[create index feed liked_tweets like unlike retweet protected_profile_tweets]
+  before_action :is_authenticated, only: %i[create index feed liked_tweets like unlike retweet protected_profile_tweets explore_user_tweets]
 
   def index
     tweets = current_user.tweets.includes([:medium])
@@ -89,6 +89,12 @@ class TweetsController < ApplicationController
     else
       render json: { errors: retweet.errors }, status: :unprocessable_entity
     end
+  end
+
+  def explore_user_tweets
+    users = User.where.not(id: current_user.following.pluck(:id)).where.not(id: current_user.id)
+    tweets = Tweet.where(:user_id => users).or(Tweet.where(id: Retweet.select(:tweet_id).where(:user_id => users))).sort_by(&:created_at).reverse
+    render json: TweetSerializer.new(tweets, { include: [:user], params: { current_user: @current_user } }).serializable_hash.to_json
   end
 
   private
