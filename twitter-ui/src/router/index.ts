@@ -1,7 +1,18 @@
+import type { Component } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
 import { setupAuthClient } from "@/api/client";
 import { useAuthStore } from "@/stores/auth";
-import { createRouter, createWebHistory } from "vue-router";
 import Default from "@/layouts/default.vue";
+export {};
+
+// Add typings for Route Meta properties
+declare module "vue-router" {
+  interface RouteMeta {
+    requiresAuth?: boolean;
+    layout?: Component;
+    sidebarComponent?: Component;
+  }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
