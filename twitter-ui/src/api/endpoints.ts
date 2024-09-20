@@ -7,6 +7,7 @@ import type {
   LoginResponse,
   UserResponse,
   TweetResponse,
+  ExploreUsersResponse,
 } from "@/types/ResponseTypes";
 import type { LoginPayload } from "@/types/RequestPayloads";
 
@@ -107,6 +108,16 @@ export async function patchUser(
     formData
   );
   return res.data.data.attributes;
+}
+
+export async function exploreUsers(): Promise<BaseUser[]> {
+  const res = await authClient.get<ExploreUsersResponse>("/users/explore");
+  return res.data.data.map((x) => x.attributes);
+}
+
+export async function exploreUserTweets(): Promise<Tweet[]> {
+  const res = await authClient.get<TweetResponse>("/tweets/explore");
+  return transformTweetResponse(res.data);
 }
 
 // TODO: maybe move this to profile store?

@@ -20,8 +20,17 @@ interface BaseResponse<T> {
 
 export interface LoginResponse extends BaseResponse<User> {}
 export interface UserResponse extends BaseResponse<BaseUser> {}
+export interface ExploreUsersResponse {
+  data: Data<BaseUser>[];
+}
 
 export interface TweetResponse {
   data: Data<BaseTweet>[];
   included: Data<BaseUser>[];
+}
+
+export interface ErrorResponse {
+  data: {
+    message: string;
+  };
 }
