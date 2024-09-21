@@ -4,6 +4,7 @@ import type { IconName } from "./Icon.vue";
 import LoadingIcon from "@/components/common/LoadingIcon.vue";
 
 interface ButtonProps {
+  // Have button take full width of container
   block?: boolean;
   icon?: IconName;
   loading?: boolean;
@@ -11,12 +12,16 @@ interface ButtonProps {
   outline?: boolean;
   color?: "primary" | "secondary" | string;
   // TODO: add documentation on what this does...
+  size?: number;
+  /* Used in conjuction with icon prop, used to make background a see-through black
+   */
   tonal?: boolean;
   type?: "button" | "submit" | "reset";
 }
 
 withDefaults(defineProps<ButtonProps>(), {
   color: "primary",
+  size: 2,
   type: "button",
 });
 </script>
@@ -29,6 +34,12 @@ withDefaults(defineProps<ButtonProps>(), {
       'btn--icon': icon,
       'btn--outline': outline,
       'btn--tonal': tonal,
+      [`${color}`]: color,
+    }"
+    :style="{
+      padding: !!icon
+        ? `${size * 0.25}rem`
+        : `${size * 0.375}rem ${size * 0.75}rem`,
     }"
     :type="type"
   >
@@ -41,21 +52,37 @@ withDefaults(defineProps<ButtonProps>(), {
 </template>
 
 <style scoped lang="scss">
-.btn {
+.primary {
   background-color: $primary;
-  border: none;
-  border-radius: 1.5rem;
   color: $white;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 700;
-  outline: none;
-  padding: 0.75rem 1.5rem;
 
   &:hover {
     // TODO: make this color a variable
     background-color: rgba(26, 145, 218);
   }
+}
+
+.black {
+  background-color: $black;
+  color: $white;
+
+  &:hover {
+    background-color: lighten($black, 30%);
+  }
+}
+
+.white {
+  background-color: $white;
+  color: $black;
+}
+
+.btn {
+  border: none;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  outline: none;
 
   &--block {
     width: 100%;

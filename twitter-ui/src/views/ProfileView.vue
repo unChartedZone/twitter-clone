@@ -60,7 +60,7 @@ function formatLink(link: string): string {
       <div class="profile__edit-profile">
         <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">
           <template v-slot:activator="{ onClick }">
-            <Button @click="onClick" outline>Edit profile</Button>
+            <Button @click="onClick" outline size="1">Edit profile</Button>
           </template>
           <ProfileEditor @onClose="closeProfileEditor" />
         </Modal>
