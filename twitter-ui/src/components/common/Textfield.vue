@@ -6,6 +6,7 @@ interface TextfieldProps {
   placeholder?: string;
   type?: string;
   autocomplete?: boolean;
+  rounded?: boolean;
 }
 
 withDefaults(defineProps<TextfieldProps>(), {
@@ -20,15 +21,15 @@ function handleChange(value: string) {
 </script>
 
 <template>
-  <div class="textfield">
+  <div class="textfield" :class="{ 'textfield--rounded': rounded }">
     <input
       class="textfield__input"
       :name="name?.toLowerCase() ?? label?.toLowerCase()"
       :placeholder="placeholder ? placeholder : label"
       :type="type"
       :value="modelValue"
-      @input="(event: any) => handleChange(event.target.value)"
       :autocomplete="!autocomplete ? 'off' : 'on'"
+      @input="(event: any) => handleChange(event.target.value)"
     />
     <label class="textfield__label">{{ label }}</label>
   </div>
@@ -40,6 +41,23 @@ function handleChange(value: string) {
   border: 1px solid rgba(156, 163, 175, 0.8);
   border-radius: 0.375rem;
   overflow: hidden;
+
+  &--rounded {
+    border-radius: 9999px;
+  }
+
+  // Hide dynamic label and just use buitlin placeholder
+  &--rounded &__label {
+    display: none;
+  }
+
+  &--rounded &__input {
+    padding: 0.75rem 0.5rem;
+  }
+
+  &--rounded &__input::placeholder {
+    opacity: 1;
+  }
 
   &:focus-within {
     border-color: $primary;
@@ -60,7 +78,7 @@ function handleChange(value: string) {
     background-color: $white;
     border: none;
     outline: none;
-    padding: 1.5rem 0.55rem 1rem;
+    padding: 1.25rem 0.55rem 0.5rem;
     font-size: 1rem;
 
     &:placeholder-shown + label {
@@ -70,7 +88,7 @@ function handleChange(value: string) {
     &:focus + label,
     &:not(:placeholder-shown) + label {
       color: $primary;
-      transform: translateY(-125%);
+      transform: translateY(-110%);
       font-size: 0.85rem;
       padding-bottom: 0.2rem;
     }
