@@ -3,6 +3,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import { setupAuthClient } from "@/api/client";
 import { useAuthStore } from "@/stores/auth";
 import Default from "@/layouts/default.vue";
+import SearchField from "@/components/SearchField.vue";
+import WhoToFollow from "@/components/WhoToFollow.vue";
+
 export {};
 
 // Add typings for Route Meta properties
@@ -10,7 +13,7 @@ declare module "vue-router" {
   interface RouteMeta {
     requiresAuth?: boolean;
     layout?: Component;
-    sidebarComponent?: Component;
+    sidebarComponents?: Component[];
   }
 }
 
@@ -36,13 +39,21 @@ const router = createRouter({
       path: "/home",
       name: "home",
       component: () => import("../views/HomeView.vue"),
-      meta: { requiresAuth: true, layout: Default },
+      meta: {
+        requiresAuth: true,
+        layout: Default,
+        sidebarComponents: [SearchField, WhoToFollow],
+      },
     },
     {
       path: "/explore",
       name: "explore",
       component: () => import("../views/ExploreView.vue"),
-      meta: { requiresAuth: true, layout: Default },
+      meta: {
+        requiresAuth: true,
+        layout: Default,
+        sidebarComponents: [WhoToFollow],
+      },
     },
     {
       path: "/notifications",
@@ -65,7 +76,11 @@ const router = createRouter({
     {
       path: "/profile",
       component: () => import("../views/ProfileView.vue"),
-      meta: { requiresAuth: true, layout: Default },
+      meta: {
+        requiresAuth: true,
+        layout: Default,
+        sidebarComponents: [SearchField, WhoToFollow],
+      },
       children: [
         {
           name: "profile",
