@@ -28,6 +28,63 @@ ul {
   list-style: none;
 }
 
+// Define a range for the spacing values, e.g., 0 to 5
+$spacing-values: 0 1 2 3 4 5;
+
+// Generate padding utility classes
+@for $i from 1 through length($spacing-values) {
+  .p-#{$i} {
+    padding: $i * 0.25rem;
+  } // All sides
+  .pt-#{$i} {
+    padding-top: $i * 0.25rem;
+  } // Top
+  .pb-#{$i} {
+    padding-bottom: $i * 0.25rem;
+  } // Bottom
+  .pl-#{$i} {
+    padding-left: $i * 0.25rem;
+  } // Left
+  .pr-#{$i} {
+    padding-right: $i * 0.25rem;
+  } // Right
+  .px-#{$i} {
+    padding-left: $i * 0.25rem;
+    padding-right: $i * 0.25rem;
+  } // Horizontal (left & right)
+  .py-#{$i} {
+    padding-top: $i * 0.25rem;
+    padding-bottom: $i * 0.25rem;
+  }
+}
+
+// Generate margin utility classes
+@for $i from 1 through length($spacing-values) {
+  .m-#{$i} {
+    margin: $i * 0.25rem;
+  } // All sides
+  .mt-#{$i} {
+    margin-top: $i * 0.25rem;
+  } // Top
+  .mb-#{$i} {
+    margin-bottom: $i * 0.25rem;
+  } // Bottom
+  .ml-#{$i} {
+    margin-left: $i * 0.25rem;
+  } // Left
+  .mr-#{$i} {
+    margin-right: $i * 0.25rem;
+  } // Right
+  .mx-#{$i} {
+    margin-left: $i * 0.25rem;
+    margin-right: $i * 0.25rem;
+  } // Horizontal (left & right)
+  .my-#{$i} {
+    margin-top: $i * 0.25rem;
+    margin-bottom: $i * 0.25rem;
+  } // Vertical (top & bottom)
+}
+
 .container {
   width: 100%;
 }
