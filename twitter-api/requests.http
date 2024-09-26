@@ -1,0 +1,51 @@
+@base-url=http://localhost:8081
+
+# @name login
+POST {{base-url}}/login
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "chris@test.com",
+    "password": "password123"
+  }
+}
+###
+
+# @name signup
+POST {{base-url}}/signup
+Content-Type: application/json
+
+{
+  "user": {
+    "username": "unchartedzone",
+    "email": "chris@test.com",
+    "password": "password123",
+    "name": "Christian Valdez"
+  }
+}
+
+###
+
+# @name getUser
+GET {{base-url}}/user
+Authorization: Bearer {{login.response.body.access_token}}
+
+##
+
+# @name fetchTweets
+GET {{base-url}}/tweets
+
+###
+
+# @name createTweet
+POST {{base-url}}/tweets
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access_token}}
+
+{
+  "tweet": {
+    "text": "My first tweet!"
+  }
+}
+###
