@@ -86,7 +86,8 @@ function handleChange(value: string) {
     }
 
     &:focus + label,
-    &:not(:placeholder-shown) + label {
+    &:not(:placeholder-shown) + label,
+    &:-webkit-autofill + label {
       color: $primary;
       transform: translateY(-110%);
       font-size: 0.85rem;
