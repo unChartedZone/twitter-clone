@@ -1,3 +1,4 @@
+import Alert from "@/components/common/Alert.vue";
 import Button from "@/components/common/Button.vue";
 import Card from "@/components/common/Card.vue";
 import CardHeader from "@/components/common/card/CardHeader.vue";
@@ -17,6 +18,7 @@ import Textfield from "@/components/common/Textfield.vue";
 
 declare module "@vue/runtime-core" {
   export interface GlobalComponents {
+    Alert: typeof Alert;
     Button: typeof Button;
     Card: typeof Card;
     CardHeader: typeof CardHeader;
