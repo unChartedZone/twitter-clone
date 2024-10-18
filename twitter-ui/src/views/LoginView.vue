@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
+import type { ErrorResponse } from "@/types/ResponseTypes";
 
 const router = useRouter();
 const authStore = useAuthStore();
-
+const showErrorMessage = ref<boolean>(false);
 const user = reactive({
   identifier: "",
   password: "",
@@ -13,17 +15,24 @@ const user = reactive({
 
 async function handleLoginSubmit() {
   const identifier = user.identifier;
-  if (isValidEmail(identifier)) {
-    await authStore.loginUser({ email: identifier, password: user.password });
-  } else {
-    // Assume they typed in their username
-    await authStore.loginUser({
-      username: identifier,
-      password: user.password,
-    });
+  try {
+    if (isValidEmail(identifier)) {
+      await authStore.loginUser({ email: identifier, password: user.password });
+    } else {
+      // Assume they typed in their username
+      await authStore.loginUser({
+        username: identifier,
+        password: user.password,
+      });
+    }
+    router.push("/home");
+  } catch (err: any) {
+    showErrorMessage.value = true;
+    if (axios.isAxiosError(err)) {
+      const res = err.response as ErrorResponse; // TODO: probably better way of typing this...
+      console.log("Message: ", res.data.message);
+    }
   }
-
-  router.push("/home");
 }
 
 function isValidEmail(email: string): boolean {
@@ -64,6 +73,7 @@ function isValidEmail(email: string): boolean {
       </div>
     </div>
   </main>
+  <Alert v-model="showErrorMessage">Wrong password!</Alert>
 </template>
 
 <style scoped lang="scss">
