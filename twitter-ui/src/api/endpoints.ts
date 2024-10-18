@@ -120,6 +120,14 @@ export async function exploreUserTweets(): Promise<Tweet[]> {
   return transformTweetResponse(res.data);
 }
 
+export async function followUser(userId: string) {
+  // TODO: update this when I create a serializer for followers
+  const res = await authClient.post<{ followed_user: BaseUser }>(
+    `/users/follow/${userId}`
+  );
+  return res.data;
+}
+
 // TODO: maybe move this to profile store?
 function transformTweetResponse(res: TweetResponse): Tweet[] {
   const userMap: Map<string, BaseUser> = res.included.reduce((acc, value) => {
