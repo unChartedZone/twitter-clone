@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 import type { ErrorResponse } from "@/types/ResponseTypes";
+import GuestMessage from "@/components/GuestMessage.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -74,6 +75,7 @@ function isValidEmail(email: string): boolean {
     </div>
   </main>
   <Alert v-model="showErrorMessage">Wrong password!</Alert>
+  <GuestMessage />
 </template>
 
 <style scoped lang="scss">

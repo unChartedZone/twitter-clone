@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import SignupForm from "@/components/SignupForm.vue";
+import GuestMessage from "@/components/GuestMessage.vue";
 
 const year = computed(() => new Date().getFullYear());
 const toggleSignupModal = ref<boolean>(false);
@@ -47,6 +48,7 @@ const toggleSignupModal = ref<boolean>(false);
   <Modal v-model="toggleSignupModal">
     <SignupForm />
   </Modal>
+  <GuestMessage v-if="toggleSignupModal" />
 </template>
 
 <style scoped lang="scss">
