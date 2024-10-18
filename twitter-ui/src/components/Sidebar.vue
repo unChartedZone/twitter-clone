@@ -23,12 +23,12 @@ async function logout() {
 </script>
 
 <template>
-  <aside class="sidebar">
-    <div class="sidebar__content">
+  <aside class="nav-sidebar">
+    <div class="nav-sidebar__content">
       <section>
         <Icon class="logo" name="bird" />
-        <ul class="sidebar__list">
-          <li v-for="link in links" class="sidebar__link">
+        <ul class="nav-sidebar__list">
+          <li v-for="link in links" class="nav-sidebar__link">
             <RouterLink :to="link.to">
               <span>
                 <Icon :name="link.icon" />
@@ -36,7 +36,7 @@ async function logout() {
               </span>
             </RouterLink>
           </li>
-          <li class="sidebar__link">
+          <li class="nav-sidebar__link">
             <span>
               <Icon name="ellipsis" />
               More
@@ -77,7 +77,7 @@ async function logout() {
 </template>
 
 <style scoped lang="scss">
-.sidebar {
+.nav-sidebar {
   position: relative;
   height: 100vh;
   width: 17rem;

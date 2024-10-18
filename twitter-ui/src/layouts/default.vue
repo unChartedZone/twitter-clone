@@ -14,11 +14,13 @@ const route = useRoute();
       <slot />
     </main>
     <!-- Additional sidebar component -->
-    <section class="sidebar-components">
-      <component
-        v-for="sidebarComponent in route.meta.sidebarComponents"
-        :is="sidebarComponent"
-      ></component>
+    <section class="sidebar">
+      <div class="sidebar__components">
+        <component
+          v-for="sidebarComponent in route.meta.sidebarComponents"
+          :is="sidebarComponent"
+        ></component>
+      </div>
     </section>
   </div>
 </template>
@@ -37,10 +39,17 @@ const route = useRoute();
   border-right: 1px solid $gray-100;
 }
 
-.sidebar-components {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin: 0.5rem 0 0 0.5rem;
+.sidebar {
+  position: relative;
+  width: 20rem;
+
+  &__components {
+    width: 20rem;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0.5rem 0 0 0.5rem;
+  }
 }
 </style>
