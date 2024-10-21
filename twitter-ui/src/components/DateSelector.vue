@@ -11,7 +11,7 @@ import { reactive, computed, watch } from "vue";
 import dayjs from "dayjs";
 
 interface DateSelectorProps {
-  modelValue: Date;
+  modelValue?: Date;
 }
 
 const props = defineProps<DateSelectorProps>();

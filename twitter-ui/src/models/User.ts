@@ -18,7 +18,7 @@ export interface BaseUser {
 export interface UserPatch {
   name?: string;
   bio?: string;
-  birthDate?: string;
+  birthDate?: Date;
   location?: string;
   website?: string;
 }

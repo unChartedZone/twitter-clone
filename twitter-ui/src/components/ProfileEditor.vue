@@ -13,10 +13,10 @@
   <Card v-else>
     <template v-slot:header>
       <div class="profile-editor__header">
-        <Button @click="closeProfileEditor" icon="cross" size="1" />
+        <Button @click="closeProfileEditor" icon="cross" :size="1" />
         <h1>Edit Profile</h1>
       </div>
-      <Button @click="saveProfile" outline size="1">Save</Button>
+      <Button @click="saveProfile" outline :size="1">Save</Button>
     </template>
     <div class="profile-editor__media">
       <section class="profile-editor__banner-image">
@@ -91,7 +91,7 @@ const profileFormState = reactive<UserPatch>({
   bio: authStore.user?.bio,
   location: authStore.user?.location,
   website: authStore.user?.website,
-  birthDate: authStore.user?.birthDate,
+  birthDate: new Date(authStore.user?.birthDate ?? ""),
 });
 
 const profileImageSrc = computed(() => {

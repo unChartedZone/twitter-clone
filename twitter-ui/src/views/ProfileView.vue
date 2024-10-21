@@ -48,19 +48,19 @@ function formatLink(link: string): string {
     </header>
     <img
       class="profile__banner-image"
-      :src="authStore.user?.bannerImage"
+      :src="authStore.user?.bannerImage ?? '/images/default-banner.avif'"
       alt=""
     />
     <section class="profile__content">
       <img
         class="profile__profile-image"
-        :src="authStore.user?.profileImage"
+        :src="authStore.user?.profileImage ?? '/images/default-pfp.png'"
         alt=""
       />
       <div class="profile__edit-profile">
         <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">
           <template v-slot:activator="{ onClick }">
-            <Button @click="onClick" outline size="1">Edit profile</Button>
+            <Button @click="onClick" outline :size="1">Edit profile</Button>
           </template>
           <ProfileEditor @onClose="closeProfileEditor" />
         </Modal>

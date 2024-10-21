@@ -53,7 +53,7 @@ async function logout() {
             <div class="profile-pill__content">
               <img
                 class="profile-pill__pic"
-                :src="authStore.user?.profileImage"
+                :src="authStore.user?.profileImage ?? '/images/default-pfp.png'"
               />
               <div>
                 <h3>{{ authStore.user?.name }}</h3>
