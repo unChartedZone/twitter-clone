@@ -32,10 +32,6 @@ export const useAuthStore = defineStore("auth", () => {
     profileStore.$reset();
   }
 
-  function setUser(userValue: User) {
-    user.value = userValue;
-  }
-
   async function updateUser(
     userPatch: UserPatch,
     bannerImage?: File,
@@ -72,6 +68,25 @@ export const useAuthStore = defineStore("auth", () => {
     };
   }
 
+  function setUser(userValue: User) {
+    user.value = userValue;
+  }
+
+  /**
+   * Locally increment following count of authenticated user
+   */
+  function incrementFollowingCount() {
+    if (user.value) {
+      user.value = {
+        ...user.value,
+        totalFollowing: user.value?.totalFollowing + 1,
+      };
+    }
+  }
+
+  /**
+   * Reset state of store
+   */
   function $reset() {
     user.value = undefined;
     accessToken.value = undefined;
@@ -85,5 +100,6 @@ export const useAuthStore = defineStore("auth", () => {
     logoutUser,
     setUser,
     updateUser,
+    incrementFollowingCount,
   };
 });

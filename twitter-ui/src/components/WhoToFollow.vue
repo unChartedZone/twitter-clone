@@ -1,13 +1,23 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import type { BaseUser } from "@/models/User";
-import { exploreUsers } from "@/api/endpoints";
+import { exploreUsers, followUser } from "@/api/endpoints";
+import { useAuthStore } from "@/stores/auth";
 
+const authStore = useAuthStore();
 const users = ref<BaseUser[]>([]);
 
 onMounted(async () => {
   users.value = await exploreUsers();
 });
+
+async function follow(userId: string) {
+  const res = await followUser(userId);
+  const followedUser = res.followed_user;
+  const index = users.value.findIndex((x) => x.id == followedUser.id);
+  users.value.splice(index, 1);
+  authStore.incrementFollowingCount();
+}
 </script>
 
 <template>
@@ -32,7 +42,9 @@ onMounted(async () => {
             </div>
           </div>
           <div>
-            <Button color="black" size="1">Follow</Button>
+            <Button color="black" :size="1" @click="follow(user.id)">
+              Follow
+            </Button>
           </div>
         </li>
       </ul>
