@@ -18,6 +18,7 @@ export type IconName =
   | "heart-outline"
   | "left-arrow"
   | "location"
+  | "picture"
   | "reply"
   | "retweet"
   | "share";
