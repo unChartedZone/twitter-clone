@@ -39,6 +39,6 @@ async function loginAsGuest() {
   flex-direction: column;
   justify-content: space-between;
   gap: 0.5rem;
-  z-index: 1000;
+  z-index: 100;
 }
 </style>

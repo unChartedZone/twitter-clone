@@ -40,7 +40,7 @@ function onClose() {
     left: 0;
     height: 100vh;
     width: 100%;
-    z-index: 100;
+    z-index: 1000;
   }
 
   &__content {
@@ -48,7 +48,7 @@ function onClose() {
     left: 50%;
     transform: translate(-50%, -50%);
     position: fixed;
-    z-index: 200;
+    z-index: 2000;
   }
 }
 </style>

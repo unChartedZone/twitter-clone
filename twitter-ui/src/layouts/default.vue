@@ -50,6 +50,7 @@ const route = useRoute();
     flex-direction: column;
     gap: 1rem;
     margin: 0.5rem 0 0 0.5rem;
+    z-index: 1;
   }
 }
 </style>
