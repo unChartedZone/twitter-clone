@@ -1,1 +1,1 @@
-{ "parser": "vue", "htmlWhitespaceSensitivity": "css" }
+{"htmlWhitespaceSensitivity": "ignore" }
