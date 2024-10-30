@@ -1,7 +1,9 @@
 # frozen_string_literal: true
-class TweetsController < ApplicationController
 
-  before_action :is_authenticated, only: %i[create index feed liked_tweets like unlike retweet protected_profile_tweets explore_user_tweets]
+class TweetsController < ApplicationController
+  before_action :is_authenticated,
+                only: %i[create index feed liked_tweets like unlike retweet protected_profile_tweets
+                         explore_user_tweets]
 
   def index
     tweets = current_user.tweets.includes([:medium])
@@ -14,22 +16,31 @@ class TweetsController < ApplicationController
 
   def feed
     following = @current_user.following
-    tweets = Tweet.where(:user_id => following).or(Tweet.where(id: Retweet.select(:tweet_id).where(:user_id => following))).sort_by(&:created_at).reverse
-    render json: TweetSerializer.new(tweets, { include: [:user], params: { current_user: @current_user } }).serializable_hash.to_json
+    tweets = Tweet
+             .where(user_id: following)
+             .or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: following)))
+             .sort_by(&:created_at).reverse
+    render json: TweetSerializer.new(tweets,
+                                     { include: [:user],
+                                       params: { current_user: @current_user } }).serializable_hash.to_json
   end
 
   def protected_profile_tweets
     tweets = fetch_user_tweets
-    render json: TweetSerializer.new(tweets, { include: [:user], params: { current_user: @current_user } }).serializable_hash.to_json
+    render json: TweetSerializer.new(tweets, { include: [:user], params: { current_user: @current_user } })
+                                .serializable_hash.to_json
   end
 
   def profile_tweets
     tweets = fetch_user_tweets
-    render json: TweetSerializer.new(tweets, { include: [:user] }).serializable_hash.to_json
+    render json: TweetSerializer.new(tweets, { include: [:user] })
+                                .serializable_hash.to_json
   end
 
   def liked_tweets
-    tweets = Tweet.where(id: TweetLike.select(:tweet_id).where.not(tweet_id: nil).where(like_id: current_user.likes))
+    tweets = Tweet.where(id: TweetLike.select(:tweet_id)
+                                      .where.not(tweet_id: nil)
+                                      .where(like_id: current_user.likes))
     render json: TweetSerializer.new(tweets).serializable_hash.to_json
   end
 
@@ -37,7 +48,7 @@ class TweetsController < ApplicationController
     tweet = Tweet.new(tweet_params)
     tweet.user = current_user
     if tweet.save
-      render json: { tweet: tweet }, status: :created
+      render json: { tweet: }, status: :created
     else
       render json: { error: tweet.errors }, status: :bad_request
     end
@@ -50,7 +61,7 @@ class TweetsController < ApplicationController
     else
       tweet.build_tweet_like(current_user.id)
       if tweet.save
-        render json: { tweet: tweet }, status: :created
+        render json: { tweet: }, status: :created
       else
         render json: { errors: tweet.errors }, status: :unprocessable_entity
       end
@@ -74,7 +85,7 @@ class TweetsController < ApplicationController
     else
       tweet.build_retweet(current_user.id)
       if tweet.save
-        render json: { tweet: tweet }, status: :created
+        render json: { tweet: }, status: :created
       else
         render json: { errors: tweet.errors }, status: :unprocessable_entity
       end
@@ -93,8 +104,12 @@ class TweetsController < ApplicationController
 
   def explore_user_tweets
     users = User.where.not(id: current_user.following.pluck(:id)).where.not(id: current_user.id)
-    tweets = Tweet.where(:user_id => users).or(Tweet.where(id: Retweet.select(:tweet_id).where(:user_id => users))).sort_by(&:created_at).reverse
-    render json: TweetSerializer.new(tweets, { include: [:user], params: { current_user: @current_user } }).serializable_hash.to_json
+    tweets = Tweet.where(user_id: users)
+                  .or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: users)))
+                  .sort_by(&:created_at).reverse
+    render json: TweetSerializer.new(tweets,
+                                     { include: [:user],
+                                       params: { current_user: @current_user } }).serializable_hash.to_json
   end
 
   private
@@ -105,6 +120,9 @@ class TweetsController < ApplicationController
 
   def fetch_user_tweets
     user = User.find_by_username(params[:username])
-    Tweet.where(user_id: user.id).or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: user.id))).sort_by(&:created_at).reverse
+    Tweet
+      .where(user_id: user.id)
+      .or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: user.id)))
+      .sort_by(&:created_at).reverse
   end
 end
