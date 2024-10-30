@@ -48,7 +48,8 @@ class TweetsController < ApplicationController
     tweet = Tweet.new(tweet_params)
     tweet.user = current_user
     if tweet.save
-      render json: { tweet: }, status: :created
+      render json: TweetSerializer.new(tweet, { include: [:user], params: { current_user: } }).serializable_hash.to_json,
+             status: :created
     else
       render json: { error: tweet.errors }, status: :bad_request
     end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TweetSerializer
   include JSONAPI::Serializer
   include DateHelper
@@ -8,18 +9,12 @@ class TweetSerializer
   has_many :medium, attributes: [:description]
   belongs_to :user, attributes: [:username]
 
-  attributes :text, :total_likes, :total_retweets
+  attributes :text, :total_likes, :total_retweets, :created_at
 
   attribute :medium do |object|
     object.medium.each do |o|
-      if o.image.present?
-        o.url = Rails.application.routes.url_helpers.url_for(o.image)
-      end
+      o.url = Rails.application.routes.url_helpers.url_for(o.image) if o.image.present?
     end
-  end
-
-  attribute :created_at do |object|
-    DateHelper.time_since(object.created_at)
   end
 
   attribute :liked do |object, params|
