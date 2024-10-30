@@ -13,6 +13,7 @@ interface ButtonProps {
   color?: "primary" | "secondary" | string;
   // TODO: add documentation on what this does...
   size?: number;
+  text?: boolean;
   /* Used in conjuction with icon prop, used to make background a see-through black
    */
   tonal?: boolean;
@@ -33,6 +34,7 @@ withDefaults(defineProps<ButtonProps>(), {
       'btn--block': block,
       'btn--icon': icon,
       'btn--outline': outline,
+      'btn--text': text,
       'btn--tonal': tonal,
       [`${color}`]: color,
     }"
@@ -108,6 +110,16 @@ withDefaults(defineProps<ButtonProps>(), {
     &:hover {
       // TODO: make this color a variable
       background-color: rgba(15, 20, 25, 0.1);
+    }
+  }
+
+  &--text {
+    background-color: transparent;
+    color: $primary;
+
+    &:hover {
+      background-color: rgba($primary, $alpha: 0.1);
+      padding: 0.25rem;
     }
   }
 
