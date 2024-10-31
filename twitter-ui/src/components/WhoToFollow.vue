@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import type { BaseUser } from "@/models/User";
 import { exploreUsers, followUser } from "@/api/endpoints";
 import { useAuthStore } from "@/stores/auth";
+import AvatarCircle from "./AvatarCircle.vue";
 
 const authStore = useAuthStore();
 const users = ref<BaseUser[]>([]);
@@ -27,13 +28,8 @@ async function follow(userId: string) {
       <ul>
         <li class="user" v-for="user in users" :key="user.id">
           <div class="user__content">
-            <img
-              class="user__profile-image"
-              :src="
-                !user.profileImage
-                  ? '/images/default-pfp.png'
-                  : user.profileImage
-              "
+            <AvatarCircle
+              :src="user.profileImage"
               :alt="`Profile image for ${user.username}`"
             />
             <div>
@@ -73,12 +69,6 @@ async function follow(userId: string) {
     display: flex;
     gap: 0.5rem;
     flex: 1;
-  }
-
-  &__profile-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
   }
 
   &__name {

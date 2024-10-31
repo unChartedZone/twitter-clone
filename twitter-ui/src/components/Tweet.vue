@@ -1,7 +1,7 @@
 <template>
   <div class="tweet">
     <div class="tweet__profile-pic">
-      <img :src="tweet.user?.profileImage" alt="" />
+      <AvatarCircle :src="tweet.user?.profileImage" />
     </div>
     <div class="tweet__body">
       <TweetHeader :tweet="tweet" />
@@ -24,6 +24,7 @@
 import type Tweet from "@/models/Tweet";
 import TweetHeader from "./tweet/TweetHeader.vue";
 import TweetActions from "@/components/tweet/TweetActions.vue";
+import AvatarCircle from "./AvatarCircle.vue";
 
 interface TweetProps {
   tweet: Tweet;
@@ -43,13 +44,6 @@ defineProps<TweetProps>();
   &__profile-pic {
     display: flex;
     justify-content: center;
-
-    img {
-      width: 30px;
-      height: 30px;
-      object-fit: cover;
-      border-radius: 50%;
-    }
   }
 
   &__body {

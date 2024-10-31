@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import AvatarCircle from "./AvatarCircle.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -51,10 +52,7 @@ async function logout() {
         <template v-slot:activator="{ onClick }">
           <section class="profile-pill" @click="onClick">
             <div class="profile-pill__content">
-              <img
-                class="profile-pill__pic"
-                :src="authStore.user?.profileImage ?? '/images/default-pfp.png'"
-              />
+              <AvatarCircle :src="authStore.user?.profileImage" />
               <div>
                 <h3>{{ authStore.user?.name }}</h3>
                 <p>@{{ authStore.user?.username }}</p>
