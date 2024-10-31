@@ -6,10 +6,12 @@ import type { BaseUser, UserPatch } from "@/models/User";
 import type {
   LoginResponse,
   UserResponse,
-  TweetResponse,
+  TweetListResponse,
   ExploreUsersResponse,
+  TweetResponse,
 } from "@/types/ResponseTypes";
 import type { LoginPayload } from "@/types/RequestPayloads";
+import { transformTweetResponse, transformTweetListResponse } from "./helpers";
 
 export async function login(user: LoginPayload): Promise<LoginResponse> {
   return (await client.post<LoginResponse>("/login", { user })).data;
@@ -39,12 +41,12 @@ export async function logout() {
 }
 
 export async function fetchFeed(): Promise<Tweet[]> {
-  const res = await authClient.get<TweetResponse>("/tweets/feed");
-  return transformTweetResponse(res.data);
+  const res = await authClient.get<TweetListResponse>("/tweets/feed");
+  return transformTweetListResponse(res.data);
 }
 
 export async function fetchUserTweets(): Promise<Tweet[]> {
-  const res = (await authClient.get<TweetResponse>("/tweets")).data;
+  const res = (await authClient.get<TweetListResponse>("/tweets")).data;
   return res.data.map(
     (i) =>
       ({
@@ -59,9 +61,11 @@ export async function fetchProtectedProfileTweets(
   username: string
 ): Promise<Tweet[] | undefined> {
   const res = (
-    await authClient.get<TweetResponse>(`/tweets/profile/${username}/protected`)
+    await authClient.get<TweetListResponse>(
+      `/tweets/profile/${username}/protected`
+    )
   ).data;
-  return transformTweetResponse(res);
+  return transformTweetListResponse(res);
 }
 
 // TODO: allow tweets of profile to be viewed in the future
@@ -69,12 +73,18 @@ export async function fetchProfileTweets(
   username: string
 ): Promise<Tweet[] | undefined> {
   try {
-    const res = (await client.get<TweetResponse>(`/tweets/profile/${username}`))
-      .data;
-    return transformTweetResponse(res);
+    const res = (
+      await client.get<TweetListResponse>(`/tweets/profile/${username}`)
+    ).data;
+    return transformTweetListResponse(res);
   } catch (e) {
     console.error(e);
   }
+}
+
+export async function postTweet(tweetPayload: any) {
+  const res = await authClient.post<TweetResponse>("/tweets", tweetPayload);
+  return transformTweetResponse(res.data);
 }
 
 export async function patchUser(
@@ -120,8 +130,8 @@ export async function exploreUsers(): Promise<BaseUser[]> {
 }
 
 export async function exploreUserTweets(): Promise<Tweet[]> {
-  const res = await authClient.get<TweetResponse>("/tweets/explore");
-  return transformTweetResponse(res.data);
+  const res = await authClient.get<TweetListResponse>("/tweets/explore");
+  return transformTweetListResponse(res.data);
 }
 
 export async function followUser(userId: string) {
@@ -130,21 +140,4 @@ export async function followUser(userId: string) {
     `/users/follow/${userId}`
   );
   return res.data;
-}
-
-// TODO: maybe move this to profile store?
-function transformTweetResponse(res: TweetResponse): Tweet[] {
-  const userMap: Map<string, BaseUser> = res.included.reduce((acc, value) => {
-    acc.set(value.id, {
-      ...value.attributes,
-      id: value.id,
-    });
-    return acc;
-  }, new Map<string, BaseUser>());
-
-  return res.data.map((tweet) => ({
-    ...tweet.attributes,
-    id: tweet.id,
-    user: userMap.get(tweet.relationships?.user.data.id ?? ""),
-  }));
 }

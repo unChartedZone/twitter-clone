@@ -7,7 +7,7 @@ interface RelationData {
   type: string;
 }
 
-interface Data<T> {
+export interface Data<T> {
   id: string;
   type: string;
   attributes: T;
@@ -25,6 +25,11 @@ export interface ExploreUsersResponse {
 }
 
 export interface TweetResponse {
+  data: Data<BaseTweet>;
+  included: Data<BaseUser>[];
+}
+
+export interface TweetListResponse {
   data: Data<BaseTweet>[];
   included: Data<BaseUser>[];
 }
