@@ -45,8 +45,8 @@ withDefaults(defineProps<ButtonProps>(), {
     }"
     :type="type"
   >
-    <LoadingIcon v-if="loading" :size="15" />
-    <div v-else>
+    <LoadingIcon class="loading-icon" v-if="loading" :size="15" />
+    <div :class="{ hidden: loading }">
       <Icon v-if="!!icon" :name="icon" :fill="tonal ? 'white' : 'black'" />
       <slot v-else />
     </div>
@@ -78,6 +78,17 @@ withDefaults(defineProps<ButtonProps>(), {
   color: $black;
 }
 
+.loading-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hidden {
+  visibility: hidden;
+}
+
 .btn {
   border: none;
   border-radius: 1.5rem;
@@ -85,6 +96,7 @@ withDefaults(defineProps<ButtonProps>(), {
   font-size: 1rem;
   font-weight: 700;
   outline: none;
+  position: relative;
 
   &--block {
     width: 100%;

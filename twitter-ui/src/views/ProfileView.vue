@@ -115,12 +115,14 @@ function formatLink(link: string): string {
   margin: 3.5rem 0 0 0;
 
   &__header {
+    position: relative;
     width: 40rem;
+
     & > div {
       backdrop-filter: blur(12px);
       width: inherit;
       position: fixed;
-      z-index: 50;
+      z-index: 25;
       top: 0;
       display: flex;
       align-items: center;
@@ -144,7 +146,7 @@ function formatLink(link: string): string {
   }
 
   &__banner-image {
-    width: 100%;
+    width: 40rem;
     height: 15rem;
     object-fit: cover;
   }

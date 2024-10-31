@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import AvatarCircle from "./AvatarCircle.vue";
+import TweetEditor from "./tweet-editor/TweetEditor.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -45,7 +46,7 @@ async function logout() {
           </li>
         </ul>
         <div style="width: 90%">
-          <Button block>Tweet</Button>
+          <TweetEditor />
         </div>
       </section>
       <Menu v-model="toggleProfilePill">
@@ -63,10 +64,10 @@ async function logout() {
         </template>
         <div>
           <List>
-            <ListItem> Add an existing account </ListItem>
-            <ListItem @click="logout"
-              >Log out for @{{ authStore.user?.username }}</ListItem
-            >
+            <ListItem>Add an existing account</ListItem>
+            <ListItem @click="logout">
+              Log out for @{{ authStore.user?.username }}
+            </ListItem>
           </List>
         </div>
       </Menu>
@@ -79,6 +80,7 @@ async function logout() {
   position: relative;
   height: 100vh;
   width: 17rem;
+  z-index: 500;
 
   &__content {
     position: fixed;

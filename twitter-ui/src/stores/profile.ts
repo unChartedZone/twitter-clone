@@ -26,6 +26,10 @@ export const useProfileStore = defineStore("profile", () => {
     tweets.value = tweetList;
   }
 
+  function addTweetToProfile(tweet: Tweet) {
+    tweets.value.unshift(tweet);
+  }
+
   function $reset() {
     tweets.value = [];
   }
@@ -34,6 +38,7 @@ export const useProfileStore = defineStore("profile", () => {
     tweets,
     loadProfileTweets,
     setTweets,
+    addTweetToProfile,
     $reset,
   };
 });

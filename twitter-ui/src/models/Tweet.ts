@@ -7,7 +7,7 @@ export interface BaseTweet {
   totalRetweets: number;
   liked: boolean;
   retweeted: boolean;
-  createdAt: string;
+  createdAt: Date;
   medium: Media[];
 }
 

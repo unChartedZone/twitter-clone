@@ -1,13 +1,5 @@
-<template>
-  <div class="tweet__header">
-    <strong class="name">{{ tweet.user?.name }}</strong>
-    <span class="username">@{{ tweet.user?.username }}</span>
-    <span>&middot;</span>
-    <span class="created-timestamp">{{ tweet.createdAt }}</span>
-  </div>
-</template>
-
 <script setup lang="ts">
+import dayjs from "dayjs";
 import type Tweet from "@/models/Tweet";
 
 interface TweetHeaderProps {
@@ -16,6 +8,17 @@ interface TweetHeaderProps {
 
 defineProps<TweetHeaderProps>();
 </script>
+
+<template>
+  <div class="tweet__header">
+    <strong class="name">{{ tweet.user?.name }}</strong>
+    <span class="username">@{{ tweet.user?.username }}</span>
+    <span>&middot;</span>
+    <span class="created-timestamp">
+      {{ dayjs(tweet.createdAt).format("MMM D, YYYY") }}
+    </span>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .tweet {

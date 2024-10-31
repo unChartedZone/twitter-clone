@@ -8,7 +8,10 @@
       <div class="tweet__text">
         <p>{{ tweet.text }}</p>
       </div>
-      <div class="tweet__media" v-if="tweet.medium.length > 0">
+      <div
+        class="tweet__media"
+        v-if="!!tweet.medium && tweet.medium.length > 0"
+      >
         <img
           v-for="media in tweet.medium"
           :src="media.url"
