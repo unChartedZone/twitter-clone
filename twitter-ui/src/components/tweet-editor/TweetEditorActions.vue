@@ -1,0 +1,30 @@
+<script setup lang="ts">
+import { ref } from "vue";
+
+const emit = defineEmits<{ (event: "publishTweet"): Promise<void> }>();
+const loading = ref<boolean>(false); // TODO: Should define some loading state instead of boolean for failure scenario
+
+async function publishTweet() {
+  loading.value = true;
+  await emit("publishTweet");
+  loading.value = false;
+}
+</script>
+
+<template>
+  <div class="actions">
+    <Button icon="picture" color="primary" :size="1" />
+    <Button :size="1" @click="publishTweet" :loading="loading">Tweet</Button>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0.5rem;
+  padding: 0.5rem 0 0;
+  border-top: 1px solid $gray;
+}
+</style>

@@ -11,14 +11,16 @@ import { useAuthStore } from "./auth";
 export const useProfileStore = defineStore("profile", () => {
   const authStore = useAuthStore();
   const tweets = ref<Tweet[]>([]);
+  const initialLoad = ref<boolean>(false);
 
   async function loadProfileTweets() {
-    if (tweets.value.length > 0 || !authStore.user?.username) return;
+    if (initialLoad.value || !authStore.user?.username) return;
     const profileTweets = await fetchProtectedProfileTweets(
       authStore.user?.username
     );
     if (profileTweets) {
       setTweets(profileTweets);
+      initialLoad.value = true;
     }
   }
 

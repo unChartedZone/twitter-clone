@@ -1,8 +1,9 @@
 <template>
-  <div class="textarea">
+  <div class="textarea" :class="{ 'textarea--borderless': borderless }">
     <textarea
       class="textarea__input"
       :value="modelValue"
+      :placeholder="placeholder"
       @input="(event: any) => handleChange(event.target.value)"
     />
     <label class="textarea__label">{{ label }}</label>
@@ -14,6 +15,7 @@ interface TextareaProps {
   modelValue?: string;
   label?: string;
   placeholder?: string;
+  borderless?: boolean;
 }
 
 defineProps<TextareaProps>();
@@ -31,6 +33,14 @@ function handleChange(value: string) {
   border-radius: 0.375rem;
   overflow: hidden;
   height: 5rem;
+
+  &--borderless {
+    border: none;
+  }
+
+  &--borderless &__input {
+    padding: 0.5rem;
+  }
 
   &__label {
     position: absolute;

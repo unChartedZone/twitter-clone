@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import AvatarCircle from "./AvatarCircle.vue";
-import TweetEditor from "./tweet-editor/TweetEditor.vue";
+import TweetEditorModal from "./tweet-editor/TweetEditorModal.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -46,7 +46,7 @@ async function logout() {
           </li>
         </ul>
         <div style="width: 90%">
-          <TweetEditor />
+          <TweetEditorModal />
         </div>
       </section>
       <Menu v-model="toggleProfilePill">
