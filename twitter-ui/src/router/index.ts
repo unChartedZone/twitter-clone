@@ -68,12 +68,6 @@ const router = createRouter({
       meta: { requiresAuth: true, layout: Default },
     },
     {
-      path: "/lists",
-      name: "lists",
-      component: () => import("../views/ListsView.vue"),
-      meta: { requiresAuth: true, layout: Default },
-    },
-    {
       path: "/profile",
       component: () => import("../views/ProfileView.vue"),
       meta: {
