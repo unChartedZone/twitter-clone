@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class TweetsController < ApplicationController
+  include Paginable
   before_action :is_authenticated,
                 only: %i[create index feed liked_tweets like unlike retweet protected_profile_tweets
                          explore_user_tweets]
 
   def index
-    tweets = current_user.tweets.includes([:medium])
+    tweets = current_user.tweets.includes([:medium]).page(current_page).per(per_page)
     render json: TweetSerializer.new(tweets).serializable_hash.to_json
   end
 
@@ -19,15 +20,22 @@ class TweetsController < ApplicationController
     tweets = Tweet
              .where(user_id: following)
              .or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: following)))
-             .sort_by(&:created_at).reverse
-    render json: TweetSerializer.new(tweets,
-                                     { include: [:user],
-                                       params: { current_user: @current_user } }).serializable_hash.to_json
+             .page(current_page)
+             .per(per_page)
+    options = {
+      include: [:user],
+      params: { current_user: @current_user }
+    }.merge(get_links_serializer_options('feed_tweets_path', tweets))
+    render json: TweetSerializer.new(tweets, options).serializable_hash.to_json
   end
 
   def protected_profile_tweets
     tweets = fetch_user_tweets
-    render json: TweetSerializer.new(tweets, { include: [:user], params: { current_user: @current_user } })
+    options = {
+      include: [:user],
+      params: { current_user: @current_user }
+    }.merge(get_links_serializer_options('protected_profile_tweets_path', tweets))
+    render json: TweetSerializer.new(tweets, options)
                                 .serializable_hash.to_json
   end
 
@@ -124,6 +132,8 @@ class TweetsController < ApplicationController
     Tweet
       .where(user_id: user.id)
       .or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: user.id)))
-      .sort_by(&:created_at).reverse
+      .order(created_at: :desc)
+      .page(current_page)
+      .per(per_page)
   end
 end

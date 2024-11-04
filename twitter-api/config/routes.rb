@@ -21,8 +21,9 @@ Rails.application.routes.draw do
   end
 
   # Tweet Endpoints
-  resources :tweets, only: [:index, :show, :create] do
-    get '/profile/:username/protected', on: :collection, to: 'tweets#protected_profile_tweets'
+  resources :tweets, only: %i[index show create] do
+    get '/profile/:username/protected', on: :collection, to: 'tweets#protected_profile_tweets',
+                                        as: 'protected_profile'
     get '/profile/:username', on: :collection, to: 'tweets#profile_tweets'
     get 'liked', on: :collection, to: 'tweets#liked_tweets'
     get 'feed', on: :collection, to: 'tweets#feed'
@@ -33,5 +34,5 @@ Rails.application.routes.draw do
     post 'unretweet', on: :member, to: 'tweets#undo_retweet'
   end
 
-  resources :medium, only: [:index, :create], path: :media
+  resources :medium, only: %i[index create], path: :media
 end
