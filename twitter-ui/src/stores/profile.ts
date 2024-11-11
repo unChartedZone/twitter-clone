@@ -7,25 +7,30 @@ import {
 } from "@/api/endpoints";
 import type Tweet from "@/models/Tweet";
 import { useAuthStore } from "./auth";
+import { getQueryParams } from "@/api/helpers";
 
 export const useProfileStore = defineStore("profile", () => {
   const authStore = useAuthStore();
   const tweets = ref<Tweet[]>([]);
-  const initialLoad = ref<boolean>(false);
+  const page = ref<number>(1); // TODO: might need to refactor this for loading other profile tabs
+  const hasMore = ref<boolean>(true);
 
   async function loadProfileTweets() {
-    if (initialLoad.value || !authStore.user?.username) return;
-    const profileTweets = await fetchProtectedProfileTweets(
-      authStore.user?.username
+    if (!authStore.user?.username || !hasMore.value) return;
+
+    const res = await fetchProtectedProfileTweets(
+      authStore.user?.username,
+      page.value
     );
-    if (profileTweets) {
-      setTweets(profileTweets);
-      initialLoad.value = true;
-    }
+
+    const params = getQueryParams(res.links.next);
+    setTweets(res.tweets);
+    page.value = parseInt(params["page"]);
+    hasMore.value = res.links.hasMore;
   }
 
   function setTweets(tweetList: Tweet[]): void {
-    tweets.value = tweetList;
+    tweets.value = [...tweets.value, ...tweetList];
   }
 
   function addTweetToProfile(tweet: Tweet) {

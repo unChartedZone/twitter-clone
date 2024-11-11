@@ -18,6 +18,14 @@ interface BaseResponse<T> {
   data: Data<T>;
 }
 
+export interface Pagination {
+  first: string;
+  last: string;
+  next: string;
+  prev: string;
+  hasMore: boolean;
+}
+
 export interface LoginResponse extends BaseResponse<User> {}
 export interface UserResponse extends BaseResponse<BaseUser> {}
 export interface ExploreUsersResponse {
@@ -32,6 +40,7 @@ export interface TweetResponse {
 export interface TweetListResponse {
   data: Data<BaseTweet>[];
   included: Data<BaseUser>[];
+  links: Pagination;
 }
 
 export interface ErrorResponse {

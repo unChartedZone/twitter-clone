@@ -1,5 +1,5 @@
 <template>
-  <p class="no-tweets">🦗 All seems quiet at the moment 🦗</p>
+  <h3 class="no-tweets">What? No Tweets Yet?</h3>
 </template>
 
 <style scoped lang="scss">

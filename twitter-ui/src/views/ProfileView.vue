@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { RouterView } from "vue-router";
 import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
-import { useProfileStore } from "@/stores/profile";
 import ProfileEditor from "@/components/ProfileEditor.vue";
 
 const authStore = useAuthStore();
-const profileStore = useProfileStore();
 const iconSize = 1.2;
 
 const showProfileEditor = ref<boolean>(false);
@@ -19,10 +17,6 @@ const birthDate = computed(() =>
 const joinDate = computed(() =>
   dayjs(authStore.user?.joinDate).format("MMMM YYYY")
 );
-
-onMounted(async () => {
-  await profileStore.loadProfileTweets();
-});
 
 function closeProfileEditor() {
   showProfileEditor.value = false;
@@ -76,9 +70,9 @@ function formatLink(link: string): string {
         </span>
         <span v-if="authStore.user?.website">
           <Icon name="chain" :size="iconSize" />
-          <Link text :href="authStore.user?.website" target="_blank">{{
-            formatLink(authStore.user.website)
-          }}</Link>
+          <Link text :href="authStore.user?.website" target="_blank">
+            {{ formatLink(authStore.user.website) }}
+          </Link>
         </span>
         <span>
           <Icon name="balloon" :size="iconSize" />
@@ -91,10 +85,12 @@ function formatLink(link: string): string {
       </div>
       <div class="profile__following">
         <span>
-          <strong>{{ authStore.user?.totalFollowing }}</strong> Following
+          <strong>{{ authStore.user?.totalFollowing }}</strong>
+          Following
         </span>
         <span>
-          <strong>{{ authStore.user?.totalFollowers }}</strong> Followers
+          <strong>{{ authStore.user?.totalFollowers }}</strong>
+          Followers
         </span>
       </div>
     </section>

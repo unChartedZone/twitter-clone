@@ -9,6 +9,7 @@ import type {
   TweetListResponse,
   ExploreUsersResponse,
   TweetResponse,
+  Pagination,
 } from "@/types/ResponseTypes";
 import type { LoginPayload } from "@/types/RequestPayloads";
 import { transformTweetResponse, transformTweetListResponse } from "./helpers";
@@ -58,14 +59,19 @@ export async function fetchUserTweets(): Promise<Tweet[]> {
 }
 
 export async function fetchProtectedProfileTweets(
-  username: string
-): Promise<Tweet[] | undefined> {
+  username: string,
+  page: number = 1
+): Promise<{ tweets: Tweet[]; links: Pagination }> {
   const res = (
     await authClient.get<TweetListResponse>(
-      `/tweets/profile/${username}/protected`
+      `/tweets/profile/${username}/protected`,
+      { params: { page } }
     )
   ).data;
-  return transformTweetListResponse(res);
+  return {
+    tweets: transformTweetListResponse(res),
+    links: res.links,
+  };
 }
 
 // TODO: allow tweets of profile to be viewed in the future

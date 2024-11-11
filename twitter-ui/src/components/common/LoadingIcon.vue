@@ -1,5 +1,8 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ size?: number }>(), { size: 30 });
+withDefaults(defineProps<{ size?: number; color?: string }>(), {
+  size: 30,
+  color: "primary",
+});
 </script>
 
 <template>
@@ -27,10 +30,10 @@ withDefaults(defineProps<{ size?: number }>(), { size: 30 });
   width: 80%;
   height: 80%;
   margin: 2px;
-  border: 2px solid currentColor;
+  border: 2px solid $primary;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: currentColor transparent transparent transparent;
+  border-color: $primary transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
