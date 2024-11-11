@@ -16,7 +16,9 @@ const loadMoreTweets = useDebounceFn(async () => {
 }, 1000);
 
 onMounted(async () => {
-  await profileStore.loadProfileTweets();
+  if (profileStore.tweets.length == 0) {
+    await profileStore.loadProfileTweets();
+  }
   loadingState.value = "resolved";
 });
 
