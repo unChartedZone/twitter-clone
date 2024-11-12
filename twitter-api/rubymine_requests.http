@@ -28,6 +28,12 @@ Authorization: Bearer {{auth_token}}
 
 ###
 
+# @name FetchUserByUsername
+GET {{base-url}}/users/bootsie
+Authorization: Bearer {{auth_token}}
+
+###
+
 # @name UpdateUser
 PATCH {{base-url}}/users/e296bfe6-89b6-4acb-ab29-be5c0fcf40bb
 Authorization: Bearer {{auth_token}}

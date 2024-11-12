@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get 'following', on: :collection, to: 'users#following'
     get 'followers', on: :collection, to: 'users#followers'
     get 'explore', on: :collection, to: 'users#explore_users'
+    get ':username', on: :collection, to: 'users#show_by_username'
     post 'follow/:id', on: :collection, to: 'users#follow_user'
     patch 'update-image', on: :collection, to: 'users#update_image'
   end

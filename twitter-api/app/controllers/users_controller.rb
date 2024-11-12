@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy, :follow_user]
-  before_action :is_authenticated, only: [:me, :update, :destroy, :following, :followers, :follow_user, :explore_users]
-  before_action :check_owner, only: [:update, :destroy]
+  before_action :set_user, only: %i[show update destroy follow_user]
+  before_action :is_authenticated, only: %i[me update destroy following followers follow_user explore_users]
+  before_action :check_owner, only: %i[update destroy]
 
   # GET /users
   def index
@@ -12,6 +12,15 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     render json: @user
+  end
+
+  def show_by_username
+    @user = User.find_by(username: params[:username])
+    if @user
+      render json: UserSerializer.new(@user).serializable_hash.to_json
+    else
+      render json: { message: 'User not found' }, status: 404
+    end
   end
 
   # POST /users
