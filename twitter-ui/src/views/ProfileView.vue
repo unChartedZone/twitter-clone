@@ -7,6 +7,7 @@ import ProfileEditor from "@/components/ProfileEditor.vue";
 import { fetchUserByUsername } from "@/api/endpoints";
 import type { BaseUser } from "@/models/User";
 import type { LoadingState } from "@/types/LoadingState";
+import Image from "@/components/common/Image.vue";
 
 const authStore = useAuthStore();
 const route = useRoute();
@@ -68,16 +69,14 @@ function formatLink(link: string): string {
         </div>
       </div>
     </header>
-    <img
+    <Image
       class="profile__banner-image"
-      :src="authStore.user?.bannerImage ?? '/images/default-banner.avif'"
-      alt=""
+      :src="currentUser?.bannerImage ?? '/images/default-banner.avif'"
     />
     <section class="profile__content">
-      <img
+      <Image
         class="profile__profile-image"
-        :src="authStore.user?.profileImage ?? '/images/default-pfp.png'"
-        alt=""
+        :src="currentUser?.profileImage ?? '/images/default-pfp.png'"
       />
       <div class="profile__edit-profile">
         <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">

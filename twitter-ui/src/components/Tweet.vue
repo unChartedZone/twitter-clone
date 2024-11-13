@@ -12,8 +12,9 @@
         class="tweet__media"
         v-if="!!tweet.medium && tweet.medium.length > 0"
       >
-        <img
+        <Image
           v-for="media in tweet.medium"
+          :key="media.id"
           :src="media.url"
           :alt="media.description"
         />
@@ -28,6 +29,7 @@ import type Tweet from "@/models/Tweet";
 import TweetHeader from "./tweet/TweetHeader.vue";
 import TweetActions from "@/components/tweet/TweetActions.vue";
 import AvatarCircle from "./AvatarCircle.vue";
+import Image from "./common/Image.vue";
 
 interface TweetProps {
   tweet: Tweet;
