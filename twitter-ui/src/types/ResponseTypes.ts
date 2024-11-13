@@ -14,7 +14,7 @@ export interface Data<T> {
   relationships?: { user: { data: RelationData } };
 }
 
-interface BaseResponse<T> {
+export interface BaseResponse<T> {
   data: Data<T>;
 }
 

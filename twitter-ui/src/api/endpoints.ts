@@ -10,6 +10,7 @@ import type {
   ExploreUsersResponse,
   TweetResponse,
   Pagination,
+  BaseResponse,
 } from "@/types/ResponseTypes";
 import type { LoginPayload } from "@/types/RequestPayloads";
 import { transformTweetResponse, transformTweetListResponse } from "./helpers";
@@ -133,6 +134,14 @@ export async function patchUser(
 export async function exploreUsers(): Promise<BaseUser[]> {
   const res = await authClient.get<ExploreUsersResponse>("/users/explore");
   return res.data.data.map((x) => x.attributes);
+}
+
+export async function fetchUserByUsername(username: string): Promise<BaseUser> {
+  const res = await authClient.get<BaseResponse<BaseUser>>(
+    `/users/${username}`
+  );
+
+  return res.data.data.attributes;
 }
 
 export async function exploreUserTweets(): Promise<Tweet[]> {
