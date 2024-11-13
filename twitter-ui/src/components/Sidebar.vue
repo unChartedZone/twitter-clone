@@ -38,7 +38,7 @@ const links: NavLink[] = [
   },
   {
     text: "Profile",
-    to: "/profile",
+    to: `/${authStore.user?.username}`,
     icon: "profile-outline",
     activeIcon: "profile",
   },

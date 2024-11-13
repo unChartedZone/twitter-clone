@@ -1,22 +1,50 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { RouterView } from "vue-router";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute, RouterView } from "vue-router";
 import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
 import ProfileEditor from "@/components/ProfileEditor.vue";
+import { fetchUserByUsername } from "@/api/endpoints";
+import type { BaseUser } from "@/models/User";
+import type { LoadingState } from "@/types/LoadingState";
 
 const authStore = useAuthStore();
+const route = useRoute();
+const currentUser = ref<BaseUser | undefined>();
 const iconSize = 1.2;
+const loading = ref<LoadingState>("idle");
 
 const showProfileEditor = ref<boolean>(false);
 
 const birthDate = computed(() =>
-  dayjs(authStore.user?.birthDate).format("MMM D, YYYY")
+  dayjs(currentUser.value?.birthDate).format("MMM D, YYYY")
 );
 
 const joinDate = computed(() =>
-  dayjs(authStore.user?.joinDate).format("MMMM YYYY")
+  dayjs(currentUser.value?.joinDate).format("MMMM YYYY")
 );
+
+// Watch for route change and refresh profile user
+watch(
+  () => route.params.username,
+  async (value, _oldValue) => {
+    await fetchUserProfile();
+  }
+);
+
+onMounted(async () => {
+  await fetchUserProfile();
+});
+
+async function fetchUserProfile() {
+  loading.value = "idle";
+  try {
+    currentUser.value = await fetchUserByUsername(route.params.username[0]);
+    loading.value = "resolved";
+  } catch (e) {
+    loading.value = "rejected";
+  }
+}
 
 function closeProfileEditor() {
   showProfileEditor.value = false;
@@ -35,7 +63,7 @@ function formatLink(link: string): string {
           <Icon name="left-arrow" />
         </Link>
         <div>
-          <h2>{{ authStore.user?.name }}</h2>
+          <h2>{{ currentUser?.name }}</h2>
           <span>3 tweets</span>
         </div>
       </div>
@@ -54,27 +82,36 @@ function formatLink(link: string): string {
       <div class="profile__edit-profile">
         <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">
           <template v-slot:activator="{ onClick }">
-            <Button @click="onClick" outline :size="1">Edit profile</Button>
+            <div class="edit-profile-activator">
+              <Button
+                v-if="currentUser?.id == authStore.user?.id"
+                @click="onClick"
+                outline
+                :size="1"
+              >
+                Edit profile
+              </Button>
+            </div>
           </template>
           <ProfileEditor @onClose="closeProfileEditor" />
         </Modal>
       </div>
       <div class="profile__name">
-        <h3>{{ authStore.user?.name }}</h3>
-        <p>@{{ authStore.user?.username }}</p>
+        <h3>{{ currentUser?.name }}</h3>
+        <p>@{{ currentUser?.username }}</p>
       </div>
       <div class="profile__info">
-        <span v-if="authStore.user?.location">
+        <span v-if="currentUser?.location">
           <Icon name="location" :size="iconSize" />
-          {{ authStore.user?.location }}
+          {{ currentUser?.location }}
         </span>
-        <span v-if="authStore.user?.website">
+        <span v-if="currentUser?.website">
           <Icon name="chain" :size="iconSize" />
           <Link text :href="authStore.user?.website" target="_blank">
-            {{ formatLink(authStore.user.website) }}
+            {{ formatLink(currentUser?.website) }}
           </Link>
         </span>
-        <span>
+        <span v-if="currentUser?.birthDate">
           <Icon name="balloon" :size="iconSize" />
           Born {{ birthDate }}
         </span>
@@ -85,11 +122,11 @@ function formatLink(link: string): string {
       </div>
       <div class="profile__following">
         <span>
-          <strong>{{ authStore.user?.totalFollowing }}</strong>
+          <strong>{{ currentUser?.totalFollowing }}</strong>
           Following
         </span>
         <span>
-          <strong>{{ authStore.user?.totalFollowers }}</strong>
+          <strong>{{ currentUser?.totalFollowers }}</strong>
           Followers
         </span>
       </div>
@@ -187,5 +224,9 @@ function formatLink(link: string): string {
     gap: 0.5rem;
     font-size: 0.9rem;
   }
+}
+
+.edit-profile-activator {
+  height: 2rem;
 }
 </style>

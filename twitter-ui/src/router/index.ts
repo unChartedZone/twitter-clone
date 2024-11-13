@@ -68,10 +68,10 @@ const router = createRouter({
       meta: { requiresAuth: true, layout: Default },
     },
     {
-      path: "/profile",
-      component: () => import("../views/ProfileView.vue"),
+      path: "/:username(.*)*",
+      name: "UserProfile",
+      component: import("../views/ProfileView.vue"),
       meta: {
-        requiresAuth: true,
         layout: Default,
         sidebarComponents: [SearchField, WhoToFollow],
       },

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
 import dayjs from "dayjs";
 import type Tweet from "@/models/Tweet";
 
@@ -11,8 +12,10 @@ defineProps<TweetHeaderProps>();
 
 <template>
   <div class="tweet__header">
-    <strong class="name">{{ tweet.user?.name }}</strong>
-    <span class="username">@{{ tweet.user?.username }}</span>
+    <RouterLink class="tweet__user-link" :to="`/${tweet.user?.username}`">
+      <strong class="name">{{ tweet.user?.name }}</strong>
+      <span class="username">@{{ tweet.user?.username }}</span>
+    </RouterLink>
     <span>&middot;</span>
     <span class="created-timestamp">
       {{ dayjs(tweet.createdAt).format("MMM D, YYYY") }}
@@ -29,6 +32,15 @@ defineProps<TweetHeaderProps>();
     .username,
     .created-timestamp {
       color: $gray-300;
+    }
+  }
+
+  &__user-link {
+    display: flex;
+    gap: 0.5rem;
+
+    strong:hover {
+      text-decoration: underline;
     }
   }
 }
