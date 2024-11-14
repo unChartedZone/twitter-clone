@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     get 'explore', on: :collection, to: 'users#explore_users'
     get ':username', on: :collection, to: 'users#show_by_username'
     post 'follow/:id', on: :collection, to: 'users#follow_user'
+    post 'unfollow/:id', on: :collection, to: 'users#unfollow_user'
     patch 'update-image', on: :collection, to: 'users#update_image'
   end
 

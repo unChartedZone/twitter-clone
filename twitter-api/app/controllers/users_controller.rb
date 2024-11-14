@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show update destroy follow_user]
-  before_action :is_authenticated, only: %i[me update destroy following followers follow_user explore_users]
+  before_action :is_authenticated,
+                only: %i[me update destroy following followers follow_user unfollow_user explore_users]
   before_action :check_owner, only: %i[update destroy]
 
   # GET /users
@@ -71,13 +72,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def unfollow_user
+    followee = Follower.find_by(user_id: current_user.id, followed_user: params[:id])
+    return unless followee.destroy
+
+    render json: { message: 'User unfollowed' }, status: :ok
+  end
+
   def explore_users
     # Return users that you are not following
     users = User.where.not(id: current_user.following.pluck(:id)).where.not(id: current_user.id)
     render json: UserSerializer.new(users), status: :ok
   end
-
-  # TODO: create unfollow user endpoint
 
   private
 
