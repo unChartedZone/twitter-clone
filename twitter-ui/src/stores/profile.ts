@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { fetchProtectedProfileTweets } from "@/api/endpoints";
+import { fetchProtectedProfileTweets } from "@/api/endpoints/tweets";
 import type Tweet from "@/models/Tweet";
 import { useAuthStore } from "./auth";
 import { getQueryParams } from "@/api/helpers";

@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { useProfileStore } from "@/stores/profile";
-import { postTweet } from "@/api/endpoints";
+import { postTweet } from "@/api/endpoints/tweets";
 
 export function useTweetEditor() {
   const profileStore = useProfileStore();

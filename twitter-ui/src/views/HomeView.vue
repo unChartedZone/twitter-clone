@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { fetchFeed } from "@/api/endpoints";
+import { fetchFeed } from "@/api/endpoints/tweets";
 import type Tweet from "@/models/Tweet";
 import TweetVue from "@/components/Tweet.vue";
 import NoTweetsMessage from "@/components/NoTweetsMessage.vue";

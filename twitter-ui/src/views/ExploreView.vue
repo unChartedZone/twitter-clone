@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { exploreUserTweets } from "@/api/endpoints";
+import { exploreUserTweets } from "@/api/endpoints/tweets";
 import type TweetType from "@/models/Tweet";
 import Tweet from "@/components/Tweet.vue";
 import NoTweetsMessage from "@/components/NoTweetsMessage.vue";

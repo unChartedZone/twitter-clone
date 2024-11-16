@@ -1,19 +1,15 @@
 import { authClient, client } from "./client";
 import type User from "@/models/User";
 import type Tweet from "@/models/Tweet";
-import { type BaseTweet } from "@/models/Tweet";
 import type { BaseUser, UserPatch } from "@/models/User";
 import type {
   LoginResponse,
   UserResponse,
   TweetListResponse,
   ExploreUsersResponse,
-  TweetResponse,
-  Pagination,
   BaseResponse,
 } from "@/types/ResponseTypes";
 import type { LoginPayload } from "@/types/RequestPayloads";
-import { transformTweetResponse, transformTweetListResponse } from "./helpers";
 
 export async function login(user: LoginPayload): Promise<LoginResponse> {
   return (await client.post<LoginResponse>("/login", { user })).data;
@@ -40,58 +36,6 @@ export async function refresh(): Promise<LoginResponse | undefined> {
 
 export async function logout() {
   return client.post("/logout");
-}
-
-export async function fetchFeed(): Promise<Tweet[]> {
-  const res = await authClient.get<TweetListResponse>("/tweets/feed");
-  return transformTweetListResponse(res.data);
-}
-
-export async function fetchUserTweets(): Promise<Tweet[]> {
-  const res = (await authClient.get<TweetListResponse>("/tweets")).data;
-  return res.data.map(
-    (i) =>
-      ({
-        id: i.id,
-        text: i.attributes.text,
-        medium: i.attributes.medium,
-      } as Tweet)
-  );
-}
-
-export async function fetchProtectedProfileTweets(
-  username: string,
-  page: number = 1
-): Promise<{ tweets: Tweet[]; links: Pagination }> {
-  const res = (
-    await authClient.get<TweetListResponse>(
-      `/tweets/profile/${username}/protected`,
-      { params: { page } }
-    )
-  ).data;
-  return {
-    tweets: transformTweetListResponse(res),
-    links: res.links,
-  };
-}
-
-// TODO: allow tweets of profile to be viewed in the future
-export async function fetchProfileTweets(
-  username: string
-): Promise<Tweet[] | undefined> {
-  try {
-    const res = (
-      await client.get<TweetListResponse>(`/tweets/profile/${username}`)
-    ).data;
-    return transformTweetListResponse(res);
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-export async function postTweet(tweetPayload: any) {
-  const res = await authClient.post<TweetResponse>("/tweets", tweetPayload);
-  return transformTweetResponse(res.data);
 }
 
 export async function patchUser(
@@ -142,11 +86,6 @@ export async function fetchUserByUsername(username: string): Promise<BaseUser> {
   );
 
   return res.data.data.attributes;
-}
-
-export async function exploreUserTweets(): Promise<Tweet[]> {
-  const res = await authClient.get<TweetListResponse>("/tweets/explore");
-  return transformTweetListResponse(res.data);
 }
 
 export async function followUser(userId: string) {
