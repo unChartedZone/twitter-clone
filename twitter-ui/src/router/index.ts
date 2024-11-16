@@ -112,8 +112,6 @@ router.beforeEach(async (to) => {
 
   if (to.meta.requiresAuth && !authStore.accessToken) {
     return "/login";
-  } else if (!to.meta.requiresAuth && authStore.accessToken) {
-    return "/home";
   }
 });
 
