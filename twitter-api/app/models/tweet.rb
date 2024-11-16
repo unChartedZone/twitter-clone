@@ -1,5 +1,5 @@
 class Tweet < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, counter_cache: true
   before_validation :set_total_likes!
   before_validation :set_total_retweets!
 
