@@ -12,6 +12,7 @@ export interface BaseUser {
   bannerImage?: string;
   totalFollowing: number;
   totalFollowers: number;
+  totalTweets: number;
 }
 
 // User fields that are typically modified

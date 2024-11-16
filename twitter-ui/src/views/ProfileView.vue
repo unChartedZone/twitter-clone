@@ -65,7 +65,7 @@ function formatLink(link: string): string {
         </Link>
         <div>
           <h2>{{ currentUser?.name }}</h2>
-          <span>3 tweets</span>
+          <span>{{ currentUser?.totalTweets }} tweets</span>
         </div>
       </div>
     </header>

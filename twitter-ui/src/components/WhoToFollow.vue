@@ -25,7 +25,7 @@ async function follow(userId: string) {
   <section>
     <div class="follows">
       <h2 class="mb-4">Who to follow</h2>
-      <ul>
+      <ul v-if="users.length > 0">
         <li class="user" v-for="user in users" :key="user.id">
           <div class="user__content">
             <AvatarCircle
@@ -44,6 +44,9 @@ async function follow(userId: string) {
           </div>
         </li>
       </ul>
+      <div v-else>
+        <p>No users! Check back later</p>
+      </div>
     </div>
   </section>
 </template>
@@ -52,7 +55,7 @@ async function follow(userId: string) {
 .follows {
   border: 1px solid $gray-100;
   border-radius: $rounded;
-  padding: 0.75rem 0.5rem;
+  padding: 0.75rem;
 
   ul {
     display: flex;
