@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include ActionView::Helpers::AssetUrlHelper
   has_secure_password
 
   validates :email, presence: true, uniqueness: true
@@ -22,6 +23,24 @@ class User < ApplicationRecord
   # Remove password from user json serialization
   def as_json(_options = {})
     super(except: [:password_digest])
+  end
+
+  def profile_image_url
+    if profile_image.attached?
+      Rails.application.routes.url_helpers.url_for(profile_image.representation(resize_to_limit: [500,
+                                                                                                  500]).processed.url)
+    else
+      image_url('default-pfp.png')
+    end
+  end
+
+  def banner_image_url
+    if banner_image.attached?
+      Rails.application.routes.url_helpers.url_for(banner_image.representation(resize_to_limit: [1000,
+                                                                                                 1000]).processed.url)
+    else
+      '/images/default-banner.avif'
+    end
   end
 
   private

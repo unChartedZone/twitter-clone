@@ -18,14 +18,14 @@ class Tweet < ApplicationRecord
   end
 
   def build_tweet_like(user_id)
-    like = Like.new(user_id: user_id)
+    like = Like.new(user_id:)
     like.save
     tweet_like = tweet_likes.build(like_id: like.id)
     yield tweet_like if block_given?
   end
 
   def build_retweet(user_id)
-    retweet = Retweet.new(tweet_id: self.id, user_id: user_id)
+    retweet = Retweet.new(tweet_id: id, user_id:)
     retweet.save
     yield retweet if block_given?
   end
