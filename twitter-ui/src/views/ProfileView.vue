@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
-import { useRoute, RouterView } from "vue-router";
+import { ref, computed, watch } from "vue";
+import { useRoute, RouterView, RouterLink } from "vue-router";
 import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
+import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import ProfileEditor from "@/components/ProfileEditor.vue";
-import { fetchUserByUsername } from "@/api/endpoints";
-import type { BaseUser } from "@/models/User";
-import type { LoadingState } from "@/types/LoadingState";
 import Image from "@/components/common/Image.vue";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 const authStore = useAuthStore();
 const route = useRoute();
-const currentUser = ref<BaseUser | undefined>();
 const iconSize = 1.2;
-const loading = ref<LoadingState>("idle");
+const { currentUser, fetchUserProfile } = useUserProfile(
+  route.params.username[0]
+);
 
 const showProfileEditor = ref<boolean>(false);
 
@@ -33,20 +33,6 @@ watch(
   }
 );
 
-onMounted(async () => {
-  await fetchUserProfile();
-});
-
-async function fetchUserProfile() {
-  loading.value = "idle";
-  try {
-    currentUser.value = await fetchUserByUsername(route.params.username[0]);
-    loading.value = "resolved";
-  } catch (e) {
-    loading.value = "rejected";
-  }
-}
-
 function closeProfileEditor() {
   showProfileEditor.value = false;
 }
@@ -58,26 +44,13 @@ function formatLink(link: string): string {
 
 <template>
   <main class="profile">
-    <header class="profile__header">
-      <div>
-        <Link @click="$router.go(-1)" icon>
-          <Icon name="left-arrow" />
-        </Link>
-        <div>
-          <h2>{{ currentUser?.name }}</h2>
-          <span>{{ currentUser?.totalTweets }} tweets</span>
-        </div>
-      </div>
-    </header>
-    <Image
-      class="profile__banner-image"
-      :src="currentUser?.bannerImage ?? '/images/default-banner.avif'"
+    <ProfileHeader
+      :name="currentUser?.name"
+      :totalTweets="currentUser?.totalTweets"
     />
+    <Image class="profile__banner-image" :src="currentUser?.bannerImage" />
     <section class="profile__content">
-      <Image
-        class="profile__profile-image"
-        :src="currentUser?.profileImage ?? '/images/default-pfp.png'"
-      />
+      <Image class="profile__profile-image" :src="currentUser?.profileImage" />
       <div class="profile__edit-profile">
         <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">
           <template v-slot:activator="{ onClick }">
@@ -95,11 +68,11 @@ function formatLink(link: string): string {
           <ProfileEditor @onClose="closeProfileEditor" />
         </Modal>
       </div>
-      <div class="profile__name">
+      <div class="profile__name mb-2">
         <h3>{{ currentUser?.name }}</h3>
         <p>@{{ currentUser?.username }}</p>
       </div>
-      <div class="profile__info">
+      <div class="profile__info mb-2">
         <span v-if="currentUser?.location">
           <Icon name="location" :size="iconSize" />
           {{ currentUser?.location }}
@@ -120,14 +93,14 @@ function formatLink(link: string): string {
         </span>
       </div>
       <div class="profile__following">
-        <span>
+        <RouterLink :to="`${currentUser?.username}/following`">
           <strong>{{ currentUser?.totalFollowing }}</strong>
           Following
-        </span>
-        <span>
+        </RouterLink>
+        <RouterLink :to="`${currentUser?.username}/followers`">
           <strong>{{ currentUser?.totalFollowers }}</strong>
           Followers
-        </span>
+        </RouterLink>
       </div>
     </section>
     <section>
@@ -146,52 +119,22 @@ function formatLink(link: string): string {
 .profile {
   margin: 3.5rem 0 0 0;
 
-  &__header {
-    position: relative;
-    width: 40rem;
-
-    & > div {
-      backdrop-filter: blur(12px);
-      width: inherit;
-      position: fixed;
-      z-index: 25;
-      top: 0;
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      background-color: rgba($white, 0.85);
-    }
-
-    h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      line-height: 1.75rem;
-    }
-
-    svg {
-      height: 1.35rem;
-    }
-
-    span {
-      font-size: 0.9rem;
-    }
-  }
-
   &__banner-image {
     width: 40rem;
     height: 15rem;
-    object-fit: cover;
+    z-index: 1;
   }
 
   &__info {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.45rem;
     font-size: 0.9rem;
 
     span {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.15rem;
+      height: 1.2rem;
     }
   }
 
@@ -210,6 +153,7 @@ function formatLink(link: string): string {
     left: 1rem;
     border: 3px solid $white;
     transform: translateY(-60%);
+    z-index: 20;
   }
 
   &__edit-profile {
