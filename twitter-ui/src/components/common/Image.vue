@@ -7,20 +7,19 @@ interface ImageProps {
   alt?: string;
 }
 
-const isLoaded = ref<LoadingState>("idle");
-
-defineProps<ImageProps>();
+withDefaults(defineProps<ImageProps>(), { src: "" });
+const isLoading = ref<LoadingState>("idle");
 </script>
 
 <template>
   <div class="image__container">
+    <div v-if="isLoading == 'idle'" class="image__loader"></div>
     <img
       class="object-cover object-center"
       :src="src"
       :alt="alt"
-      @load="isLoaded = 'resolved'"
+      @load="isLoading = 'resolved'"
     />
-    <div v-if="isLoaded == 'idle'" class="image__loader"></div>
   </div>
 </template>
 
@@ -29,6 +28,7 @@ defineProps<ImageProps>();
   &__container {
     position: relative;
     overflow: hidden;
+    background-color: $white;
 
     img {
       height: 100%;
@@ -50,6 +50,7 @@ defineProps<ImageProps>();
       rgba(lightgrey, 0) 100%
     );
     animation: loading 1s infinite;
+    z-index: 100;
   }
 }
 
