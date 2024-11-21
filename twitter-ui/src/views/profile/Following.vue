@@ -14,7 +14,7 @@ const { currentUser } = useUserProfile(route.params.username[0]);
 const following = ref<BaseUser[]>([]);
 
 onMounted(async () => {
-  following.value = await fetchFollowing();
+  following.value = await fetchFollowing(route.params.username[0]);
 });
 
 /**

@@ -89,13 +89,17 @@ export async function fetchUserByUsername(username: string): Promise<BaseUser> {
   return res.data.data.attributes;
 }
 
-export async function fetchFollowing(): Promise<BaseUser[]> {
-  const res = await authClient.get<FollowingResponse>("/users/following");
+export async function fetchFollowing(username: string): Promise<BaseUser[]> {
+  const res = await authClient.get<FollowingResponse>("/users/following", {
+    params: { username },
+  });
   return res.data.data.map((x) => x.attributes);
 }
 
-export async function fetchFollowers(): Promise<BaseUser[]> {
-  const res = await authClient.get<FollowingResponse>("/users/followers");
+export async function fetchFollowers(username: string): Promise<BaseUser[]> {
+  const res = await authClient.get<FollowingResponse>("/users/followers", {
+    params: { username },
+  });
   return res.data.data.map((x) => x.attributes);
 }
 

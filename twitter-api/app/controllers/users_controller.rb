@@ -54,13 +54,23 @@ class UsersController < ApplicationController
   end
 
   def followers
-    followers = @current_user.followers
-    render json: UserSerializer.new(followers, { params: { current_user: @current_user } }), status: :ok
+    @user = User.find_by(username: params[:username])
+    if @user 
+      followers = @user.followers
+      render json: UserSerializer.new(followers, { params: { current_user: @user } }), status: :ok
+    else
+      render json: { message: "User not found" }, status: 404
+    end
   end
 
   def following
-    following = @current_user.following
-    render json: UserSerializer.new(following), status: :ok
+    @user = User.find_by(username: params[:username])
+    if @user 
+      following = @user.following
+      render json: UserSerializer.new(following), status: :ok
+    else
+      render json: { message: "User not found" }, status: 404
+    end
   end
 
   def follow_user
