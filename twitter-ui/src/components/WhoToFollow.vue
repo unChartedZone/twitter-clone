@@ -4,6 +4,7 @@ import type { BaseUser } from "@/models/User";
 import { exploreUsers, followUser } from "@/api/endpoints";
 import { useAuthStore } from "@/stores/auth";
 import AvatarCircle from "./AvatarCircle.vue";
+import FollowButton from "./profile/FollowButton.vue";
 
 const authStore = useAuthStore();
 const users = ref<BaseUser[]>([]);
@@ -12,9 +13,7 @@ onMounted(async () => {
   users.value = await exploreUsers();
 });
 
-async function follow(userId: string) {
-  const res = await followUser(userId);
-  const followedUser = res.followed_user;
+async function onFollow(followedUser: BaseUser) {
   const index = users.value.findIndex((x) => x.id == followedUser.id);
   users.value.splice(index, 1);
   authStore.incrementFollowingCount();
@@ -38,9 +37,7 @@ async function follow(userId: string) {
             </div>
           </div>
           <div>
-            <Button color="black" :size="1" @click="follow(user.id)">
-              Follow
-            </Button>
+            <FollowButton :userId="user.id" @onFollow="onFollow" />
           </div>
         </li>
       </ul>
