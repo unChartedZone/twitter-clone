@@ -1,6 +1,8 @@
 <template>
-  <RouterLink v-if="to" :to="to" class="tab-header">
-    <slot />
+  <RouterLink style="flex: 1" v-slot="{ isExactActive }" v-if="to" :to="to">
+    <div class="tab-header" :class="{ 'tab-header--active': isExactActive }">
+      <slot />
+    </div>
   </RouterLink>
   <li class="tab-header" v-else>
     <slot />
@@ -19,7 +21,6 @@ defineProps<TabHeaderProps>();
 
 <style scoped lang="scss">
 .tab-header {
-  display: inline-block;
   cursor: pointer;
   padding: 1rem 2rem;
   flex: 1;
@@ -28,6 +29,11 @@ defineProps<TabHeaderProps>();
 
   &:hover {
     background-color: $gray;
+  }
+
+  &--active {
+    border-bottom: 3px solid $primary;
+    border-radius: 2px;
   }
 }
 </style>
