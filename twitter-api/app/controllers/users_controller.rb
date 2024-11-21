@@ -55,7 +55,7 @@ class UsersController < ApplicationController
 
   def followers
     followers = @current_user.followers
-    render json: UserSerializer.new(followers), status: :ok
+    render json: UserSerializer.new(followers, { params: { current_user: @current_user } }), status: :ok
   end
 
   def following

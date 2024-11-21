@@ -34,5 +34,11 @@ class UserSerializer
     params[:access_token]
   end
 
+  attribute :isFollowing do |object, params|
+    params[:current_user].present? && params[:current_user].following.find(object.id).present?
+  rescue ActiveRecord::RecordNotFound
+    false
+  end
+
   cache_options store: Rails.cache, namespace: 'jsonapi-serializer', expires_in: 1.hour
 end
