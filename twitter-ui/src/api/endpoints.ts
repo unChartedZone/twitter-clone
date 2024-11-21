@@ -8,6 +8,7 @@ import type {
   TweetListResponse,
   ExploreUsersResponse,
   BaseResponse,
+  FollowingResponse,
 } from "@/types/ResponseTypes";
 import type { LoginPayload } from "@/types/RequestPayloads";
 
@@ -88,10 +89,28 @@ export async function fetchUserByUsername(username: string): Promise<BaseUser> {
   return res.data.data.attributes;
 }
 
+export async function fetchFollowing(): Promise<BaseUser[]> {
+  const res = await authClient.get<FollowingResponse>("/users/following");
+  return res.data.data.map((x) => x.attributes);
+}
+
+export async function fetchFollowers(): Promise<BaseUser[]> {
+  const res = await authClient.get<FollowingResponse>("/users/followers");
+  return res.data.data.map((x) => x.attributes);
+}
+
 export async function followUser(userId: string) {
   // TODO: update this when I create a serializer for followers
   const res = await authClient.post<{ followed_user: BaseUser }>(
     `/users/follow/${userId}`
   );
   return res.data;
+}
+
+/**
+ * Unfollow a user
+ * @param userId User ID of user being unfollowed
+ */
+export async function postUnfollowUser(userId: string): Promise<void> {
+  await authClient.post(`/users/unfollow/${userId}`);
 }
