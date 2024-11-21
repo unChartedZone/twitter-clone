@@ -10,7 +10,7 @@ interface ButtonProps {
   loading?: boolean;
   // Have button be clear and display a border around button
   outline?: boolean;
-  color?: "primary" | "secondary" | string;
+  color?: "primary" | "secondary" | "danger" | string;
   // TODO: add documentation on what this does...
   size?: number;
   text?: boolean;
@@ -36,7 +36,7 @@ withDefaults(defineProps<ButtonProps>(), {
       'btn--outline': outline,
       'btn--text': text,
       'btn--tonal': tonal,
-      [`${color}`]: color,
+      [`btn--${color}`]: color,
     }"
     :style="{
       padding: !!icon
@@ -54,30 +54,6 @@ withDefaults(defineProps<ButtonProps>(), {
 </template>
 
 <style scoped lang="scss">
-.primary {
-  background-color: $primary;
-  color: $white;
-
-  &:hover {
-    // TODO: make this color a variable
-    background-color: rgba(26, 145, 218);
-  }
-}
-
-.black {
-  background-color: $black;
-  color: $white;
-
-  &:hover {
-    background-color: lighten($black, 30%);
-  }
-}
-
-.white {
-  background-color: $white;
-  color: $black;
-}
-
 .loading-icon {
   position: absolute;
   top: 50%;
@@ -97,6 +73,32 @@ withDefaults(defineProps<ButtonProps>(), {
   font-weight: 700;
   outline: none;
   position: relative;
+  min-width: 2rem;
+
+  // Theme Classes
+  &--primary {
+    background-color: $primary;
+    color: $white;
+
+    &:hover {
+      // TODO: make this color a variable
+      background-color: rgba(26, 145, 218);
+    }
+  }
+
+  &--black {
+    background-color: $black;
+    color: $white;
+
+    &:hover {
+      background-color: lighten($black, 30%);
+    }
+  }
+
+  &--white {
+    background-color: $white;
+    color: $black;
+  }
 
   &--block {
     width: 100%;
@@ -137,6 +139,16 @@ withDefaults(defineProps<ButtonProps>(), {
 
   &--tonal {
     background-color: rgba($black, 0.6);
+  }
+
+  &--danger {
+    color: red;
+    background-color: rgba(red, 0.2);
+    border-color: red;
+
+    &:hover {
+      background-color: rgba(red, 0.2);
+    }
   }
 }
 </style>
