@@ -70,8 +70,9 @@ const router = createRouter({
     {
       path: "/:username(.*)*",
       name: "UserProfile",
-      component: import("../views/ProfileView.vue"),
+      component: () => import("../views/ProfileView.vue"),
       meta: {
+        requiresAuth: true,
         layout: Default,
         sidebarComponents: [SearchField, WhoToFollow],
       },
@@ -97,6 +98,26 @@ const router = createRouter({
           component: () => import("../views/profile/LikedTweetsView.vue"),
         },
       ],
+    },
+    {
+      path: "/:username(.*)*/following",
+      name: "Following",
+      component: () => import("../views/profile/Following.vue"),
+      meta: {
+        requiresAuth: true,
+        layout: Default,
+        sidebarComponents: [SearchField, WhoToFollow],
+      },
+    },
+    {
+      path: "/:username(.*)*/followers",
+      name: "Followers",
+      component: () => import("../views/profile/Followers.vue"),
+      meta: {
+        requiresAuth: true,
+        layout: Default,
+        sidebarComponents: [SearchField, WhoToFollow],
+      },
     },
   ],
 });

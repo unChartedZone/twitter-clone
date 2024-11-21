@@ -13,6 +13,7 @@ export interface BaseUser {
   totalFollowing: number;
   totalFollowers: number;
   totalTweets: number;
+  isFollowing?: boolean;
 }
 
 // User fields that are typically modified

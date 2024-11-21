@@ -28,8 +28,8 @@ ul {
   list-style: none;
 }
 
-// Define a range for the spacing values, e.g., 0 to 5
-$spacing-values: 0 1 2 3 4 5;
+// Define a range for the spacing values, e.g., 0 to 9
+$spacing-values: 0 1 2 3 4 5 6 7 8 9;
 
 // Generate padding utility classes
 @for $i from 1 through length($spacing-values) {

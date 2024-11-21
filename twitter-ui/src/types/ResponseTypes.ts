@@ -32,6 +32,10 @@ export interface ExploreUsersResponse {
   data: Data<BaseUser>[];
 }
 
+export interface FollowingResponse {
+  data: Data<BaseUser>[];
+}
+
 export interface TweetResponse {
   data: Data<BaseTweet>;
   included: Data<BaseUser>[];
