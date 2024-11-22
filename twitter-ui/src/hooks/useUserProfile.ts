@@ -3,15 +3,15 @@ import type { LoadingState } from "@/types/LoadingState";
 import type { BaseUser } from "@/models/User";
 import { fetchUserByUsername } from "@/api/endpoints";
 
-export function useUserProfile(username: string) {
+export function useUserProfile(routeUsername: string) {
   const loading = ref<LoadingState>("idle");
   const currentUser = ref<BaseUser>();
 
   onMounted(async () => {
-    await fetchUserProfile();
+    await fetchUserProfile(routeUsername);
   });
 
-  async function fetchUserProfile() {
+  async function fetchUserProfile(username: string) {
     loading.value = "idle";
     try {
       currentUser.value = await fetchUserByUsername(username);
