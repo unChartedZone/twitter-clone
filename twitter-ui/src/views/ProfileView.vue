@@ -31,7 +31,8 @@ const joinDate = computed(() =>
 // Watch for route change and refresh profile user
 watch(
   () => route.params.username,
-  async (value, _oldValue) => {
+  async (value, oldValue) => {
+    if (value[0] === oldValue[0]) return;
     await fetchUserProfile(value[0]);
   }
 );
