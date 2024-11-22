@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
 import type { BaseUser } from "@/models/User";
 import AvatarCircle from "../AvatarCircle.vue";
 
@@ -11,7 +12,12 @@ defineProps<FollowsListProps>();
 
 <template>
   <section>
-    <div v-for="followee in followees" :key="followee.id" class="user">
+    <RouterLink
+      v-for="followee in followees"
+      :key="followee.id"
+      :to="`/${followee.username}`"
+      class="user"
+    >
       <AvatarCircle :src="followee.profileImage" />
       <section>
         <div class="user__title">
@@ -25,7 +31,7 @@ defineProps<FollowsListProps>();
           <p>{{ followee.bio }}</p>
         </div>
       </section>
-    </div>
+    </RouterLink>
   </section>
 </template>
 
