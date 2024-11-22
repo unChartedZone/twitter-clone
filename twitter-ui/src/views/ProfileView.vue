@@ -3,17 +3,20 @@ import { ref, computed, watch } from "vue";
 import { useRoute, RouterView, RouterLink } from "vue-router";
 import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import ProfileEditor from "@/components/ProfileEditor.vue";
+import LoadingIcon from "@/components/common/LoadingIcon.vue";
 import Image from "@/components/common/Image.vue";
-import { useUserProfile } from "@/hooks/useUserProfile";
 
 const authStore = useAuthStore();
 const route = useRoute();
 const iconSize = 1.2;
-const { currentUser, fetchUserProfile } = useUserProfile(
-  route.params.username[0]
-);
+const {
+  currentUser,
+  fetchUserProfile,
+  loading: profileLoading,
+} = useUserProfile(route.params.username[0]);
 
 const showProfileEditor = ref<boolean>(false);
 
@@ -29,7 +32,7 @@ const joinDate = computed(() =>
 watch(
   () => route.params.username,
   async (value, _oldValue) => {
-    await fetchUserProfile();
+    await fetchUserProfile(value[0]);
   }
 );
 
@@ -44,65 +47,73 @@ function formatLink(link: string): string {
 
 <template>
   <main class="profile">
-    <ProfileHeader
-      :name="currentUser?.name"
-      :totalTweets="currentUser?.totalTweets"
-    />
-    <Image class="profile__banner-image" :src="currentUser?.bannerImage" />
-    <section class="profile__content">
-      <Image class="profile__profile-image" :src="currentUser?.profileImage" />
-      <div class="profile__edit-profile">
-        <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">
-          <template v-slot:activator="{ onClick }">
-            <div class="edit-profile-activator">
-              <Button
-                v-if="currentUser?.id == authStore.user?.id"
-                @click="onClick"
-                outline
-                :size="1"
-              >
-                Edit profile
-              </Button>
-            </div>
-          </template>
-          <ProfileEditor @onClose="closeProfileEditor" />
-        </Modal>
-      </div>
-      <div class="profile__name mb-2">
-        <h3>{{ currentUser?.name }}</h3>
-        <p>@{{ currentUser?.username }}</p>
-      </div>
-      <div class="profile__info mb-2">
-        <span v-if="currentUser?.location">
-          <Icon name="location" :size="iconSize" />
-          {{ currentUser?.location }}
-        </span>
-        <span v-if="currentUser?.website">
-          <Icon name="chain" :size="iconSize" />
-          <Link text :href="authStore.user?.website" target="_blank">
-            {{ formatLink(currentUser?.website) }}
-          </Link>
-        </span>
-        <span v-if="currentUser?.birthDate">
-          <Icon name="balloon" :size="iconSize" />
-          Born {{ birthDate }}
-        </span>
-        <span>
-          <Icon name="calendar" :size="iconSize" />
-          Joined {{ joinDate }}
-        </span>
-      </div>
-      <div class="profile__following">
-        <RouterLink :to="`${currentUser?.username}/following`">
-          <strong>{{ currentUser?.totalFollowing }}</strong>
-          Following
-        </RouterLink>
-        <RouterLink :to="`${currentUser?.username}/followers`">
-          <strong>{{ currentUser?.totalFollowers }}</strong>
-          Followers
-        </RouterLink>
-      </div>
-    </section>
+    <div v-if="profileLoading === 'idle'">
+      <LoadingIcon />
+    </div>
+    <div v-else>
+      <ProfileHeader
+        :name="currentUser?.name"
+        :totalTweets="currentUser?.totalTweets"
+      />
+      <Image class="profile__banner-image" :src="currentUser?.bannerImage" />
+      <section class="profile__content">
+        <Image
+          class="profile__profile-image"
+          :src="currentUser?.profileImage"
+        />
+        <div class="profile__edit-profile">
+          <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">
+            <template v-slot:activator="{ onClick }">
+              <div class="edit-profile-activator">
+                <Button
+                  v-if="currentUser?.id == authStore.user?.id"
+                  @click="onClick"
+                  outline
+                  :size="1"
+                >
+                  Edit profile
+                </Button>
+              </div>
+            </template>
+            <ProfileEditor @onClose="closeProfileEditor" />
+          </Modal>
+        </div>
+        <div class="profile__name mb-2">
+          <h3>{{ currentUser?.name }}</h3>
+          <p>@{{ currentUser?.username }}</p>
+        </div>
+        <div class="profile__info mb-2">
+          <span v-if="currentUser?.location">
+            <Icon name="location" :size="iconSize" />
+            {{ currentUser?.location }}
+          </span>
+          <span v-if="currentUser?.website">
+            <Icon name="chain" :size="iconSize" />
+            <Link text :href="authStore.user?.website" target="_blank">
+              {{ formatLink(currentUser?.website) }}
+            </Link>
+          </span>
+          <span v-if="currentUser?.birthDate">
+            <Icon name="balloon" :size="iconSize" />
+            Born {{ birthDate }}
+          </span>
+          <span>
+            <Icon name="calendar" :size="iconSize" />
+            Joined {{ joinDate }}
+          </span>
+        </div>
+        <div class="profile__following">
+          <RouterLink :to="`${currentUser?.username}/following`">
+            <strong>{{ currentUser?.totalFollowing }}</strong>
+            Following
+          </RouterLink>
+          <RouterLink :to="`${currentUser?.username}/followers`">
+            <strong>{{ currentUser?.totalFollowers }}</strong>
+            Followers
+          </RouterLink>
+        </div>
+      </section>
+    </div>
     <section>
       <TabRow>
         <TabHeader :to="{ name: 'profile' }">Tweets</TabHeader>
