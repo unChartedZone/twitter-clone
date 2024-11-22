@@ -20,6 +20,7 @@ class TweetsController < ApplicationController
     tweets = Tweet
              .where(user_id: following)
              .or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: following)))
+             .order(created_at: :desc)
              .page(current_page)
              .per(per_page)
     options = {
