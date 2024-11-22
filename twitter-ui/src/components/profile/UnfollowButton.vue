@@ -44,7 +44,7 @@ async function unfollowUser() {
     outline
     @mouseover="onMouseOver"
     @mouseleave="onMouseLeave"
-    @click="unfollowUser"
+    @click.stop.prevent="unfollowUser"
   >
     {{ buttonOptions.text }}
   </Button>

@@ -19,5 +19,5 @@ async function follow() {
 </script>
 
 <template>
-  <Button color="black" :size="1" @click="follow">Follow</Button>
+  <Button color="black" :size="1" @click.stop.prevent="follow">Follow</Button>
 </template>
