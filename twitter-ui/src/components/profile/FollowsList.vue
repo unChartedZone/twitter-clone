@@ -22,12 +22,12 @@ defineProps<FollowsListProps>();
       <section>
         <div class="user__title">
           <div>
-            <h3>{{ followee.name }}</h3>
-            <p>@{{ followee.username }}</p>
+            <h3 class="user__name">{{ followee.name }}</h3>
+            <p class="user__username">@{{ followee.username }}</p>
           </div>
           <slot name="list-actions" :followee="followee" />
         </div>
-        <div>
+        <div class="user__bio">
           <p>{{ followee.bio }}</p>
         </div>
       </section>
@@ -40,6 +40,11 @@ defineProps<FollowsListProps>();
   display: flex;
   gap: 1rem;
   padding: 1rem;
+  background-color: $white;
+
+  &:hover {
+    background-color: $gray-100;
+  }
 
   section {
     flex: 1;
@@ -53,6 +58,20 @@ defineProps<FollowsListProps>();
     h3 {
       font-size: 1rem;
     }
+  }
+
+  &__name {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__username {
+    font-size: 0.95rem;
+  }
+
+  &__bio {
+    margin: 0.5rem 0 0;
   }
 }
 </style>
