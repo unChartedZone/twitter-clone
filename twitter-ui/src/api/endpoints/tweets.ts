@@ -6,6 +6,7 @@ import type {
   TweetResponse,
   Pagination,
 } from "@/types/ResponseTypes";
+import type { TweetListSegment } from "@/types/TweetList";
 
 export async function fetchProtectedProfileTweets(
   username: string,
@@ -16,6 +17,27 @@ export async function fetchProtectedProfileTweets(
       `/tweets/profile/${username}/protected`,
       { params: { page } }
     )
+  ).data;
+  return {
+    tweets: transformTweetListResponse(res),
+    links: res.links,
+  };
+}
+
+export async function fetchTweets(
+  username: string,
+  page: number = 1,
+  segment: TweetListSegment
+): Promise<{ tweets: Tweet[]; links: Pagination }> {
+  const url =
+    segment == "default"
+      ? `/tweets/${username}`
+      : `/tweets/${username}/${segment}`;
+
+  const res = (
+    await authClient.get<TweetListResponse>(url, {
+      params: { page },
+    })
   ).data;
   return {
     tweets: transformTweetListResponse(res),

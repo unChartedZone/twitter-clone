@@ -4,7 +4,7 @@ import { watch } from "vue";
 interface AlertProps {
   modelValue: boolean;
   color: string;
-  delay: number;
+  delay?: number;
 }
 
 const props = withDefaults(defineProps<AlertProps>(), {

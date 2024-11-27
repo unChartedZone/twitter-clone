@@ -1,5 +1,17 @@
+<script setup lang="ts">
+import { useProfileStore } from "@/stores/profile";
+import TweetList from "@/components/profile/TweetList.vue";
+import { useProfileTweets } from "@/hooks/useProfileTweets";
+
+const profileStore = useProfileStore();
+useProfileTweets("media");
+</script>
+
 <template>
   <div>
-    <h1>Media Tweets</h1>
+    <TweetList
+      :tweets="profileStore.tweetLists.media.tweets"
+      :loading="profileStore.tweetLists.loading === 'idle'"
+    />
   </div>
 </template>

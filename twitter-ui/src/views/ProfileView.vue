@@ -3,6 +3,7 @@ import { ref, computed, watch } from "vue";
 import { useRoute, RouterView, RouterLink } from "vue-router";
 import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
+import { useProfileStore } from "@/stores/profile";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import ProfileEditor from "@/components/ProfileEditor.vue";
@@ -10,6 +11,7 @@ import LoadingIcon from "@/components/common/LoadingIcon.vue";
 import Image from "@/components/common/Image.vue";
 
 const authStore = useAuthStore();
+const profileStore = useProfileStore();
 const route = useRoute();
 const iconSize = 1.2;
 const {
@@ -33,6 +35,7 @@ watch(
   () => route.params.username,
   async (value, oldValue) => {
     if (value[0] === oldValue[0]) return;
+    profileStore.$reset();
     await fetchUserProfile(value[0]);
   }
 );
