@@ -18,6 +18,10 @@ export const useAuthStore = defineStore("auth", () => {
     () => userFetchState.value === "idle"
   );
 
+  const loggedIn = computed<boolean>(() => {
+    return !!user.value && !!accessToken.value;
+  });
+
   async function loginUser(payload: LoginPayload) {
     const res = await login(payload);
     accessToken.value = res.data.attributes.accessToken;
@@ -108,6 +112,7 @@ export const useAuthStore = defineStore("auth", () => {
     accessToken,
     user,
     userFetchStateLoading,
+    loggedIn,
     loginUser,
     refreshUser,
     logoutUser,

@@ -22,11 +22,13 @@ const router = createRouter({
       path: "/",
       name: "index",
       component: () => import("../views/IndexView.vue"),
+      meta: { requiresAuth: false },
     },
     {
       path: "/login",
       name: "login",
       component: () => import("../views/LoginView.vue"),
+      meta: { requiresAuth: false },
     },
     {
       path: "/signup",
@@ -123,14 +125,22 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const authStore = useAuthStore();
 
-  // refresh user session
+  // attempt to refresh user session
   if (!authStore.accessToken) {
     await authStore.refreshUser();
     await setupAuthClient();
   }
 
-  if (to.meta.requiresAuth && !authStore.accessToken) {
+  // If navigating to a route that requires authentication and not currently
+  // logged in, then redirect to login page.
+  if (to.meta.requiresAuth && !authStore.loggedIn) {
     return "/login";
+  }
+
+  // If navigating to a route that doesn't require authentication (home, login,
+  // etc), then redirect to home feed page.
+  if (!to.meta.requiresAuth && authStore.loggedIn) {
+    return "/home";
   }
 });
 
