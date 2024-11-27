@@ -7,7 +7,7 @@ const authStore = useAuthStore();
 </script>
 
 <template>
-  <AppLoadingScreen v-if="!authStore.loggedIn" />
+  <AppLoadingScreen v-if="authStore.userFetchStateLoading" />
   <component :is="$route.meta.layout || 'main'">
     <RouterView />
   </component>

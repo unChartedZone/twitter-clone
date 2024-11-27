@@ -6,13 +6,17 @@ import { useProfileStore } from "./profile";
 import type { BaseUser, UserPatch } from "@/models/User";
 import type Tweet from "@/models/Tweet";
 import type { LoginPayload } from "@/types/RequestPayloads";
+import type { LoadingState } from "@/types/LoadingState";
 
 export const useAuthStore = defineStore("auth", () => {
+  const userFetchState = ref<LoadingState>("idle");
   const accessToken = ref<string>();
   const user = ref<User>();
   const profileStore = useProfileStore();
 
-  const loggedIn = computed(() => !!user.value);
+  const userFetchStateLoading = computed<boolean>(
+    () => userFetchState.value === "idle"
+  );
 
   async function loginUser(payload: LoginPayload) {
     const res = await login(payload);
@@ -21,10 +25,16 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function refreshUser() {
-    const res = await refresh();
-    if (res) {
-      accessToken.value = res.data.attributes.accessToken;
-      user.value = res.data.attributes;
+    userFetchState.value = "idle";
+    try {
+      const res = await refresh();
+      if (res) {
+        accessToken.value = res.data.attributes.accessToken;
+        user.value = res.data.attributes;
+        userFetchState.value = "resolved";
+      }
+    } catch (e) {
+      userFetchState.value = "rejected";
     }
   }
 
@@ -97,7 +107,7 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     accessToken,
     user,
-    loggedIn,
+    userFetchStateLoading,
     loginUser,
     refreshUser,
     logoutUser,
