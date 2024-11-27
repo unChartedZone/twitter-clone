@@ -16,11 +16,8 @@ async function loginAsGuest() {
 
 <template>
   <div class="guest-message">
-    <p>Dear Recruiter or Hiring Manager</p>
-    <p>
-      If you would like to access the guest account, please use the credentials
-      provided below.
-    </p>
+    <h3>Dear Recruiter or Hiring Manager</h3>
+    <p>To access the guest account, click the button below.</p>
     <Button @click="loginAsGuest" color="white">Log in as Guest</Button>
   </div>
 </template>
@@ -33,12 +30,12 @@ async function loginAsGuest() {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  width: 20rem;
-  padding: 0.5rem;
+  width: 22rem;
+  padding: 0.5rem 0.75rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.75rem;
   z-index: 100;
 }
 </style>
