@@ -120,6 +120,13 @@ GET {{base-url}}/tweets/{{tweet-id}}
 
 ###
 
+# @name FetchMediaTweets
+GET {{base-url}}/tweets/profile/unchartedzone/media
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+
 # @name FetchLikedTweets
 GET {{base-url}}/tweets/liked
 Content-Type: application/json

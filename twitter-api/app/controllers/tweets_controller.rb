@@ -3,7 +3,7 @@
 class TweetsController < ApplicationController
   include Paginable
   before_action :is_authenticated,
-                only: %i[create index feed liked_tweets like unlike retweet protected_profile_tweets
+                only: %i[create index feed liked_tweets media_tweets like unlike retweet protected_profile_tweets
                          explore_user_tweets]
 
   def index
@@ -23,34 +23,42 @@ class TweetsController < ApplicationController
              .order(created_at: :desc)
              .page(current_page)
              .per(per_page)
-    options = {
-      include: [:user],
-      params: { current_user: @current_user }
-    }.merge(get_links_serializer_options('feed_tweets_path', tweets))
+    options = generate_tweet_options(tweets, 'feed_tweets_path')
     render json: TweetSerializer.new(tweets, options).serializable_hash.to_json
   end
 
+  # Fetch tweets of user, required authentication in order to show if
+  # authenticated user has liked, retweeted or bookmarked them
   def protected_profile_tweets
     tweets = fetch_user_tweets
-    options = {
-      include: [:user],
-      params: { current_user: @current_user }
-    }.merge(get_links_serializer_options('protected_profile_tweets_path', tweets))
+    options = generate_tweet_options(tweets, 'protected_profile_tweets_path')
     render json: TweetSerializer.new(tweets, options)
                                 .serializable_hash.to_json
   end
 
-  def profile_tweets
-    tweets = fetch_user_tweets
-    render json: TweetSerializer.new(tweets, { include: [:user] })
-                                .serializable_hash.to_json
+  # Fetch tweets that have a media attachments
+  def media_tweets
+    user = User.find_by_username(params[:username])
+    tweets = Tweet
+             .where(user_id: user.id)
+             .joins(:tweet_media).distinct
+             .order(created_at: :desc)
+             .page(current_page)
+             .per(per_page)
+    options = generate_tweet_options(tweets, 'media_tweets_path')
+    render json: TweetSerializer.new(tweets, options).serializable_hash.to_json
   end
 
   def liked_tweets
+    user = User.find_by_username(params[:username])
     tweets = Tweet.where(id: TweetLike.select(:tweet_id)
                                       .where.not(tweet_id: nil)
-                                      .where(like_id: current_user.likes))
-    render json: TweetSerializer.new(tweets).serializable_hash.to_json
+                                      .where(like_id: user.likes))
+                  .order(created_at: :desc)
+                  .page(current_page)
+                  .per(per_page)
+    options = generate_tweet_options(tweets, 'liked_tweets_path')
+    render json: TweetSerializer.new(tweets, options).serializable_hash.to_json
   end
 
   def create
@@ -123,6 +131,13 @@ class TweetsController < ApplicationController
   end
 
   private
+
+  def generate_tweet_options(tweets, path)
+    {
+      include: [:user],
+      params: { current_user: @current_user }
+    }.merge(get_links_serializer_options(path, tweets))
+  end
 
   def tweet_params
     params.require(:tweet).permit(:text, medium_ids: [])

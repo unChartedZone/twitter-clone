@@ -26,14 +26,15 @@ Rails.application.routes.draw do
   resources :tweets, only: %i[index show create] do
     get '/profile/:username/protected', on: :collection, to: 'tweets#protected_profile_tweets',
                                         as: 'protected_profile'
-    get '/profile/:username', on: :collection, to: 'tweets#profile_tweets'
-    get 'liked', on: :collection, to: 'tweets#liked_tweets'
     get 'feed', on: :collection, to: 'tweets#feed'
     get 'explore', on: :collection, to: 'tweets#explore_user_tweets'
     post 'like', on: :member
     post 'unlike', on: :member
     post 'retweet', on: :member
     post 'unretweet', on: :member, to: 'tweets#undo_retweet'
+    get '/:username', on: :collection, to: 'tweets#protected_profile_tweets', as: 'profile'
+    get '/:username/media', on: :collection, to: 'tweets#media_tweets', as: 'media'
+    get '/:username/liked', on: :collection, to: 'tweets#liked_tweets', as: 'liked'
   end
 
   resources :medium, only: %i[index create], path: :media
