@@ -6,8 +6,6 @@ import Default from "@/layouts/default.vue";
 import SearchField from "@/components/SearchField.vue";
 import WhoToFollow from "@/components/WhoToFollow.vue";
 
-export {};
-
 // Add typings for Route Meta properties
 declare module "vue-router" {
   interface RouteMeta {

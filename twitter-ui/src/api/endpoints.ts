@@ -27,12 +27,8 @@ export async function signupUser(payload: {
   return res.data;
 }
 
-export async function refresh(): Promise<LoginResponse | undefined> {
-  try {
-    return (await client.post("/refresh")).data;
-  } catch (e) {
-    console.log("Failed to refresh user session");
-  }
+export async function refresh(): Promise<LoginResponse> {
+  return (await client.post("/refresh")).data;
 }
 
 export async function logout() {
