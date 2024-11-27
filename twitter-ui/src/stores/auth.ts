@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { login, logout, refresh, patchUser } from "@/api/endpoints";
 import type User from "@/models/User";
@@ -11,6 +11,8 @@ export const useAuthStore = defineStore("auth", () => {
   const accessToken = ref<string>();
   const user = ref<User>();
   const profileStore = useProfileStore();
+
+  const loggedIn = computed(() => !!user.value);
 
   async function loginUser(payload: LoginPayload) {
     const res = await login(payload);
@@ -95,6 +97,7 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     accessToken,
     user,
+    loggedIn,
     loginUser,
     refreshUser,
     logoutUser,
