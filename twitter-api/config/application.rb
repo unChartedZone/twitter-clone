@@ -40,7 +40,7 @@ module TwitterApi
     # create logger with file as a logging target
     config.logger = Logger.new('log/logs.log')
     # setup minimum log level
-    config.log_level = :warn
+    config.log_level = :debug
 
     # Setup use of cookies in requests and responses
     config.middleware.use ActionDispatch::Cookies

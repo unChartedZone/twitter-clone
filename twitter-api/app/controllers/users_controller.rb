@@ -38,7 +38,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(update_user_params)
-      render json: UserSerializer.new(@user)
+      render json: UserSerializer.new(@user).serializable_hash.to_json, status: :accepted
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -55,21 +55,21 @@ class UsersController < ApplicationController
 
   def followers
     @user = User.find_by(username: params[:username])
-    if @user 
+    if @user
       followers = @user.followers
       render json: UserSerializer.new(followers, { params: { current_user: @user } }), status: :ok
     else
-      render json: { message: "User not found" }, status: 404
+      render json: { message: 'User not found' }, status: 404
     end
   end
 
   def following
     @user = User.find_by(username: params[:username])
-    if @user 
+    if @user
       following = @user.following
       render json: UserSerializer.new(following), status: :ok
     else
-      render json: { message: "User not found" }, status: 404
+      render json: { message: 'User not found' }, status: 404
     end
   end
 

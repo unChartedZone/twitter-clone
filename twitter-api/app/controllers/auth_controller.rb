@@ -58,7 +58,7 @@ class AuthController < ApplicationController
     Rails.logger.info("REFRESH TOKEN: #{refresh_token}")
     Rails.logger.info("DOMAIN: #{DOMAIN}")
     set_refresh_token_cookie(refresh_token)
-    render json: UserSerializer.new(@user, { params: { access_token: } })
+    render json: UserSerializer.new(@user, { params: { access_token: } }).serializable_hash.to_json, status: :ok
   end
 
   def logout
