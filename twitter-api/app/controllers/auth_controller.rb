@@ -25,7 +25,7 @@ class AuthController < ApplicationController
     access_token = JsonWebToken.generate_access_token(@user)
     refresh_token = JsonWebToken.generate_refresh_token(@user)
     set_refresh_token_cookie(refresh_token)
-    Rails.logger.info 'Logging in user #{@user.username}'
+    Rails.logger.info "Logging in user #{@user.username}"
     render json: UserSerializer.new(@user, { params: { access_token: access_token } })
   end
 
@@ -34,7 +34,7 @@ class AuthController < ApplicationController
     # Grab refresh token from request cookies
     refresh_token = cookies[:refresh_token]
 
-    Rails.logger.info('Received following refresh token #{refresh_token}')
+    Rails.logger.info("Received following refresh token #{refresh_token}")
     # If there isn't a refresh token cookie, then send back unauthorized response
     unless refresh_token
       return render json: { access_token: '' }, status: :unauthorized
