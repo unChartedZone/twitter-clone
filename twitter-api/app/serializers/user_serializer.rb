@@ -31,6 +31,7 @@ class UserSerializer
   end
 
   attribute :access_token do |_object, params|
+    Rails.logger.info("ACCESS TOKEN FOR USER: #{params[:access_token]}")
     params[:access_token]
   end
 

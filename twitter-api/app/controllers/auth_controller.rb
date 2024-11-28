@@ -54,13 +54,10 @@ class AuthController < ApplicationController
     access_token = JsonWebToken.generate_access_token(@user)
     refresh_token = JsonWebToken.generate_refresh_token(@user)
 
-    Rails.logger.info("Refreshing, created access token: #{access_token}")
-    Rails.logger.info("Refreshing, created refresh token: #{refresh_token}")
+    Rails.logger.info("ACCESS TOKEN: #{access_token}")
+    Rails.logger.info("REFRESH TOKEN: #{refresh_token}")
     Rails.logger.info("DOMAIN: #{DOMAIN}")
-    Rails.logger.info("Access Secret: #{ACCESS_SECRET}")
-
     set_refresh_token_cookie(refresh_token)
-
     render json: UserSerializer.new(@user, { params: { access_token: } })
   end
 
