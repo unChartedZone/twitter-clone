@@ -30,9 +30,11 @@ class AuthController < ApplicationController
   end
 
   def refresh_current_token
+    Rails.logger.info('Refreshing token for user')
     # Grab refresh token from request cookies
     refresh_token = cookies[:refresh_token]
 
+    Rails.logger.info('Received following refresh token #{refresh_token}')
     # If there isn't a refresh token cookie, then send back unauthorized response
     unless refresh_token
       return render json: { access_token: '' }, status: :unauthorized
