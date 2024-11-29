@@ -14,7 +14,7 @@ class AuthController < ApplicationController
       refresh_token = JsonWebToken.generate_refresh_token(@user)
       set_refresh_token_cookie(refresh_token)
       Rails.logger.info 'Signing up user #{@user.username}'
-      render json: UserSerializer.new(@user, { params: { access_token: } }), status: :created
+      render json: UserSerializer.new(@user, { params: { access_token: access_token } }), status: :created
     end
   end
 
@@ -28,7 +28,7 @@ class AuthController < ApplicationController
     refresh_token = JsonWebToken.generate_refresh_token(@user)
     set_refresh_token_cookie(refresh_token)
     Rails.logger.info "Logging in user #{@user.username}"
-    render json: UserSerializer.new(@user, { params: { access_token: } })
+    render json: UserSerializer.new(@user, { params: { access_token: access_token } })
   end
 
   def refresh_current_token
@@ -58,8 +58,8 @@ class AuthController < ApplicationController
     Rails.logger.info("REFRESH TOKEN: #{refresh_token}")
     Rails.logger.info("DOMAIN: #{DOMAIN}")
     set_refresh_token_cookie(refresh_token)
-    # render json: UserSerializer.new(@user, { params: { access_token: } }).serializable_hash.to_json, status: :ok
-    render json: { accessToken: access_token }, status: :ok
+    # render json: { accessToken: access_token }, status: :ok
+    render json: UserSerializer.new(@user, { params: { access_token: access_token } }).serializable_hash.to_json, status: :ok
   end
 
   def logout
