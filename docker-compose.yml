@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  twitter-ui:
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./twitter-ui
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 8080:8080
+  twitter-api:
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./twitter-api
+    ports:
+      - 8081:8081
+    environment:
+      - DATABASE_URL=postgres://root:password@postgres-db/twitter_api_development
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+  postgres-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: "twitter_api_development"
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready
+      interval: 2s
+      timeout: 5s
+      retries: 30

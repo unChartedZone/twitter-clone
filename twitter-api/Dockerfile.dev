@@ -1,0 +1,25 @@
+# Use an official Ruby image as a base
+FROM ruby:3.1.2
+
+# Install dependencies
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs yarn vim
+
+# Set environment variables for Docker
+ENV RAILS_ENV=development \
+    APP_ROOT=/usr/src/app
+
+# Set the working directory
+WORKDIR $APP_ROOT
+
+# Install gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Copy the rest of the application
+COPY . .
+
+# Expose the default Rails port
+EXPOSE 8081
+
+# Run a command to start the Rails server in development mode
+CMD ["rails", "server", "-b", "0.0.0.0", "-p", "8081"]
