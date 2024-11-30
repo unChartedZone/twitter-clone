@@ -26,7 +26,11 @@ export interface Pagination {
   hasMore: boolean;
 }
 
-export interface LoginResponse extends BaseResponse<User> {}
+export interface LoginResponse extends BaseResponse<User> {
+  meta: {
+    accessToken: string;
+  };
+}
 export interface UserResponse extends BaseResponse<BaseUser> {}
 export interface ExploreUsersResponse {
   data: Data<BaseUser>[];

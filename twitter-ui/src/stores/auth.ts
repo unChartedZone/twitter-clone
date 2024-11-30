@@ -24,7 +24,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   async function loginUser(payload: LoginPayload) {
     const res = await login(payload);
-    accessToken.value = res.data.attributes.accessToken;
+    accessToken.value = res.meta.accessToken;
     user.value = res.data.attributes;
   }
 
@@ -33,7 +33,7 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const res = await refresh();
       if (res) {
-        accessToken.value = res.data.attributes.accessToken;
+        accessToken.value = res.meta.accessToken;
         user.value = res.data.attributes;
         userFetchState.value = "resolved";
       }

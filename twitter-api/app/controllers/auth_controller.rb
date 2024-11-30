@@ -14,7 +14,8 @@ class AuthController < ApplicationController
       refresh_token = JsonWebToken.generate_refresh_token(@user)
       set_refresh_token_cookie(refresh_token)
       Rails.logger.info 'Signing up user #{@user.username}'
-      render json: UserSerializer.new(@user, { params: { access_token: access_token } }), status: :created
+      options = { meta: { accessToken: access_token } }
+      render json: UserSerializer.new(@user, options), status: :created
     end
   end
 
@@ -28,7 +29,8 @@ class AuthController < ApplicationController
     refresh_token = JsonWebToken.generate_refresh_token(@user)
     set_refresh_token_cookie(refresh_token)
     Rails.logger.info "Logging in user #{@user.username}"
-    render json: UserSerializer.new(@user, { params: { access_token: access_token } })
+    options = { meta: { accessToken: access_token } }
+    render json: UserSerializer.new(@user, options)
   end
 
   def refresh_current_token
@@ -36,7 +38,6 @@ class AuthController < ApplicationController
     # Grab refresh token from request cookies
     refresh_token = cookies[:refresh_token]
 
-    Rails.logger.info("Received following refresh token #{refresh_token}")
     # If there isn't a refresh token cookie, then send back unauthorized response
     return render json: { access_token: '' }, status: :unauthorized unless refresh_token
 
@@ -54,12 +55,10 @@ class AuthController < ApplicationController
     access_token = JsonWebToken.generate_access_token(@user)
     refresh_token = JsonWebToken.generate_refresh_token(@user)
 
-    Rails.logger.info("ACCESS TOKEN: #{access_token}")
-    Rails.logger.info("REFRESH TOKEN: #{refresh_token}")
-    Rails.logger.info("DOMAIN: #{DOMAIN}")
     set_refresh_token_cookie(refresh_token)
-    # render json: { accessToken: access_token }, status: :ok
-    render json: UserSerializer.new(@user, { params: { access_token: access_token } }).serializable_hash.to_json, status: :ok
+    options = { meta: { accessToken: access_token } }
+    render json: UserSerializer.new(@user, options).serializable_hash.to_json,
+           status: :ok
   end
 
   def logout

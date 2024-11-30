@@ -30,11 +30,6 @@ class UserSerializer
     object.banner_image_url
   end
 
-  attribute :access_token do |_object, params|
-    Rails.logger.info("ACCESS TOKEN FOR USER: #{params[:access_token]}")
-    params[:access_token] if params[:access_token].present?
-  end
-
   attribute :isFollowing do |object, params|
     params[:current_user].present? && params[:current_user].following.find(object.id).present?
   rescue ActiveRecord::RecordNotFound
