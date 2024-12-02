@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :media, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :retweets, dependent: :destroy
+  has_many :bookmarks, dependent: :destroy
+  has_many :bookmarked_tweets, through: :bookmarks, source: :tweet
   has_many :followers
   has_many :follower_relationships, foreign_key: 'followed_user', class_name: 'Follower'
   has_many :followers, through: :follower_relationships, source: :user
