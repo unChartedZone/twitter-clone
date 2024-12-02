@@ -25,5 +25,9 @@ class TweetSerializer
     params[:current_user].present? && object.retweets.find_by_user_id(params[:current_user].id).present?
   end
 
+  attribute :bookmarked do |object, params|
+    params[:current_user].present? && object.bookmarked?(params[:current_user])
+  end
+
   cache_options store: Rails.cache, namespace: 'jsonapi-serializer', expires_in: 1.hour
 end

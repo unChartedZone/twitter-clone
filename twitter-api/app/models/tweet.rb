@@ -8,6 +8,12 @@ class Tweet < ApplicationRecord
   has_many :tweet_likes, dependent: :destroy
   has_many :likes, through: :tweet_likes
   has_many :retweets, dependent: :destroy
+  has_many :bookmarks, dependent: :destroy
+  has_many :bookmarked_by_users, through: :bookmarks, source: :user
+
+  def bookmarked?(user)
+    bookmarks.exists?(user_id: user.id)
+  end
 
   def set_total_likes!
     self.total_likes = tweet_likes.length

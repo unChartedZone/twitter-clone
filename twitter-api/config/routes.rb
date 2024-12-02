@@ -37,5 +37,8 @@ Rails.application.routes.draw do
     get '/:username/liked', on: :collection, to: 'tweets#liked_tweets', as: 'liked'
   end
 
+  # Bookmark Endpoints
+  resources :bookmarks, only: %i[index create]
+
   resources :medium, only: %i[index create], path: :media
 end
