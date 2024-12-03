@@ -31,11 +31,13 @@ export type IconName =
 
 interface IconProps {
   name: IconName;
+  color: "primary" | "danger" | "success" | "black" | "white";
   fill?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | number;
 }
 
 const props = withDefaults(defineProps<IconProps>(), {
+  color: "black",
   fill: "black",
   size: "xs",
 });
@@ -60,12 +62,29 @@ const computedSize = computed(() => {
 <template>
   <component
     class="icon"
+    :class="[`${color}`]"
     :is="icon"
-    :style="{ fill, height: `${computedSize}rem` }"
+    :style="{ height: `${computedSize}rem` }"
   />
 </template>
 
 <style scoped lang="scss">
+.black {
+  fill: $black;
+}
+
+.primary {
+  fill: $primary;
+}
+
+.white {
+  fill: $white;
+}
+
+.danger {
+  fill: red;
+}
+
 .icon {
   min-height: 1rem;
 }
