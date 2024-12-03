@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import type { BaseUser } from "@/models/User";
 import { fetchFollowers } from "@/api/endpoints";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import ProfileHeader from "@/components/profile/ProfileHeader.vue";
+import PageHeader from "@/components/PageHeader.vue";
 import FollowerTabs from "./FollowerTabs.vue";
 import FollowButton from "@/components/profile/FollowButton.vue";
 import FollowsList from "@/components/profile/FollowsList.vue";
@@ -21,9 +21,9 @@ onMounted(async () => {
 
 <template>
   <div>
-    <ProfileHeader
-      :name="currentUser?.name"
-      :totalTweets="currentUser?.totalTweets"
+    <PageHeader
+      :title="currentUser?.name"
+      :subtitle="`${currentUser?.totalTweets} tweets`"
     />
     <FollowerTabs :currentUser="currentUser" />
     <FollowsList :followees="followers">

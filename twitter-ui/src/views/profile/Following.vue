@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { fetchFollowing } from "@/api/endpoints";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import ProfileHeader from "@/components/profile/ProfileHeader.vue";
+import PageHeader from "@/components/PageHeader.vue";
 import UnfollowButton from "@/components/profile/UnfollowButton.vue";
 import FollowerTabs from "./FollowerTabs.vue";
 import FollowsList from "@/components/profile/FollowsList.vue";
@@ -31,9 +31,9 @@ function removeUser(userId: string) {
 
 <template>
   <div>
-    <ProfileHeader
-      :name="currentUser?.name"
-      :totalTweets="currentUser?.totalTweets"
+    <PageHeader
+      :title="currentUser?.name"
+      :subtitle="`${currentUser?.totalTweets} tweets`"
     />
     <FollowerTabs :currentUser="currentUser" />
     <FollowsList :followees="following">

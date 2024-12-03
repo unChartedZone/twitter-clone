@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
 import { useProfileStore } from "@/stores/profile";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import ProfileHeader from "@/components/profile/ProfileHeader.vue";
+import PageHeader from "@/components/PageHeader.vue";
 import ProfileEditor from "@/components/ProfileEditor.vue";
 import LoadingIcon from "@/components/common/LoadingIcon.vue";
 import Image from "@/components/common/Image.vue";
@@ -55,9 +55,9 @@ function formatLink(link: string): string {
       <LoadingIcon />
     </div>
     <div v-else>
-      <ProfileHeader
-        :name="currentUser?.name"
-        :totalTweets="currentUser?.totalTweets"
+      <PageHeader
+        :title="`${currentUser?.name}`"
+        :subtitle="`${currentUser?.totalTweets} tweets`"
       />
       <Image class="profile__banner-image" :src="currentUser?.bannerImage" />
       <section class="profile__content">
@@ -132,8 +132,6 @@ function formatLink(link: string): string {
 
 <style scoped lang="scss">
 .profile {
-  margin: 3.5rem 0 0 0;
-
   &__banner-image {
     width: 40rem;
     height: 15rem;
