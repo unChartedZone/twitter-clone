@@ -1,6 +1,6 @@
 class BookmarksController < ApplicationController
-  before_action :is_authenticated, only: %i[index create]
-  before_action :set_tweet, only: [:create]
+  before_action :is_authenticated, only: %i[index create destroy]
+  before_action :set_tweet, only: %i[create destroy]
 
   def index
     bookmarks = current_user.bookmarked_tweets
@@ -18,7 +18,14 @@ class BookmarksController < ApplicationController
     end
   end
 
-  def destroy; end
+  def destroy
+    bookmark = current_user.bookmarks.find_by(tweet: @tweet)
+    if bookmark.destroy
+      render json: { message: 'Bookmark removed' }, status: :ok
+    else
+      render json: { message: 'Bookmark not found' }, status: :unprocessable_entity
+    end
+  end
 
   private
 
