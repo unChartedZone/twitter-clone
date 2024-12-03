@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   end
 
   # Bookmark Endpoints
-  resources :bookmarks, only: %i[index create destroy]
+  resources :bookmarks, only: %i[index create destroy], param: :tweet_id
 
   resources :medium, only: %i[index create], path: :media
 end
