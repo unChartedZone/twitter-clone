@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     post 'retweet', on: :member
     post 'unretweet', on: :member, to: 'tweets#undo_retweet'
     get '/:username', on: :collection, to: 'tweets#protected_profile_tweets', as: 'profile'
+    get '/:username/replied', on: :collection, to: 'tweets#replied_tweets', as: 'replied'
     get '/:username/media', on: :collection, to: 'tweets#media_tweets', as: 'media'
     get '/:username/liked', on: :collection, to: 'tweets#liked_tweets', as: 'liked'
   end

@@ -3,7 +3,7 @@
 class TweetsController < ApplicationController
   include Paginable
   before_action :is_authenticated,
-                only: %i[create index feed liked_tweets media_tweets like unlike retweet protected_profile_tweets
+                only: %i[create index feed replied_tweets liked_tweets media_tweets like unlike retweet protected_profile_tweets
                          explore_user_tweets]
 
   def index
@@ -34,6 +34,16 @@ class TweetsController < ApplicationController
     options = generate_tweet_options(tweets, 'protected_profile_tweets_path')
     render json: TweetSerializer.new(tweets, options)
                                 .serializable_hash.to_json
+  end
+
+  def replied_tweets
+    user = User.find_by_username(params[:username])
+    tweets = Tweet.where(id: Retweet.select(:tweet_id).where.not(tweet_id: nil).where(user_id: user.id))
+                  .order(created_at: :desc)
+                  .page(current_page)
+                  .per(per_page)
+    options = generate_tweet_options(tweets, 'replied_tweets_path')
+    render json: TweetSerializer.new(tweets, options).serializable_hash.to_json, status: :ok
   end
 
   # Fetch tweets that have a media attachments
