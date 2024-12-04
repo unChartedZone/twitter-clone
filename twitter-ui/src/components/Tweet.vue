@@ -19,7 +19,7 @@
           :alt="media.description"
         />
       </div>
-      <TweetActions :tweet="tweet" />
+      <TweetActionRow :tweet="tweet" />
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import type Tweet from "@/models/Tweet";
 import TweetHeader from "./tweet/TweetHeader.vue";
-import TweetActions from "@/components/tweet/TweetActions.vue";
+import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import AvatarCircle from "./AvatarCircle.vue";
 import Image from "./common/Image.vue";
 

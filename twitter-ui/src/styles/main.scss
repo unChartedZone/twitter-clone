@@ -1,4 +1,6 @@
+@import "variables";
 @import "typography";
+
 *,
 *::before,
 *::after {
@@ -133,4 +135,16 @@ $spacing-values: 0 1 2 3 4 5 6 7 8 9;
       margin-left: $i * 0.25rem;
     }
   }
+}
+
+.primary {
+  color: $primary;
+}
+
+.success {
+  color: green;
+}
+
+.danger {
+  color: red;
 }

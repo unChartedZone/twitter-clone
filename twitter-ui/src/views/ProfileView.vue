@@ -9,6 +9,7 @@ import PageHeader from "@/components/PageHeader.vue";
 import ProfileEditor from "@/components/ProfileEditor.vue";
 import LoadingIcon from "@/components/common/LoadingIcon.vue";
 import Image from "@/components/common/Image.vue";
+import PageLoader from "@/components/PageLoader.vue";
 
 const authStore = useAuthStore();
 const profileStore = useProfileStore();
@@ -51,9 +52,7 @@ function formatLink(link: string): string {
 
 <template>
   <main class="profile">
-    <div v-if="profileLoading === 'idle'">
-      <LoadingIcon />
-    </div>
+    <PageLoader v-if="profileLoading === 'idle'" />
     <div v-else>
       <PageHeader
         :title="`${currentUser?.name}`"

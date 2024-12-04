@@ -11,7 +11,7 @@ const toggleSignupModal = ref<boolean>(false);
   <main class="page">
     <div class="page__content">
       <section class="icon-section">
-        <Icon name="bird" :size="40" fill="white" />
+        <Icon name="bird" :size="40" color="white" />
       </section>
       <section class="action-section">
         <Icon name="bird" size="md" />

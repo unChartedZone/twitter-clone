@@ -1,7 +1,7 @@
 import type Tweet from "@/models/Tweet";
 import type { LoadingState } from "./LoadingState";
 
-export type TweetListSegment = "default" | "media" | "liked";
+export type TweetListSegment = "default" | "replied" | "media" | "liked";
 
 export interface TweetList {
   tweets: Tweet[];
@@ -12,6 +12,7 @@ export interface TweetList {
 export interface TweetListState {
   loading: LoadingState;
   default: TweetList;
+  replied: TweetList;
   media: TweetList;
   liked: TweetList;
 }

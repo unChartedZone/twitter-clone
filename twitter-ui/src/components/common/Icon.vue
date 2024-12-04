@@ -31,7 +31,7 @@ export type IconName =
 
 interface IconProps {
   name: IconName;
-  color: "primary" | "danger" | "success" | "black" | "white";
+  color?: "primary" | "danger" | "success" | "black" | "white";
   fill?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | number;
 }
@@ -73,12 +73,16 @@ const computedSize = computed(() => {
   fill: $black;
 }
 
+.white {
+  fill: $white;
+}
+
 .primary {
   fill: $primary;
 }
 
-.white {
-  fill: $white;
+.success {
+  fill: green;
 }
 
 .danger {

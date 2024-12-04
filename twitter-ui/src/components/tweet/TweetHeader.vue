@@ -27,6 +27,7 @@ defineProps<TweetHeaderProps>();
 .tweet {
   &__header {
     display: flex;
+    align-items: center;
     gap: 0.5rem;
 
     .username,
@@ -37,7 +38,8 @@ defineProps<TweetHeaderProps>();
 
   &__user-link {
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.15rem;
 
     strong:hover {
       text-decoration: underline;

@@ -49,7 +49,7 @@ function isValidEmail(email: string): boolean {
   <main class="login__wrapper">
     <div class="login__form w-96 mx-auto space-y-6 py-6">
       <div class="login__logo">
-        <Icon name="bird" fill="white" />
+        <Icon name="bird" color="white" />
       </div>
       <h1 class="login__header">Log in to Twitter</h1>
 
