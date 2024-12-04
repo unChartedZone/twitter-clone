@@ -5,8 +5,11 @@
       <TweetAction
         icon="retweet"
         :text="`${tweet.totalRetweets}`"
+        activeIcon="retweet"
         :active="tweet.retweeted"
         activeColor="success"
+        @action="retweetTweet"
+        @activeAction="unretweetTweet"
       />
       <TweetAction
         icon="heart-outline"
@@ -14,6 +17,8 @@
         :text="`${tweet.totalLikes}`"
         :active="tweet.liked"
         activeColor="danger"
+        @action="likeTweet"
+        @activeAction="unlikeTweet"
       />
     </div>
     <div class="additional-actions">
@@ -32,6 +37,8 @@
 
 <script setup lang="ts">
 import * as bookmarkApi from "@/api/endpoints/bookmarks";
+import * as likeApi from "@/api/endpoints/likes";
+import * as retweetApi from "@/api/endpoints/retweet";
 import type Tweet from "@/models/Tweet";
 import TweetAction from "./TweetAction.vue";
 
@@ -53,6 +60,30 @@ async function removeBookmark() {
     await bookmarkApi.removeBookmarkedTweet(props.tweet.id);
     props.tweet.bookmarked = false;
   } catch (e) {}
+}
+
+async function likeTweet() {
+  await likeApi.likeTweet(props.tweet.id);
+  props.tweet.liked = true;
+  props.tweet.totalLikes += 1;
+}
+
+async function unlikeTweet() {
+  await likeApi.unlikeTweet(props.tweet.id);
+  props.tweet.liked = false;
+  props.tweet.totalLikes -= 1;
+}
+
+async function retweetTweet() {
+  await retweetApi.retweet(props.tweet.id);
+  props.tweet.totalRetweets += 1;
+  props.tweet.retweeted = true;
+}
+
+async function unretweetTweet() {
+  await retweetApi.unretweet(props.tweet.id);
+  props.tweet.totalRetweets -= 1;
+  props.tweet.retweeted = false;
 }
 </script>
 
