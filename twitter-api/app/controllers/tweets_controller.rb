@@ -89,7 +89,7 @@ class TweetsController < ApplicationController
     else
       tweet.build_tweet_like(current_user.id)
       if tweet.save
-        render json: { tweet: }, status: :created
+        render json: TweetSerializer.new(tweet, { include: [:user], params: { current_user: } }), status: :created
       else
         render json: { errors: tweet.errors }, status: :unprocessable_entity
       end
@@ -113,7 +113,7 @@ class TweetsController < ApplicationController
     else
       tweet.build_retweet(current_user.id)
       if tweet.save
-        render json: { tweet: }, status: :created
+        render json: TweetSerializer.new(tweet, { include: [:user], params: { current_user: } }), status: :created
       else
         render json: { errors: tweet.errors }, status: :unprocessable_entity
       end
