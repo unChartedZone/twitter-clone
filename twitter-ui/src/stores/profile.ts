@@ -26,6 +26,11 @@ export const useProfileStore = defineStore("profile", () => {
       page: 1,
       hasMore: true,
     },
+    replied: {
+      tweets: [],
+      page: 1,
+      hasMore: true,
+    },
     media: {
       tweets: [],
       page: 1,
