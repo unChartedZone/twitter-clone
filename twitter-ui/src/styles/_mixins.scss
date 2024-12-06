@@ -1,0 +1,29 @@
+@mixin respond($breakpoint) {
+  /* Small (sm) */
+  @if $breakpoint == sm {
+    @media (max-width: 639px) {
+      @content;
+    }
+  }
+
+  /* Medium (md) */
+  @if $breakpoint == md {
+    @media (max-width: 767px) {
+      @content;
+    }
+  }
+
+  /* Large (lg) */
+  @if $breakpoint == lg {
+    @media (max-width: 1023px) {
+      @content;
+    }
+  }
+
+  /* Extra Large (xl) */
+  @if $breakpoint == xl {
+    @media (max-width: 1279px) {
+      @content;
+    }
+  }
+}
