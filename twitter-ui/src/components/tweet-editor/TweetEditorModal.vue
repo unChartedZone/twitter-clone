@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import TweetEditor from "./TweetEditor.vue";
+import NewButton from "../ui/Button.vue";
+import Icon from "../icons/Icon.vue";
 
 const toggleTweetModal = ref<boolean>(false);
 </script>
 
 <template>
-  <Button block @click="toggleTweetModal = true">Tweet</Button>
+  <div class="button-container">
+    <Button block @click="toggleTweetModal = true">Tweet</Button>
+    <NewButton variant="icon" @click="toggleTweetModal = true">
+      <Icon variant="feather" />
+    </NewButton>
+  </div>
   <Modal v-model="toggleTweetModal">
     <Card class="tweet-editor__card">
       <template v-slot:header>
@@ -19,6 +26,20 @@ const toggleTweetModal = ref<boolean>(false);
 </template>
 
 <style scoped lang="scss">
+.button-container button:nth-of-type(1) {
+  @include respond(xl) {
+    display: none;
+  }
+}
+
+.button-container button:nth-of-type(2) {
+  display: none;
+
+  @include respond(xl) {
+    display: initial;
+  }
+}
+
 .tweet-editor {
   &__card :deep(textarea) {
     min-height: 5rem;
