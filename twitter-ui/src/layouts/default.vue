@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Sidebar from "@/components/Sidebar.vue";
+import Navbar from "@/components/navbar/Navbar.vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -8,7 +8,7 @@ const route = useRoute();
 <template>
   <div class="layout">
     <!-- Navigation sidebar component -->
-    <Sidebar />
+    <Navbar />
     <!-- Main content -->
     <main class="main__content">
       <slot />
@@ -30,8 +30,28 @@ const route = useRoute();
   min-height: 100vh;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 4fr 2.5fr;
-  max-width: 1250px; // TODO: set responsive widths at smaller screen sizes
+  grid-template-columns: 17rem 4fr 2.5fr;
+  max-width: 1300px;
+
+  @include respond(xl) {
+    grid-template-columns: 5rem 4fr 2.5fr;
+  }
+
+  @include respond(lg) {
+    grid-template-columns: 5rem 6fr 1fr;
+
+    & > :nth-child(3) {
+      display: none;
+    }
+  }
+
+  @include respond(md) {
+    grid-template-columns: 5rem 6fr;
+  }
+
+  @include respond(sm) {
+    background-color: red;
+  }
 }
 
 .main__content {
@@ -41,10 +61,8 @@ const route = useRoute();
 
 .sidebar {
   position: relative;
-  width: 20rem;
 
   &__components {
-    width: 20rem;
     position: fixed;
     display: flex;
     flex-direction: column;

@@ -63,6 +63,7 @@ async function onFollow(followedUser: BaseUser) {
 
 .user {
   display: flex;
+  gap: 1.5rem;
   justify-content: space-between;
 
   &__content {

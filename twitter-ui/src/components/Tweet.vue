@@ -40,10 +40,11 @@ defineProps<TweetProps>();
 
 <style scoped lang="scss">
 .tweet {
+  border-bottom: 1px solid $gray-100;
   display: grid;
   grid-template-columns: 10% 90%;
   gap: 0.25rem;
-  padding: 0.5rem 0.75rem 0.75rem 0;
+  padding: 0.5rem 0.75rem 1rem 0;
   font-size: 15px;
 
   &__profile-pic {
