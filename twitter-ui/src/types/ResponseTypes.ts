@@ -1,6 +1,7 @@
 import type { BaseTweet } from "@/models/Tweet";
 import { type BaseUser } from "@/models/User";
 import type User from "@/models/User";
+import type Comment from "@/models/Comment";
 
 interface RelationData {
   id: string;
@@ -24,6 +25,16 @@ export interface Pagination {
   next: string;
   prev: string;
   hasMore: boolean;
+}
+
+export interface Response<T> {
+  data: Data<T>;
+}
+
+export interface ResponseList<T, U = {}> {
+  data: Data<T>[];
+  included: Data<U>[];
+  links: Pagination;
 }
 
 export interface LoginResponse extends BaseResponse<User> {
@@ -50,6 +61,8 @@ export interface TweetListResponse {
   included: Data<BaseUser>[];
   links: Pagination;
 }
+
+export interface CommentListResponse extends ResponseList<Comment> {}
 
 export interface ErrorResponse {
   data: {
