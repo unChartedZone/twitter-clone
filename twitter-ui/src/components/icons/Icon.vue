@@ -7,6 +7,10 @@ import Ellipsis from "./Ellipsis.vue";
 import Feather from "./Feather.vue";
 import Heart from "./Heart.vue";
 import HeartOutline from "./HeartOutline.vue";
+import Home from "./Home.vue";
+import HomeOutline from "./HomeOutline.vue";
+import MagnifyingGlass from "./MagnifyingGlass.vue";
+import MagnifyingGlassBold from "./MagnifyingGlassBold.vue";
 import Reply from "./Reply.vue";
 import Retweet from "./Retweet.vue";
 import Share from "./Share.vue";
@@ -19,6 +23,10 @@ export type IconVariant =
   | "feather"
   | "heart"
   | "heart-outline"
+  | "home"
+  | "home-outline"
+  | "magnifying-glass"
+  | "magnifying-glass-bold"
   | "reply"
   | "retweet"
   | "share";
@@ -33,6 +41,10 @@ iconComponentMap.set("feather", Feather);
 iconComponentMap.set("ellipsis", Ellipsis);
 iconComponentMap.set("heart", Heart);
 iconComponentMap.set("heart-outline", HeartOutline);
+iconComponentMap.set("home", Home);
+iconComponentMap.set("home-outline", HomeOutline);
+iconComponentMap.set("magnifying-glass", MagnifyingGlass);
+iconComponentMap.set("magnifying-glass-bold", MagnifyingGlassBold);
 iconComponentMap.set("reply", Reply);
 iconComponentMap.set("retweet", Retweet);
 iconComponentMap.set("share", Share);
