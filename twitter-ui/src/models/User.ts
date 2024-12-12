@@ -25,6 +25,13 @@ export interface UserPatch {
   website?: string;
 }
 
+export interface UserSummary {
+  id: string;
+  name: string;
+  username: string;
+  profileImageUrl: string;
+}
+
 export default interface User extends BaseUser {
   accessToken: string;
 }
