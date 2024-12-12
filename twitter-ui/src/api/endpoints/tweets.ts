@@ -31,8 +31,8 @@ export async function fetchTweets(
 ): Promise<{ tweets: Tweet[]; links: Pagination }> {
   const url =
     segment == "default"
-      ? `/tweets/${username}`
-      : `/tweets/${username}/${segment}`;
+      ? `/tweets/profile/${username}`
+      : `/tweets/profile/${username}/${segment}`;
 
   const res = (
     await authClient.get<TweetListResponse>(url, {
@@ -83,5 +83,10 @@ export async function exploreUserTweets(): Promise<Tweet[]> {
 
 export async function postTweet(tweetPayload: any) {
   const res = await authClient.post<TweetResponse>("/tweets", tweetPayload);
+  return transformTweetResponse(res.data);
+}
+
+export async function fetchSingleTweet(tweetId: string): Promise<Tweet> {
+  const res = await authClient.get<TweetResponse>(`/tweets/${tweetId}`);
   return transformTweetResponse(res.data);
 }

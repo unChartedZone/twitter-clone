@@ -17,7 +17,7 @@ Content-Type: application/json
   }
 }
 > {%
-    client.global.set("auth_token", response.body.data.attributes.accessToken);
+    client.global.set("auth_token", response.body.meta.accessToken);
 %}
 
 ###
@@ -121,7 +121,7 @@ GET {{base-url}}/tweets/{{tweet-id}}
 ###
 
 # @name FetchMediaTweets
-GET {{base-url}}/tweets/profile/unchartedzone/media
+GET {{base-url}}/tweets/unchartedzone/media
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -143,5 +143,35 @@ Authorization: Bearer {{auth_token}}
 # @name UndoRetweet
 POST {{base-url}}/tweets/{{tweet-id}}/unretweet
 Authorization: Bearer {{auth_token}}
+
+###
+
+# @name FetchComments
+GET {{base-url}}/comments?tweet_id=c3d20d98-5364-453e-badc-ae8e7a3aa9a0
+Authorization: Bearer {{auth_token}}
+
+###
+
+# @name CreateComment
+POST {{base-url}}/comments?tweet_id=c3d20d98-5364-453e-badc-ae8e7a3aa9a0
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="comment[content]"
+Content-Type: text/plain
+
+Second comment
+--WebAppBoundary
+Content-Disposition: form-data; name="comment[comment_media_attributes][0][attachment]"; filename="_4bfd0236-e587-4a3f-a378-2def9a9936f6.jpeg"
+Content-Type: image/png
+
+< ../../../../Pictures/Bootsie/_4bfd0236-e587-4a3f-a378-2def9a9936f6.jpeg
+--WebAppBoundary
+Content-Disposition: form-data; name="comment[comment_media_attributes][0][alt_text]"
+Content-Type: text/plain
+
+Alt text for image
+--WebAppBoundary--
 
 ###

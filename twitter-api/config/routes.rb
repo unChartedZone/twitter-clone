@@ -24,18 +24,16 @@ Rails.application.routes.draw do
 
   # Tweet Endpoints
   resources :tweets, only: %i[index show create] do
-    get '/profile/:username/protected', on: :collection, to: 'tweets#protected_profile_tweets',
-                                        as: 'protected_profile'
     get 'feed', on: :collection, to: 'tweets#feed'
     get 'explore', on: :collection, to: 'tweets#explore_user_tweets'
     post 'like', on: :member
     post 'unlike', on: :member
     post 'retweet', on: :member
     post 'unretweet', on: :member, to: 'tweets#undo_retweet'
-    get '/:username', on: :collection, to: 'tweets#protected_profile_tweets', as: 'profile'
-    get '/:username/replied', on: :collection, to: 'tweets#replied_tweets', as: 'replied'
-    get '/:username/media', on: :collection, to: 'tweets#media_tweets', as: 'media'
-    get '/:username/liked', on: :collection, to: 'tweets#liked_tweets', as: 'liked'
+    get '/profile/:username', on: :collection, to: 'tweets#protected_profile_tweets', as: 'profile'
+    get '/profile/:username/replied', on: :collection, to: 'tweets#replied_tweets', as: 'replied'
+    get '/profile/:username/media', on: :collection, to: 'tweets#media_tweets', as: 'media'
+    get '/profile/:username/liked', on: :collection, to: 'tweets#liked_tweets', as: 'liked'
   end
 
   # Bookmark Endpoints
