@@ -119,6 +119,17 @@ const router = createRouter({
         sidebarComponents: [SearchField, WhoToFollow],
       },
     },
+    {
+      path: "/:username(.*)*/status/:tweetId",
+      name: "TweetDetails",
+      component: () => import("../views/TweetDetailsView.vue"),
+      props: true,
+      meta: {
+        requiresAuth: true,
+        layout: Default,
+        sidebarComponents: [SearchField, WhoToFollow],
+      },
+    },
   ],
 });
 

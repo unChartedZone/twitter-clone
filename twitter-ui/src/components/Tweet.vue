@@ -1,30 +1,41 @@
 <template>
-  <div class="tweet">
-    <div class="tweet__profile-pic">
-      <AvatarCircle :src="tweet.user?.profileImage" />
-    </div>
-    <div class="tweet__body">
-      <TweetHeader :tweet="tweet" />
-      <div class="tweet__text">
-        <p>{{ tweet.text }}</p>
+  <RouterLink
+    :to="{
+      name: 'TweetDetails',
+      params: {
+        tweetId: tweet.id,
+        username: tweet.user?.username,
+      },
+    }"
+  >
+    <div class="tweet">
+      <div class="tweet__profile-pic">
+        <AvatarCircle :src="tweet.user?.profileImage" />
       </div>
-      <div
-        class="tweet__media"
-        v-if="!!tweet.medium && tweet.medium.length > 0"
-      >
-        <Image
-          v-for="media in tweet.medium"
-          :key="media.id"
-          :src="media.url"
-          :alt="media.description"
-        />
+      <div class="tweet__body">
+        <TweetHeader :tweet="tweet" />
+        <div class="tweet__text">
+          <p>{{ tweet.text }}</p>
+        </div>
+        <div
+          class="tweet__media"
+          v-if="!!tweet.medium && tweet.medium.length > 0"
+        >
+          <Image
+            v-for="media in tweet.medium"
+            :key="media.id"
+            :src="media.url"
+            :alt="media.description"
+          />
+        </div>
+        <TweetActionRow :tweet="tweet" size="icon-sm" />
       </div>
-      <TweetActionRow :tweet="tweet" />
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
 import type Tweet from "@/models/Tweet";
 import TweetHeader from "./tweet/TweetHeader.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
@@ -46,6 +57,11 @@ defineProps<TweetProps>();
   gap: 0.25rem;
   padding: 0.5rem 0.75rem 1rem 0;
   font-size: 15px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray-100;
+  }
 
   &__profile-pic {
     display: flex;

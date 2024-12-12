@@ -51,7 +51,8 @@ withDefaults(defineProps<PageHeaderProps>(), { title: "", subtitle: "" });
   }
 
   span {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: $gray-300;
   }
 }
 </style>
