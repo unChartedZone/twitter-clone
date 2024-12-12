@@ -1,24 +1,26 @@
 <template>
   <div class="tweet__actions">
     <div class="main-actions">
-      <TweetAction icon="reply" text="0" />
+      <TweetAction icon="reply" text="0" :size="size" />
       <TweetAction
         icon="retweet"
         :text="`${tweet.totalRetweets}`"
         activeIcon="retweet"
         :active="tweet.retweeted"
-        activeColor="success"
+        color="success"
         @action="retweetTweet"
         @activeAction="unretweetTweet"
+        :size="size"
       />
       <TweetAction
         icon="heart-outline"
         activeIcon="heart"
         :text="`${tweet.totalLikes}`"
         :active="tweet.liked"
-        activeColor="danger"
+        color="danger"
         @action="likeTweet"
         @activeAction="unlikeTweet"
+        :size="size"
       />
     </div>
     <div class="additional-actions">
@@ -26,11 +28,12 @@
         icon="bookmark-outline"
         activeIcon="bookmark"
         :active="tweet.bookmarked"
-        activeColor="primary"
+        color="primary"
         @action="addBookmark"
         @activeAction="removeBookmark"
+        :size="size"
       />
-      <TweetAction icon="share" />
+      <TweetAction icon="share" :size="size" />
     </div>
   </div>
 </template>
@@ -44,6 +47,7 @@ import TweetAction from "./TweetAction.vue";
 
 interface TweetActionRowProps {
   tweet: Tweet;
+  size: "icon" | "icon-sm";
 }
 
 const props = defineProps<TweetActionRowProps>();

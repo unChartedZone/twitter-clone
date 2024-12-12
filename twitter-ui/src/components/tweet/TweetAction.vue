@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import Icon, { type IconName } from "../common/Icon.vue";
+import Button from "../ui/Button.vue";
+import Icon, { type IconVariant } from "../icons/Icon.vue";
 
 interface TweetActionProps {
-  icon: IconName;
+  icon: IconVariant;
   active?: boolean;
-  activeIcon?: IconName;
-  activeColor?: "primary" | "danger" | "success" | "black" | "white";
+  activeIcon?: IconVariant;
+  color?: "primary" | "danger" | "success" | "black" | "white";
   text?: string;
+  size: "icon" | "icon-sm";
 }
 
 defineEmits<{
@@ -14,35 +16,56 @@ defineEmits<{
   (e: "activeAction"): Promise<void> | void;
 }>();
 
-defineProps<TweetActionProps>();
-const ICON_SIZE = 0.93; // TODO: this might just be a set size within icon component
+withDefaults(defineProps<TweetActionProps>(), {
+  color: "primary",
+  size: "icon",
+});
 </script>
 
 <template>
-  <div class="tweet-action">
-    <div v-if="active && !!activeIcon" @click="$emit('activeAction')">
-      <Icon
-        :name="activeIcon"
-        :size="ICON_SIZE"
-        :color="active ? activeColor : 'black'"
-      />
-      <span :class="{ [`${activeColor}`]: active }">{{ text }}</span>
-    </div>
-    <div v-else @click="$emit('action')">
-      <Icon :name="icon" :size="ICON_SIZE" color="black" />
-      <span>{{ text }}</span>
-    </div>
+  <div
+    class="tweet-action"
+    :class="[`color-${color}`, !!active && `active-color-${color}`]"
+  >
+    <Button
+      variant="icon-ghost"
+      :size="size"
+      @click.stop.prevent="active ? $emit('activeAction') : $emit('action')"
+    >
+      <Icon :variant="active && activeIcon ? activeIcon : icon" />
+    </Button>
+    <span v-if="!!text">{{ text }}</span>
   </div>
 </template>
 
 <style scoped lang="scss">
 .tweet-action {
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
 
-  div {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+$color-list: (
+  primary: $primary,
+  danger: $danger,
+  success: $success,
+);
+
+@each $key, $val in $color-list {
+  .color-#{$key} {
+    &:hover {
+      color: $val;
+      transition: color 0.3s ease-in-out;
+
+      button {
+        fill: #{$val};
+        background-color: adjust-color($color: $val, $alpha: -0.8);
+      }
+    }
+  }
+
+  .active-color-#{$key} {
+    color: $val;
+    fill: $val;
   }
 }
 </style>
