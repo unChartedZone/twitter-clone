@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import LoadingIcon from "../common/LoadingIcon.vue";
+import LoadingIcon from "@/components/common/LoadingIcon.vue";
 
-// TODO: use this button replace other button
 interface ButtonProps {
   variant?:
     | "primary"
     | "outline"
     | "monochrome"
     | "destructive"
+    | "text"
     | "icon"
     | "icon-ghost";
   type?: "button" | "submit" | "reset";
   size?: "xs" | "sm" | "default" | "lg" | "xl" | "icon" | "icon-sm";
+  secondaryText?: string;
+  block?: boolean;
   loading?: boolean;
 }
 
@@ -26,20 +28,31 @@ withDefaults(defineProps<ButtonProps>(), {
   <button
     :type="type"
     class="btn"
-    :class="[`btn--${variant}`, `btn--size-${size}`]"
+    :class="[`btn--${variant}`, `btn--size-${size}`, block && 'btn--block']"
   >
-    <div v-if="loading" class="btn__loader">
-      <LoadingIcon :size="25" />
-    </div>
+    <LoadingIcon v-if="loading" class="btn__loader" :size="16" />
     <div class="btn__content" :class="[loading && 'loading']">
       <slot />
+      <div class="secondary-content">
+        <span>{{ secondaryText }}</span>
+      </div>
     </div>
   </button>
 </template>
 
 <style scoped lang="scss">
-$padding: 0.5rem 1rem;
+$padding: 0.375rem 0.75rem;
 $rounded: 1.5rem;
+
+@mixin outline-styling {
+  border: 1px solid $gray-200;
+  border-radius: $rounded;
+  background-color: $white;
+  color: $black;
+  padding: $padding;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
 
 .btn {
   display: grid;
@@ -51,16 +64,28 @@ $rounded: 1.5rem;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 700;
+  font-family: $fonts;
   line-height: 1rem;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s linear;
 
   &__content,
   &__loader {
-    grid-area: stack;
+    grid-area: stack; // Helps stack button content and loading icon on top of each other
+    justify-self: center;
+    height: 100%;
+    position: relative;
   }
 
   .loading {
     visibility: hidden;
+  }
+
+  .secondary-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    visibility: hidden;
+    transform: translate(-50%, -50%);
   }
 
   &--primary {
@@ -70,10 +95,13 @@ $rounded: 1.5rem;
     position: relative;
     min-width: 2rem;
     padding: $padding;
-    width: 100%;
 
     &:hover {
       background-color: lighten($primary, 0.4);
+    }
+
+    :deep(.lds-ring div) {
+      border-color: $white transparent transparent transparent;
     }
   }
 
@@ -89,21 +117,37 @@ $rounded: 1.5rem;
   }
 
   &--outline {
-    border-style: solid;
-    border-width: 1px;
-    border-color: $black;
-    background-color: $white;
-    color: $black;
+    @include outline-styling;
+
+    &:hover {
+      background-color: $gray-100;
+    }
+  }
+
+  &--destructive {
+    @include outline-styling;
+
+    &:hover {
+      background-color: adjust-color($color: $danger, $alpha: -0.95);
+      border-color: $danger;
+      color: $danger;
+    }
+    &:hover .btn__content {
+      visibility: hidden;
+    }
+    &:hover .secondary-content {
+      visibility: visible;
+    }
   }
 
   &--icon {
     background-color: $black;
-    height: 40px;
-    width: 40px;
     border-radius: 50%;
     padding: 0.5rem;
     color: $primary;
     fill: $white;
+    line-height: 1rem;
+    height: 100%;
 
     &:hover {
       background-color: adjust-color($color: $black, $lightness: 20%);
@@ -116,7 +160,8 @@ $rounded: 1.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    line-height: 1rem;
 
     &:hover {
       background-color: adjust-color(
@@ -126,6 +171,11 @@ $rounded: 1.5rem;
       );
       fill: $primary;
     }
+  }
+
+  &--size-xl {
+    font-size: 1.1rem;
+    padding: 1rem;
   }
 
   &--size-icon {
@@ -138,6 +188,10 @@ $rounded: 1.5rem;
     height: 30px;
     width: 30px;
     padding: 0.45rem;
+  }
+
+  &--block {
+    width: 100%;
   }
 }
 </style>
