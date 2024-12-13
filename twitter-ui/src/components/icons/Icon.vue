@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Component } from "vue";
+import { type IconVariant } from "@/types/IconVariants";
 import Bird from "./Bird.vue";
 import Bookmark from "./Bookmark.vue";
 import BookmarkOutline from "./BookmarkOutline.vue";
@@ -14,22 +15,6 @@ import MagnifyingGlassBold from "./MagnifyingGlassBold.vue";
 import Reply from "./Reply.vue";
 import Retweet from "./Retweet.vue";
 import Share from "./Share.vue";
-
-export type IconVariant =
-  | "bird"
-  | "bookmark"
-  | "bookmark-outline"
-  | "ellipsis"
-  | "feather"
-  | "heart"
-  | "heart-outline"
-  | "home"
-  | "home-outline"
-  | "magnifying-glass"
-  | "magnifying-glass-bold"
-  | "reply"
-  | "retweet"
-  | "share";
 
 defineProps<{ variant: IconVariant }>();
 
