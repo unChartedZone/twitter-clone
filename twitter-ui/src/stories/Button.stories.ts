@@ -82,9 +82,8 @@ export const IconGhost: Story = {
     },
     template: `
       <Button v-bind="args">
-        <Icon variant="feather" />
+        <Icon variant="cross" />
       </Button>
-
     `,
   }),
 };
