@@ -1,7 +1,7 @@
 name: Fly Deploy
 on:
   push:
-    branches: ["master"] # Runs on pushes targeting the default branch
+    branches: ["main"] # Runs on pushes targeting the default branch
   workflow_dispatch:
 jobs:
   deploy:
