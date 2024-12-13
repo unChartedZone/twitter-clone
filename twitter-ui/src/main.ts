@@ -6,7 +6,6 @@ import router from "./router";
 import "./styles/main.scss";
 
 import Alert from "./components/common/Alert.vue";
-import Button from "@/components/common/Button.vue";
 import Card from "@/components/common/Card.vue";
 import CardHeader from "./components/common/card/CardHeader.vue";
 import FileInput from "./components/common/FileInput.vue";
@@ -28,7 +27,6 @@ app.use(createPinia());
 app.use(router);
 
 app.component("Alert", Alert);
-app.component("Button", Button);
 app.component("Card", Card);
 app.component("CardHeader", CardHeader);
 app.component("FileInput", FileInput);
