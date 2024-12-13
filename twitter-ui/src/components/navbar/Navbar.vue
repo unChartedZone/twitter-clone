@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
+import Icon from "../icons/Icon.vue";
+import { type IconVariant } from "@/types/IconVariants";
 import NavLink from "./NavLink.vue";
 import UserPill from "./UserPill.vue";
-import type { IconName } from "../common/Icon.vue";
 import TweetEditorModal from "../tweet-editor/TweetEditorModal.vue";
 
 interface NavLink {
   text: string;
   to: string;
-  icon: IconName;
-  activeIcon: IconName;
+  icon: IconVariant;
+  activeIcon: IconVariant;
 }
 
 const authStore = useAuthStore();
@@ -19,8 +20,8 @@ const links: NavLink[] = [
   {
     text: "Explore",
     to: "/explore",
-    icon: "magnify-glass",
-    activeIcon: "magnify-glass-bold",
+    icon: "magnifying-glass",
+    activeIcon: "magnifying-glass-bold",
   },
   {
     text: "Notifications",
