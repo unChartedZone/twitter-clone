@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
-import Button from "../common/Button.vue";
+import Button from "../ui/Button.vue";
+import Icon from "../icons/Icon.vue";
 
 describe("Button", () => {
   it("renders a normal button properly", () => {
@@ -10,9 +11,16 @@ describe("Button", () => {
 
   it("renders a icon button properly", () => {
     const wrapper = mount(Button, {
-      props: { icon: "balloon" },
-      slots: { default: "something" },
+      props: { variant: "icon", size: "icon" },
+      global: {
+        components: { Icon }, // Register Icon globally
+      },
+      slots: { default: `<Icon variant="balloon" />` },
     });
-    expect(wrapper.text()).toContain("");
+
+    const buttonSlot = wrapper.find("svg");
+
+    expect(wrapper.text()).toBe("");
+    expect(buttonSlot.element.tagName).toBe("svg");
   });
 });
