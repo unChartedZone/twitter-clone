@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - master    # change to main if needed
-    paths:
-      - 'twitter-api/**'  # Trigger only on changes in the api folder
 jobs:
   deploy:
     name: Deploy app
