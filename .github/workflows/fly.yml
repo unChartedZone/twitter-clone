@@ -8,11 +8,12 @@ jobs:
     name: Deploy app
     runs-on: ubuntu-latest
     concurrency: deploy-group    # optional: ensure only one action runs at a time
+    defaults:
+       run:
+         working-directory: ./twitter-api
     steps:
       - uses: actions/checkout@v4
-        working-directory: ./twitter-api
       - uses: superfly/flyctl-actions/setup-flyctl@master
-        working-directory: ./twitter-api
       - run: flyctl deploy --remote-only
         working-directory: ./twitter-api
         env:
