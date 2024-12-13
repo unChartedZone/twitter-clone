@@ -9,7 +9,8 @@ interface ButtonProps {
     | "destructive"
     | "text"
     | "icon"
-    | "icon-ghost";
+    | "icon-ghost"
+    | "icon-monochrome";
   type?: "button" | "submit" | "reset";
   size?: "xs" | "sm" | "default" | "lg" | "xl" | "icon" | "icon-sm";
   secondaryText?: string;
@@ -97,7 +98,7 @@ $rounded: 1.5rem;
     padding: $padding;
 
     &:hover {
-      background-color: lighten($primary, 0.4);
+      background-color: adjust-color($color: $primary, $alpha: -0.2);
     }
 
     :deep(.lds-ring div) {
@@ -140,6 +141,17 @@ $rounded: 1.5rem;
     }
   }
 
+  &--text {
+    color: $primary;
+    background-color: transparent;
+    border-radius: $rounded;
+    padding: $padding;
+
+    &:hover {
+      background-color: $gray-100;
+    }
+  }
+
   &--icon {
     background-color: $black;
     border-radius: 50%;
@@ -170,6 +182,16 @@ $rounded: 1.5rem;
         $alpha: 0.7
       );
       fill: $primary;
+    }
+  }
+
+  &--icon-monochrome {
+    background-color: adjust-color($color: $black, $alpha: -0.5);
+    fill: $white;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: adjust-color($color: $black, $alpha: -0.6);
     }
   }
 
