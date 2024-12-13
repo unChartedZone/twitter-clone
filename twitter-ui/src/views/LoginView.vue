@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 import type { ErrorResponse } from "@/types/ResponseTypes";
+import Icon from "@/components/icons/Icon.vue";
 import GuestMessage from "@/components/GuestMessage.vue";
 
 const router = useRouter();
@@ -49,7 +50,7 @@ function isValidEmail(email: string): boolean {
   <main class="login__wrapper">
     <div class="login__form w-96 mx-auto space-y-6 py-6">
       <div class="login__logo">
-        <Icon name="bird" color="white" />
+        <Icon variant="bird" />
       </div>
       <h1 class="login__header">Log in to Twitter</h1>
 
@@ -108,6 +109,7 @@ function isValidEmail(email: string): boolean {
 
   &__logo {
     width: 3rem;
+    fill: $white;
   }
 
   &__footer {

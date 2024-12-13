@@ -1,7 +1,7 @@
 <template>
   <Card>
     <CardHeader center>
-      <Icon name="bird" />
+      <Icon variant="bird" style="height: 2rem" />
     </CardHeader>
     <CardBody>
       <div>
@@ -36,6 +36,7 @@
 import { ref, reactive, computed } from "vue";
 import * as api from "@/api/endpoints";
 import router from "@/router";
+import Icon from "./icons/Icon.vue";
 import DateSelector from "./DateSelector.vue";
 import CardBody from "./common/card/CardBody.vue";
 import { useAuthStore } from "@/stores/auth";

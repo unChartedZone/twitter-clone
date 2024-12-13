@@ -5,16 +5,15 @@ import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
 import { useProfileStore } from "@/stores/profile";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import Icon from "@/components/icons/Icon.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import ProfileEditor from "@/components/ProfileEditor.vue";
-import LoadingIcon from "@/components/common/LoadingIcon.vue";
 import Image from "@/components/common/Image.vue";
 import PageLoader from "@/components/PageLoader.vue";
 
 const authStore = useAuthStore();
 const profileStore = useProfileStore();
 const route = useRoute();
-const iconSize = 1.2;
 const {
   currentUser,
   fetchUserProfile,
@@ -87,21 +86,21 @@ function formatLink(link: string): string {
         </div>
         <div class="profile__info mb-2">
           <span v-if="currentUser?.location">
-            <Icon name="location" :size="iconSize" />
+            <Icon variant="location" />
             {{ currentUser?.location }}
           </span>
           <span v-if="currentUser?.website">
-            <Icon name="chain" :size="iconSize" />
+            <Icon variant="chain" />
             <Link text :href="authStore.user?.website" target="_blank">
               {{ formatLink(currentUser?.website) }}
             </Link>
           </span>
           <span v-if="currentUser?.birthDate">
-            <Icon name="balloon" :size="iconSize" />
+            <Icon variant="balloon" />
             Born {{ birthDate }}
           </span>
           <span>
-            <Icon name="calendar" :size="iconSize" />
+            <Icon variant="calendar" />
             Joined {{ joinDate }}
           </span>
         </div>

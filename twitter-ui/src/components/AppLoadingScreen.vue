@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Icon from "./common/Icon.vue";
+import Icon from "@/components/icons/Icon.vue";
 </script>
 
 <template>
   <div class="app-loading-screen">
-    <Icon name="bird" :size="20" />
+    <Icon variant="bird" />
   </div>
 </template>
 
@@ -18,5 +18,9 @@ import Icon from "./common/Icon.vue";
   justify-content: center;
   align-items: center;
   z-index: 99999;
+
+  svg {
+    height: 20rem;
+  }
 }
 </style>

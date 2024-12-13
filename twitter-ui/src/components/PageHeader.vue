@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import Button from "./ui/Button.vue";
+import Icon from "./icons/Icon.vue";
+
 interface PageHeaderProps {
   title: string;
   subtitle: string;
@@ -10,9 +13,9 @@ withDefaults(defineProps<PageHeaderProps>(), { title: "", subtitle: "" });
 <template>
   <header class="page-header">
     <div>
-      <Link @click="$router.go(-1)" icon>
-        <Icon name="left-arrow" />
-      </Link>
+      <Button variant="icon-ghost" size="icon" @click="$router.go(-1)">
+        <Icon variant="left-arrow" />
+      </Button>
       <div>
         <h2>{{ title }}</h2>
         <span>{{ subtitle }}</span>
@@ -26,6 +29,7 @@ withDefaults(defineProps<PageHeaderProps>(), { title: "", subtitle: "" });
   position: relative;
   width: 40rem;
   margin: 0 0 3.5rem;
+  padding: 0 0.5rem;
 
   & > div {
     backdrop-filter: blur(12px);
