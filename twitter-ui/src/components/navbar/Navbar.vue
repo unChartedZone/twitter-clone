@@ -50,7 +50,7 @@ const links: NavLink[] = [
       <div class="navbar__content">
         <section class="navbar__links">
           <div>
-            <Icon class="logo" name="bird" />
+            <Icon class="logo" variant="bird" />
           </div>
           <div>
             <ul class="navbar__list">

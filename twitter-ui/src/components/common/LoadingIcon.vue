@@ -27,9 +27,8 @@ withDefaults(defineProps<{ size?: number; color?: string }>(), {
   box-sizing: border-box;
   display: block;
   position: absolute;
-  width: 80%;
-  height: 80%;
-  margin: 2px;
+  width: 100%;
+  height: 100%;
   border: 2px solid $primary;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;

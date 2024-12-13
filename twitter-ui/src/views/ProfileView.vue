@@ -178,6 +178,12 @@ function formatLink(link: string): string {
     display: flex;
     gap: 0.5rem;
     font-size: 0.9rem;
+
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 

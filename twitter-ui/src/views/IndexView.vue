@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import Icon from "@/components/icons/Icon.vue";
 import SignupForm from "@/components/SignupForm.vue";
 import GuestMessage from "@/components/GuestMessage.vue";
 
@@ -11,10 +12,10 @@ const toggleSignupModal = ref<boolean>(false);
   <main class="page">
     <div class="page__content">
       <section class="icon-section">
-        <Icon name="bird" :size="40" color="white" />
+        <Icon variant="bird" />
       </section>
       <section class="action-section">
-        <Icon name="bird" size="md" />
+        <Icon variant="bird" />
         <h1>Happening now</h1>
         <h2>Join Twitter Today.</h2>
         <div class="action-section__links space-y-4">
@@ -93,10 +94,16 @@ const toggleSignupModal = ref<boolean>(false);
   background-color: black;
   height: 100%;
   width: 100%;
+
+  svg {
+    height: 40rem;
+    fill: $white;
+  }
 }
 
 .action-section {
   svg {
+    height: 3rem;
     margin-bottom: 3rem;
   }
 

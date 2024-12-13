@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import AvatarCircle from "../AvatarCircle.vue";
+import Icon from "../icons/Icon.vue";
 import List from "../common/List.vue";
 import ListItem from "../common/ListItem.vue";
 import Menu from "../common/Menu.vue";
@@ -29,7 +30,7 @@ async function logout() {
               <p>@{{ authStore.user?.username }}</p>
             </div>
           </div>
-          <Icon name="ellipsis" />
+          <Icon variant="ellipsis" />
         </section>
       </template>
       <div>

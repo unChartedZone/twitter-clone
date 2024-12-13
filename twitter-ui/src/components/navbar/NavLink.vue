@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import Icon, { type IconName } from "@/components/common/Icon.vue";
+import Icon from "../icons/Icon.vue";
+import { type IconVariant } from "@/types/IconVariants";
 import { RouterLink } from "vue-router";
 
 interface NavLinkProps {
   to?: string;
-  icon: IconName;
-  activeIcon?: IconName;
+  icon: IconVariant;
+  activeIcon?: IconVariant;
   text?: string;
 }
 
@@ -23,8 +24,8 @@ defineProps<NavLinkProps>();
     >
       <div class="nav-link__content">
         <div class="nav-link__icon">
-          <Icon v-if="isActive && activeIcon" :name="activeIcon" />
-          <Icon v-else :name="icon" />
+          <Icon v-if="isActive && activeIcon" :variant="activeIcon" />
+          <Icon v-else :variant="icon" />
         </div>
         <span class="nav-link__text">{{ text }}</span>
       </div>
@@ -34,7 +35,7 @@ defineProps<NavLinkProps>();
     <div v-else class="nav-link__container">
       <div class="nav-link__content">
         <div class="nav-link__icon">
-          <Icon :name="icon" />
+          <Icon :variant="icon" />
         </div>
         <span class="nav-link__text">{{ text }}</span>
       </div>
@@ -71,12 +72,13 @@ defineProps<NavLinkProps>();
   &__icon {
     position: relative;
     width: 1.5rem;
-    height: 2rem;
+    height: 1.5rem;
 
     svg {
       position: absolute;
       top: 50%;
       left: 50%;
+      height: 100%;
       transform: translate(-50%, -50%);
     }
   }
