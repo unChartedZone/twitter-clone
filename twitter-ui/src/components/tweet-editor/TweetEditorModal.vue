@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import TweetEditor from "./TweetEditor.vue";
-import NewButton from "../ui/Button.vue";
+import Button from "../ui/Button.vue";
 import Icon from "../icons/Icon.vue";
 
 const toggleTweetModal = ref<boolean>(false);
@@ -9,16 +9,28 @@ const toggleTweetModal = ref<boolean>(false);
 
 <template>
   <div class="button-container">
-    <Button block @click="toggleTweetModal = true">Tweet</Button>
-    <NewButton variant="icon" @click="toggleTweetModal = true">
-      <Icon variant="feather" />
-    </NewButton>
+    <div class="large">
+      <Button block size="xl" @click="toggleTweetModal = true">Tweet</Button>
+    </div>
+    <div class="small">
+      <Button variant="icon" @click="toggleTweetModal = true">
+        <Icon variant="feather" />
+      </Button>
+    </div>
   </div>
   <Modal v-model="toggleTweetModal">
     <Card class="tweet-editor__card">
       <template v-slot:header>
-        <Button icon="cross" :size="1" @click="toggleTweetModal = false" />
-        <Button text :size="1">Drafts</Button>
+        <div>
+          <Button
+            variant="icon-ghost"
+            size="icon"
+            @click="toggleTweetModal = false"
+          >
+            <Icon variant="cross" />
+          </Button>
+        </div>
+        <Button variant="text">Drafts</Button>
       </template>
       <TweetEditor @closeEditor="toggleTweetModal = false" />
     </Card>
@@ -26,13 +38,13 @@ const toggleTweetModal = ref<boolean>(false);
 </template>
 
 <style scoped lang="scss">
-.button-container button:nth-of-type(1) {
+.button-container .large {
   @include respond(xl) {
     display: none;
   }
 }
 
-.button-container button:nth-of-type(2) {
+.button-container .small {
   display: none;
 
   @include respond(xl) {

@@ -25,7 +25,6 @@
   }
 
   &__footer {
-    min-height: 1rem;
     padding: 0.25rem 0.5rem;
   }
 }

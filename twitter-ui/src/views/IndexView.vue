@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import Button from "@/components/ui/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 import SignupForm from "@/components/SignupForm.vue";
 import GuestMessage from "@/components/GuestMessage.vue";
@@ -19,7 +20,9 @@ const toggleSignupModal = ref<boolean>(false);
         <h1>Happening now</h1>
         <h2>Join Twitter Today.</h2>
         <div class="action-section__links space-y-4">
-          <Button block @click="toggleSignupModal = true">Sign up</Button>
+          <Button size="xl" block @click="toggleSignupModal = true">
+            Sign up
+          </Button>
           <Link to="/login" block outline>Log in</Link>
         </div>
       </section>

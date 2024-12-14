@@ -45,15 +45,59 @@ export const Primary: Story = {
   },
 };
 
+export const Outline: Story = {
+  args: {
+    variant: "outline",
+  },
+};
+
 export const Monochrome: Story = {
   args: {
     variant: "monochrome",
   },
 };
 
+export const Destructive: Story = {
+  args: {
+    variant: "destructive",
+    secondaryText: "Unfollow",
+  },
+  render: (args: any) => ({
+    components: { Button },
+    setup() {
+      return { args };
+    },
+    template: `
+      <Button v-bind="args">
+        Following
+      </Button>
+
+    `,
+  }),
+};
+
 export const IconFab: Story = {
   args: {
     variant: "icon",
+    size: "icon",
+  },
+  render: (args: any) => ({
+    components: { Button, Icon },
+    setup() {
+      return { args };
+    },
+    template: `
+      <Button v-bind="args">
+        <Icon variant="feather" />
+      </Button>
+
+    `,
+  }),
+};
+
+export const IconMonochrome: Story = {
+  args: {
+    variant: "icon-monochrome",
     size: "icon",
   },
   render: (args: any) => ({

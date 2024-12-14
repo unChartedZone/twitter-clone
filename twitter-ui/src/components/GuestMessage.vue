@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import Button from "./ui/Button.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -18,7 +19,7 @@ async function loginAsGuest() {
   <div class="guest-message">
     <h3>Dear Recruiter or Hiring Manager</h3>
     <p>To access the guest account, click the button below.</p>
-    <Button @click="loginAsGuest" color="white">Log in as Guest</Button>
+    <Button variant="monochrome" @click="loginAsGuest">Log in as Guest</Button>
   </div>
 </template>
 

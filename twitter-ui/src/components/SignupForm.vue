@@ -25,7 +25,9 @@
             </p>
             <DateSelector v-model="formState.birthDate" />
           </div>
-          <Button block :loading="loading" type="submit">Signup</Button>
+          <Button block size="xl" :loading="loading" type="submit">
+            Signup
+          </Button>
         </form>
       </div>
     </CardBody>
@@ -36,6 +38,7 @@
 import { ref, reactive, computed } from "vue";
 import * as api from "@/api/endpoints";
 import router from "@/router";
+import Button from "./ui/Button.vue";
 import Icon from "./icons/Icon.vue";
 import DateSelector from "./DateSelector.vue";
 import CardBody from "./common/card/CardBody.vue";

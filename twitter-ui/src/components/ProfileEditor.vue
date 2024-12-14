@@ -13,10 +13,12 @@
   <Card v-else>
     <template v-slot:header>
       <div class="profile-editor__header">
-        <Button @click="closeProfileEditor" icon="cross" :size="1" />
+        <Button variant="icon-ghost" size="icon" @click="closeProfileEditor">
+          <Icon variant="cross" />
+        </Button>
         <h1>Edit Profile</h1>
       </div>
-      <Button @click="saveProfile" outline :size="1">Save</Button>
+      <Button variant="outline" @click="saveProfile">Save</Button>
     </template>
     <div class="profile-editor__media">
       <section class="profile-editor__banner-image">
@@ -26,17 +28,26 @@
           accept=".png, .jpg, .jpeg"
         >
           <template v-slot="{ onClick }">
-            <Button @click="onClick" icon="camera-outline" tonal />
+            <Button
+              variant="icon-monochrome"
+              size="icon"
+              @click="onClick"
+              tonal
+            >
+              <Icon variant="camera-outline" />
+            </Button>
           </template>
         </FileInput>
         <Button
+          variant="icon-monochrome"
+          size="icon"
           @click="
             profileMediaState.bannerImage = undefined;
             profileMediaState.selectedBannerImage = undefined;
           "
-          icon="cross"
-          tonal
-        />
+        >
+          <Icon variant="cross" />
+        </Button>
       </section>
       <section class="profile-editor__profile-image">
         <FileInput
@@ -44,7 +55,9 @@
           accept=".png, .jpg, .jpeg"
         >
           <template v-slot="{ onClick }">
-            <Button @click="onClick" icon="camera-outline" tonal />
+            <Button variant="icon-monochrome" size="icon" @click="onClick">
+              <Icon variant="camera-outline" />
+            </Button>
           </template>
         </FileInput>
         <img :src="profileImageSrc" alt="" />
@@ -65,6 +78,8 @@
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import Button from "./ui/Button.vue";
+import Icon from "./icons/Icon.vue";
 import MediaEditor from "./profile-editor/MediaEditor.vue";
 import DateSelector from "./DateSelector.vue";
 import type { UserPatch } from "@/models/User";

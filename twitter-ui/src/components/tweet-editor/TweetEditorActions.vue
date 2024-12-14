@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import Button from "../ui/Button.vue";
+import Icon from "../icons/Icon.vue";
 
 const emit = defineEmits<{ (event: "publishTweet"): Promise<void> }>();
 const loading = ref<boolean>(false); // TODO: Should define some loading state instead of boolean for failure scenario
@@ -13,8 +15,10 @@ async function publishTweet() {
 
 <template>
   <div class="actions">
-    <Button icon="picture" color="primary" :size="1" />
-    <Button :size="1" @click="publishTweet" :loading="loading">Tweet</Button>
+    <Button variant="icon-ghost" size="icon">
+      <Icon variant="picture" />
+    </Button>
+    <Button @click="publishTweet" :loading="loading">Tweet</Button>
   </div>
 </template>
 

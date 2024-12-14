@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
 import { useProfileStore } from "@/stores/profile";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import Button from "@/components/ui/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import ProfileEditor from "@/components/ProfileEditor.vue";
@@ -68,10 +69,9 @@ function formatLink(link: string): string {
             <template v-slot:activator="{ onClick }">
               <div class="edit-profile-activator">
                 <Button
+                  variant="outline"
                   v-if="currentUser?.id == authStore.user?.id"
                   @click="onClick"
-                  outline
-                  :size="1"
                 >
                   Edit profile
                 </Button>
