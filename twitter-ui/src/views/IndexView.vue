@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import Button from "@/components/ui/Button.vue";
+import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 import SignupForm from "@/components/SignupForm.vue";
 import GuestMessage from "@/components/GuestMessage.vue";

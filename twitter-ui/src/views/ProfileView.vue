@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useAuthStore } from "@/stores/auth";
 import { useProfileStore } from "@/stores/profile";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import Button from "@/components/ui/Button.vue";
+import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import ProfileEditor from "@/components/ProfileEditor.vue";

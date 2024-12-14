@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Button from "../ui/Button.vue";
+import Button from "../common/Button.vue";
 import { postUnfollowUser } from "@/api/endpoints";
 import type { LoadingState } from "@/types/LoadingState";
 

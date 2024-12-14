@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { followUser } from "@/api/endpoints";
 import type { BaseUser } from "@/models/User";
-import Button from "../ui/Button.vue";
+import Button from "../common/Button.vue";
 import type { LoadingState } from "@/types/LoadingState";
 
 interface FollowButtonProps {

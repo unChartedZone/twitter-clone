@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
 import AvatarCircle from "./AvatarCircle.vue";
-import Button from "./ui/Button.vue";
+import Button from "./common/Button.vue";
 
 const authStore = useAuthStore();
 </script>

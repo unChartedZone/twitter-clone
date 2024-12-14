@@ -6,7 +6,7 @@ import * as commentApi from "@/api/endpoints/comments";
 import type Tweet from "@/models/Tweet";
 import type CommentType from "@/models/Comment";
 import AvatarCircle from "@/components/AvatarCircle.vue";
-import Button from "@/components/ui/Button.vue";
+import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 import Image from "@/components/common/Image.vue";
 import PageHeader from "@/components/PageHeader.vue";

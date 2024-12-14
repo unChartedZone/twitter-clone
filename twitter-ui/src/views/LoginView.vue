@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 import type { ErrorResponse } from "@/types/ResponseTypes";
-import Button from "@/components/ui/Button.vue";
+import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 import GuestMessage from "@/components/GuestMessage.vue";
 

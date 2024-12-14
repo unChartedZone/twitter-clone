@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import TweetEditor from "./TweetEditor.vue";
-import Button from "../ui/Button.vue";
+import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
 
 const toggleTweetModal = ref<boolean>(false);

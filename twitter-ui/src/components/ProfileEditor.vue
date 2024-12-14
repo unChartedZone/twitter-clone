@@ -78,7 +78,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
-import Button from "./ui/Button.vue";
+import Button from "./common/Button.vue";
 import Icon from "./icons/Icon.vue";
 import MediaEditor from "./profile-editor/MediaEditor.vue";
 import DateSelector from "./DateSelector.vue";

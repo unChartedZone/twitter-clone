@@ -2,7 +2,7 @@ import { fn } from "@storybook/test";
 import type { Meta, StoryObj } from "@storybook/vue3";
 
 // import Button from './Button.vue';
-import Button from "@/components/ui/Button.vue";
+import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories
