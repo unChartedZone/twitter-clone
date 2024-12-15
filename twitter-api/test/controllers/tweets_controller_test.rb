@@ -23,8 +23,7 @@ class TweetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should fetch owner profile tweets" do
-    skip("need to figure out url for tweets profile endpoint")
-    get tweets_profile_url(@user)
+    get profile_tweets_url(@user.username), headers: { Authorization: "Bearer #{@token}" }, as: :json
     assert_response :success
   end
 

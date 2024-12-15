@@ -18,7 +18,6 @@ class TweetsController < ApplicationController
   end
 
   def feed
-    Rails.logger.info("Fetching feed")
     following = @current_user.following
     tweets = Tweet
                .where(user_id: following)

@@ -13,23 +13,23 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get user' do
-    get user_url(@user), as: :json
+    get user_url(@user.username), as: :json
     assert_response :success
     json_response = JSON.parse(self.response.body, symbolize_names: true)
-    assert_equal @user.email, json_response[:email]
-    assert_equal @user.username, json_response[:username]
+    assert_equal @user.email, json_response[:data][:attributes][:email]
+    assert_equal @user.username, json_response[:data][:attributes][:username]
   end
 
   test 'should update user' do
     patch user_url(@user),
-          params: { user: { name: 'Another name', dateOfBirth: '10/10/1989' } },
+          params: { user: { name: 'Another name', birthDate: '1989-10-15' } },
           headers: { Authorization: "Bearer #{JsonWebToken.generate_access_token(@user)}" },
           as: :multipart_form_data
     assert_response :success
     json_response = JSON.parse(self.response.body, symbolize_names: true)
     assert_equal 'Another name', json_response[:data][:attributes][:name]
     assert_equal 'I like to take long walks on the beach', json_response[:data][:attributes][:bio]
-    assert_equal '1989-10-10', json_response[:data][:attributes][:dateOfBirth]
+    assert_equal '1989-10-15', json_response[:data][:attributes][:birthDate]
   end
 
   test 'should not update user if not the owner' do
