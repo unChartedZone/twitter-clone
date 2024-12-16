@@ -2,7 +2,7 @@ import PageLoader from "@/components/PageLoader.vue";
 import type { Meta, StoryObj } from "@storybook/vue3";
 
 const meta = {
-  title: "Example/PageLoader",
+  title: "Example/Page Loader",
   component: PageLoader,
   tags: ["autodocs"],
   argTypes: {},
