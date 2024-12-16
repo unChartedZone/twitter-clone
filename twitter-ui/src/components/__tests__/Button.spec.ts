@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
-import Button from "../ui/Button.vue";
+import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
 
 describe("Button", () => {
