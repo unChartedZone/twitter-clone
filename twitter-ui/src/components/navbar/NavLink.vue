@@ -59,6 +59,10 @@ defineProps<NavLinkProps>();
     &:hover {
       background-color: $gray;
     }
+
+    @include respond(xl) {
+      padding: 0.5rem;
+    }
   }
 
   &__content {
@@ -67,6 +71,10 @@ defineProps<NavLinkProps>();
     align-items: center;
     gap: 0.75rem;
     padding: 0 0.75rem;
+
+    @include respond(xl) {
+      padding: 0;
+    }
   }
 
   &__icon {

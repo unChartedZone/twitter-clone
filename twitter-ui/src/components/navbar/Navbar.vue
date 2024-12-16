@@ -118,6 +118,12 @@ const links: NavLink[] = [
     }
   }
 
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   &__user-pill {
     display: flex;
 
