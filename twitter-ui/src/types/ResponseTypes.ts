@@ -63,6 +63,7 @@ export interface TweetListResponse {
 }
 
 export interface CommentListResponse extends ResponseList<Comment> {}
+export interface CommentResponse extends Response<Comment> {}
 
 export interface ErrorResponse {
   data: {

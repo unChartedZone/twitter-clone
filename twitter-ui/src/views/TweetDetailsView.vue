@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useAuthStore } from "@/stores/auth";
 import * as tweetApi from "@/api/endpoints/tweets";
 import * as commentApi from "@/api/endpoints/comments";
 import type Tweet from "@/models/Tweet";
@@ -11,14 +10,13 @@ import Icon from "@/components/icons/Icon.vue";
 import Image from "@/components/common/Image.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import PageLoader from "@/components/PageLoader.vue";
-import Comment from "@/components/Comment.vue";
-import ReplyEditor from "@/components/ReplyEditor.vue";
+import Comment from "@/components/comment/Comment.vue";
+import ReplyEditor from "@/components/comment/ReplyEditor.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import dayjs from "dayjs";
 import { useQuery } from "@/hooks/useQuery";
 
 const props = defineProps<{ tweetId: string }>();
-const authStore = useAuthStore();
 const comments = ref<CommentType[]>([]);
 
 const { result: tweet, loading } = useQuery<Tweet | undefined>(
@@ -29,6 +27,10 @@ const { result: tweet, loading } = useQuery<Tweet | undefined>(
 onMounted(async () => {
   comments.value = await commentApi.fetchComents(props.tweetId);
 });
+
+function addCommentToThread(comment: CommentType) {
+  comments.value.push(comment);
+}
 </script>
 
 <template>
@@ -67,7 +69,11 @@ onMounted(async () => {
         </div>
       </section>
       <TweetActionRow v-if="!!tweet" :tweet="tweet" size="icon" />
-      <ReplyEditor />
+      <ReplyEditor
+        v-if="!!tweet"
+        :tweetId="tweet.id"
+        @onCommentCreated="addCommentToThread"
+      />
       <!-- Comment section -->
       <section>
         <ul>

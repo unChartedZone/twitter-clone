@@ -4,7 +4,7 @@ import Icon from "./icons/Icon.vue";
 
 interface PageHeaderProps {
   title: string;
-  subtitle: string;
+  subtitle?: string;
 }
 
 withDefaults(defineProps<PageHeaderProps>(), { title: "", subtitle: "" });
