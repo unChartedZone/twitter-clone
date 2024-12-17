@@ -1,18 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { watch } from "vue";
 import { useRoute, RouterView, RouterLink } from "vue-router";
-import dayjs from "dayjs";
-import { useAuthStore } from "@/stores/auth";
 import { useProfileStore } from "@/stores/profile";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import Button from "@/components/common/Button.vue";
-import Icon from "@/components/icons/Icon.vue";
 import PageHeader from "@/components/PageHeader.vue";
-import ProfileEditor from "@/components/ProfileEditor.vue";
-import Image from "@/components/common/Image.vue";
+import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import PageLoader from "@/components/PageLoader.vue";
 
-const authStore = useAuthStore();
 const profileStore = useProfileStore();
 const route = useRoute();
 const {
@@ -20,16 +14,6 @@ const {
   fetchUserProfile,
   loading: profileLoading,
 } = useUserProfile(route.params.username[0]);
-
-const showProfileEditor = ref<boolean>(false);
-
-const birthDate = computed(() =>
-  dayjs(currentUser.value?.birthDate).format("MMM D, YYYY")
-);
-
-const joinDate = computed(() =>
-  dayjs(currentUser.value?.joinDate).format("MMMM YYYY")
-);
 
 // Watch for route change and refresh profile user
 watch(
@@ -40,81 +24,18 @@ watch(
     await fetchUserProfile(value[0]);
   }
 );
-
-function closeProfileEditor() {
-  showProfileEditor.value = false;
-}
-
-function formatLink(link: string): string {
-  return link.replace(/^https?:\/\//, "");
-}
 </script>
 
 <template>
   <main class="profile">
-    <PageLoader v-if="profileLoading === 'idle'" />
+    <PageHeader
+      v-if="!!currentUser"
+      :title="`${currentUser?.name}`"
+      :subtitle="`${currentUser?.totalTweets} tweets`"
+    />
+    <PageLoader v-if="profileLoading === 'idle' && !currentUser" />
     <div v-else>
-      <PageHeader
-        :title="`${currentUser?.name}`"
-        :subtitle="`${currentUser?.totalTweets} tweets`"
-      />
-      <Image class="profile__banner-image" :src="currentUser?.bannerImage" />
-      <section class="profile__content">
-        <Image
-          class="profile__profile-image"
-          :src="currentUser?.profileImage"
-        />
-        <div class="profile__edit-profile">
-          <Modal v-model="showProfileEditor" @on-close="closeProfileEditor">
-            <template v-slot:activator="{ onClick }">
-              <div class="edit-profile-activator">
-                <Button
-                  variant="outline"
-                  v-if="currentUser?.id == authStore.user?.id"
-                  @click="onClick"
-                >
-                  Edit profile
-                </Button>
-              </div>
-            </template>
-            <ProfileEditor @onClose="closeProfileEditor" />
-          </Modal>
-        </div>
-        <div class="profile__name mb-2">
-          <h3>{{ currentUser?.name }}</h3>
-          <p>@{{ currentUser?.username }}</p>
-        </div>
-        <div class="profile__info mb-2">
-          <span v-if="currentUser?.location">
-            <Icon variant="location" />
-            {{ currentUser?.location }}
-          </span>
-          <span v-if="currentUser?.website">
-            <Icon variant="chain" />
-            <Link text :href="authStore.user?.website" target="_blank">
-              {{ formatLink(currentUser?.website) }}
-            </Link>
-          </span>
-          <span v-if="currentUser?.birthDate">
-            <Icon variant="balloon" />
-            Born {{ birthDate }}
-          </span>
-          <span>
-            <Icon variant="calendar" />
-            Joined {{ joinDate }}
-          </span>
-        </div>
-        <div class="profile__following">
-          <RouterLink :to="`${currentUser?.username}/following`">
-            <strong>{{ currentUser?.totalFollowing }}</strong>
-            Following
-          </RouterLink>
-          <RouterLink :to="`${currentUser?.username}/followers`">
-            <strong>{{ currentUser?.totalFollowers }}</strong>
-            Followers
-          </RouterLink>
-        </div>
-      </section>
+      <ProfileHeader :user="currentUser!" />
     </div>
     <section>
       <TabRow>
@@ -127,66 +48,3 @@ function formatLink(link: string): string {
     </section>
   </main>
 </template>
-
-<style scoped lang="scss">
-.profile {
-  &__banner-image {
-    width: 40rem;
-    height: 15rem;
-    z-index: 1;
-  }
-
-  &__info {
-    display: flex;
-    gap: 0.45rem;
-    font-size: 0.9rem;
-
-    span {
-      display: flex;
-      align-items: center;
-      gap: 0.15rem;
-      height: 1.2rem;
-    }
-  }
-
-  &__content {
-    padding: 0 1rem 1rem;
-    position: relative;
-  }
-
-  &__profile-image {
-    width: 133px;
-    height: 133px;
-    object-fit: cover;
-    border-radius: 50%;
-    position: absolute;
-    top: 0;
-    left: 1rem;
-    border: 3px solid $white;
-    transform: translateY(-60%);
-    z-index: 20;
-  }
-
-  &__edit-profile {
-    display: flex;
-    justify-content: end;
-    padding: 0.5rem 0 2.5rem;
-  }
-
-  &__following {
-    display: flex;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-
-    a {
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-}
-
-.edit-profile-activator {
-  height: 2rem;
-}
-</style>
