@@ -27,6 +27,10 @@ defineProps<TabHeaderProps>();
   text-align: center;
   font-weight: 700;
 
+  @include respond(sm) {
+    padding: 0.5rem 1rem;
+  }
+
   &:hover {
     background-color: $gray;
   }

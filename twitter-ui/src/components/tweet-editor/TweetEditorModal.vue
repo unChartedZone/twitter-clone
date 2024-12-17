@@ -50,6 +50,12 @@ const toggleTweetModal = ref<boolean>(false);
   @include respond(xl) {
     display: initial;
   }
+
+  @include respond(sm) {
+    position: fixed;
+    bottom: 3.5rem;
+    right: 0.75rem;
+  }
 }
 
 .tweet-editor {

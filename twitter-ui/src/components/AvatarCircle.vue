@@ -22,5 +22,10 @@ defineProps<ProfilePicCircle>();
   width: 40px;
   height: 40px;
   border-radius: 50%;
+
+  @include respond(sm) {
+    width: 30px;
+    height: 30px;
+  }
 }
 </style>

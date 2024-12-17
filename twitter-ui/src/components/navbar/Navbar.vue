@@ -49,21 +49,19 @@ const links: NavLink[] = [
     <div class="navbar__container">
       <div class="navbar__content">
         <section class="navbar__links">
-          <div>
-            <Icon class="logo" variant="bird" />
+          <div class="logo">
+            <Icon variant="bird" />
           </div>
-          <div>
-            <ul class="navbar__list">
-              <NavLink
-                v-for="link in links"
-                :key="link.text"
-                :icon="link.icon"
-                :activeIcon="link.activeIcon"
-                :text="link.text"
-                :to="link.to"
-              />
-              <NavLink text="More" icon="ellipsis" />
-            </ul>
+          <div class="navbar__list">
+            <NavLink
+              v-for="link in links"
+              :key="link.text"
+              :icon="link.icon"
+              :activeIcon="link.activeIcon"
+              :text="link.text"
+              :to="link.to"
+            />
+            <NavLink class="more-options" text="More" icon="ellipsis" />
           </div>
           <div>
             <TweetEditorModal />
@@ -93,6 +91,15 @@ const links: NavLink[] = [
     @include respond(xl) {
       width: 5rem;
     }
+
+    @include respond(sm) {
+      height: unset;
+      top: unset;
+      width: 100%;
+      bottom: 0rem;
+      left: 0;
+      padding: 0;
+    }
   }
 
   &__content {
@@ -106,15 +113,28 @@ const links: NavLink[] = [
     @include respond(xl) {
       align-items: center;
     }
+
+    @include respond(sm) {
+      height: initial;
+      flex-direction: row;
+      background-color: $white;
+      border-top: 1px solid $gray-100;
+      padding: 0;
+    }
   }
 
   &__links {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
 
     @include respond(xl) {
       align-items: center;
+    }
+
+    @include respond(sm) {
+      flex-direction: row;
     }
   }
 
@@ -122,6 +142,13 @@ const links: NavLink[] = [
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    @include respond(sm) {
+      justify-content: space-between;
+      flex-direction: row;
+      flex: 1;
+      padding: 0 0.5rem;
+    }
   }
 
   &__user-pill {
@@ -129,6 +156,12 @@ const links: NavLink[] = [
 
     @include respond(xl) {
       justify-content: center;
+    }
+
+    @include respond(sm) {
+      position: fixed;
+      top: 0.5rem;
+      left: 0.5rem;
     }
   }
 }
@@ -139,6 +172,19 @@ const links: NavLink[] = [
 
   @include respond(xl) {
     margin: 0 0 0.75rem;
+  }
+
+  @include respond(sm) {
+    position: fixed;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.more-options {
+  @include respond(sm) {
+    display: none;
   }
 }
 </style>

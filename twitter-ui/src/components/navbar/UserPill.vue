@@ -64,6 +64,11 @@ async function logout() {
     padding: 0;
   }
 
+  @include respond(sm) {
+    width: 30px;
+    height: 30px;
+  }
+
   &:hover {
     background-color: $gray;
   }
@@ -78,13 +83,6 @@ async function logout() {
     @include respond(xl) {
       display: none;
     }
-  }
-
-  &__pic {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: black;
   }
 
   h3 {

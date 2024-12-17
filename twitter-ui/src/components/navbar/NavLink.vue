@@ -50,6 +50,7 @@ defineProps<NavLinkProps>();
   font-weight: 400;
   line-height: 1.7rem;
   padding: 0.25rem 0;
+  list-style: none;
 
   &__container {
     display: inline-block;

@@ -23,6 +23,10 @@ defineProps<TweetListProps>();
 <style scoped lang="scss">
 .tweet-list {
   padding: 0 0 1rem;
+
+  @include respond(sm) {
+    padding: 0 0 3rem;
+  }
 }
 
 .loading-icon {
