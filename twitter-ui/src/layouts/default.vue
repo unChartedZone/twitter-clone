@@ -11,6 +11,8 @@ const route = useRoute();
     <Navbar />
     <!-- Main content -->
     <main class="main__content">
+      <!-- Used to hold user pill and app logo icon at top of page on mobile screens -->
+      <div class="mobile-header"></div>
       <slot />
     </main>
     <!-- Additional sidebar component -->
@@ -50,13 +52,18 @@ const route = useRoute();
   }
 
   @include respond(sm) {
-    background-color: red;
+    grid-template-columns: 0fr 1fr;
   }
 }
 
 .main__content {
   border-left: 1px solid $gray-100;
   border-right: 1px solid $gray-100;
+
+  @include respond(sm) {
+    border-top: 1px solid $gray-100;
+    margin-top: 3rem;
+  }
 }
 
 .sidebar {
@@ -69,6 +76,21 @@ const route = useRoute();
     gap: 1rem;
     margin: 0.5rem 0 0 0.5rem;
     z-index: 1;
+  }
+}
+
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3rem;
+  width: 100%;
+  background-color: $white;
+  z-index: 10;
+
+  @include respond(sm) {
+    display: initial;
   }
 }
 </style>
