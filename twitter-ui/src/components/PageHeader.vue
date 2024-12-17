@@ -12,7 +12,7 @@ withDefaults(defineProps<PageHeaderProps>(), { title: "", subtitle: "" });
 
 <template>
   <header class="page-header">
-    <div>
+    <div class="page-header__content">
       <Button variant="icon-ghost" size="icon" @click="$router.go(-1)">
         <Icon variant="left-arrow" />
       </Button>
@@ -26,22 +26,22 @@ withDefaults(defineProps<PageHeaderProps>(), { title: "", subtitle: "" });
 
 <style scoped lang="scss">
 .page-header {
-  position: relative;
-  width: 40rem;
-  margin: 0 0 3.5rem;
-  padding: 0 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  left: 0;
+  backdrop-filter: blur(12px);
+  background-color: rgba($white, 0.85);
 
-  & > div {
-    backdrop-filter: blur(12px);
-    width: inherit;
-    position: fixed;
-    z-index: 25;
-    top: 0;
+  @include respond(sm) {
+    top: 3rem;
+  }
+
+  &__content {
     display: flex;
     align-items: center;
     gap: 2rem;
-    background-color: rgba($white, 0.85);
-    padding: 0.2rem 0;
+    padding: 0.5rem 0.5rem;
   }
 
   h2 {
