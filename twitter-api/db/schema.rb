@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_08_191716) do
+ActiveRecord::Schema.define(version: 2024_12_18_180226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,8 @@ ActiveRecord::Schema.define(version: 2024_12_08_191716) do
     t.uuid "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "tweet_id", null: false
+    t.index ["tweet_id"], name: "index_likes_on_tweet_id"
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
@@ -103,15 +105,6 @@ ActiveRecord::Schema.define(version: 2024_12_08_191716) do
     t.index ["user_id"], name: "index_retweets_on_user_id"
   end
 
-  create_table "tweet_likes", force: :cascade do |t|
-    t.uuid "like_id", null: false
-    t.uuid "tweet_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["like_id"], name: "index_tweet_likes_on_like_id"
-    t.index ["tweet_id"], name: "index_tweet_likes_on_tweet_id"
-  end
-
   create_table "tweet_media", force: :cascade do |t|
     t.uuid "tweet_id", null: false
     t.uuid "medium_id", null: false
@@ -126,8 +119,9 @@ ActiveRecord::Schema.define(version: 2024_12_08_191716) do
     t.uuid "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "total_likes", default: 0
-    t.integer "total_retweets", default: 0
+    t.integer "likes_count", default: 0
+    t.integer "retweets_count", default: 0
+    t.integer "comments_count", default: 0
     t.index ["user_id"], name: "index_tweets_on_user_id"
   end
 
@@ -157,12 +151,11 @@ ActiveRecord::Schema.define(version: 2024_12_08_191716) do
   add_foreign_key "comments", "tweets"
   add_foreign_key "comments", "users"
   add_foreign_key "followers", "users"
+  add_foreign_key "likes", "tweets"
   add_foreign_key "likes", "users"
   add_foreign_key "media", "users"
   add_foreign_key "retweets", "tweets"
   add_foreign_key "retweets", "users"
-  add_foreign_key "tweet_likes", "likes"
-  add_foreign_key "tweet_likes", "tweets"
   add_foreign_key "tweet_media", "media"
   add_foreign_key "tweet_media", "tweets"
   add_foreign_key "tweets", "users"
