@@ -101,7 +101,7 @@ class TweetsController < ApplicationController
   def unlike
     tweet = Tweet.find(params[:id])
     like = tweet.likes.find_by_user_id(current_user.id)
-    if like.destroy && tweet.save
+    if like.destroy
       head :no_content
     else
       render json: { message: 'Error unliking tweet' }, status: :bad_request

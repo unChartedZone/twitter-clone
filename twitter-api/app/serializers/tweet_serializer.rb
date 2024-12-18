@@ -9,12 +9,24 @@ class TweetSerializer
   has_many :medium, attributes: [:description]
   belongs_to :user, attributes: [:username]
 
-  attributes :text, :total_likes, :total_retweets, :created_at
+  attributes :text, :created_at
 
   attribute :medium do |object|
     object.medium.each do |o|
       o.url = Rails.application.routes.url_helpers.url_for(o.image) if o.image.present?
     end
+  end
+
+  attribute :total_likes do |object|
+    object.likes_count
+  end
+
+  attribute :total_retweets do |object|
+    object.retweets_count
+  end
+
+  attribute :total_comments do |object|
+    object.comments_count
   end
 
   attribute :liked do |object, params|

@@ -1,5 +1,5 @@
 class Comment < ApplicationRecord
-  belongs_to :tweet
+  belongs_to :tweet, counter_cache: true
   belongs_to :user
   has_many :comment_media, dependent: :destroy
 
