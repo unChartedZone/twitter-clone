@@ -1,7 +1,7 @@
 <template>
   <div class="tweet__actions">
     <div class="main-actions">
-      <TweetAction icon="reply" text="0" :size="size" />
+      <TweetAction icon="reply" :text="`${tweet.totalComments}`" :size="size" />
       <TweetAction
         icon="retweet"
         :text="`${tweet.totalRetweets}`"
