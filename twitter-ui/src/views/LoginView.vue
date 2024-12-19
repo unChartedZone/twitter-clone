@@ -49,7 +49,7 @@ function isValidEmail(email: string): boolean {
 
 <template>
   <main class="login__wrapper">
-    <div class="login__form w-96 mx-auto space-y-6 py-6">
+    <div class="login__form mx-auto space-y-6 py-6">
       <div class="login__logo">
         <Icon variant="bird" />
       </div>
@@ -89,9 +89,14 @@ function isValidEmail(email: string): boolean {
   }
 
   &__form {
-    width: 24rem;
+    max-width: 24rem;
+    width: 40%;
     margin: 0 auto;
     padding: 1.5rem 0;
+
+    @include respond(md) {
+      width: 80%;
+    }
 
     & > * + * {
       margin-top: 1.5rem;

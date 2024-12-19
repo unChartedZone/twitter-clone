@@ -63,6 +63,7 @@ const route = useRoute();
   @include respond(sm) {
     border-top: 1px solid $gray-100;
     margin-top: 3rem;
+    padding: 0 0 3rem;
   }
 }
 

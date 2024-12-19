@@ -31,7 +31,8 @@ async function loginAsGuest() {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  width: 22rem;
+  max-width: 22rem;
+  width: 80%;
   padding: 0.5rem 0.75rem;
   display: flex;
   flex-direction: column;

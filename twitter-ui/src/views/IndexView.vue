@@ -59,7 +59,6 @@ const toggleSignupModal = ref<boolean>(false);
 .page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
 
   &__content {
     display: grid;
@@ -67,6 +66,12 @@ const toggleSignupModal = ref<boolean>(false);
     flex-grow: 1;
     align-items: center;
     justify-items: center;
+    height: 95vh;
+
+    @include respond(sm) {
+      grid-template-columns: auto;
+      height: 100vh;
+    }
   }
 
   &__footer {
@@ -98,6 +103,10 @@ const toggleSignupModal = ref<boolean>(false);
   height: 100%;
   width: 100%;
 
+  @include respond(sm) {
+    display: none;
+  }
+
   svg {
     height: 40rem;
     fill: $white;
@@ -105,6 +114,8 @@ const toggleSignupModal = ref<boolean>(false);
 }
 
 .action-section {
+  padding: 1rem;
+
   svg {
     height: 3rem;
     margin-bottom: 3rem;
