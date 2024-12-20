@@ -40,10 +40,22 @@ defineProps<TweetHeaderProps>();
     display: flex;
     align-items: center;
     gap: 0.15rem;
+    min-width: 0;
 
     strong:hover {
       text-decoration: underline;
     }
   }
+}
+
+.username {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.created-timestamp {
+  flex-shrink: 0;
 }
 </style>
