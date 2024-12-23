@@ -75,7 +75,12 @@ class UsersController < ApplicationController
 
   def follow_user
     follow = Follower.new({ followed_user: @user, user_id: current_user.id })
-    if follow.save && @current_user.save && @user.save # this feels stupid...
+    if follow.save
+      NotificationService.create_notification(
+        initiator: current_user,
+        recipient: @user,
+        action_text: "#{current_user.name} followed you."
+      )
       render json: follow, status: :created
     else
       render json: follow.errors, status: :unprocessable_entity
