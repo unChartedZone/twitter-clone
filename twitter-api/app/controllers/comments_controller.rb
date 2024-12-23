@@ -13,6 +13,11 @@ class CommentsController < ApplicationController
     comment.tweet = @tweet
 
     if comment.save
+      NotificationService.create_notification(
+        initiator: current_user,
+        recipient: @tweet.user,
+        action_text: "#{current_user.name} commented on your tweet."
+      )
       render json: CommentSerializer.new(comment).serializable_hash.to_json, status: :created
     else
       render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity

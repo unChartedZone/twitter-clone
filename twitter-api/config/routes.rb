@@ -42,5 +42,7 @@ Rails.application.routes.draw do
   # Comment Endpoints
   resources :comments, only: [:index, :create, :destroy]
 
+  resources :notifications, only: [:index]
+
   resources :medium, only: %i[index create], path: :media
 end

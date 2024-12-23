@@ -89,6 +89,11 @@ class TweetsController < ApplicationController
     else
       tweet.build_tweet_like(current_user.id)
       if tweet.save
+        NotificationService.create_notification(
+          initiator: current_user,
+          recipient: tweet.user,
+          action_text: "#{current_user.name} liked your tweet."
+        )
         render json: TweetSerializer.new(tweet, { include: [:user], params: { current_user: } }), status: :created
       else
         render json: { errors: tweet.errors }, status: :unprocessable_entity
@@ -113,6 +118,11 @@ class TweetsController < ApplicationController
     else
       tweet.build_retweet(current_user.id)
       if tweet.save
+        NotificationService.create_notification(
+          initiator: current_user,
+          recipient: tweet.user,
+          action_text: "#{current_user.name} retweeted your tweet."
+        )
         render json: TweetSerializer.new(tweet, { include: [:user], params: { current_user: } }), status: :created
       else
         render json: { errors: tweet.errors }, status: :unprocessable_entity
