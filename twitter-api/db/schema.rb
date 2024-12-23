@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_18_180226) do
+ActiveRecord::Schema.define(version: 2024_12_22_073121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,17 @@ ActiveRecord::Schema.define(version: 2024_12_18_180226) do
     t.index ["user_id"], name: "index_media_on_user_id"
   end
 
+  create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "text", null: false
+    t.uuid "initiator_id", null: false
+    t.uuid "recipient_id", null: false
+    t.boolean "read", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["initiator_id"], name: "index_notifications_on_initiator_id"
+    t.index ["recipient_id"], name: "index_notifications_on_recipient_id"
+  end
+
   create_table "retweets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "tweet_id", null: false
@@ -154,6 +165,8 @@ ActiveRecord::Schema.define(version: 2024_12_18_180226) do
   add_foreign_key "likes", "tweets"
   add_foreign_key "likes", "users"
   add_foreign_key "media", "users"
+  add_foreign_key "notifications", "users", column: "initiator_id"
+  add_foreign_key "notifications", "users", column: "recipient_id"
   add_foreign_key "retweets", "tweets"
   add_foreign_key "retweets", "users"
   add_foreign_key "tweet_media", "media"
