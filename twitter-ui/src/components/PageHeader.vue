@@ -50,10 +50,6 @@ withDefaults(defineProps<PageHeaderProps>(), { title: "", subtitle: "" });
     line-height: 1.75rem;
   }
 
-  svg {
-    height: 1.35rem;
-  }
-
   span {
     font-size: 0.85rem;
     color: $gray-300;

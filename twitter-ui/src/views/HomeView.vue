@@ -15,8 +15,7 @@ onMounted(async () => {
 
 <template>
   <div class="home-page">
-    <!-- <TweetEditor /> -->
-    <InlineTweetEditor />
+    <InlineTweetEditor class="inline-tweet-editor" />
     <NoTweetsMessage v-if="tweets?.length == 0" />
     <ul class="tweet-list">
       <TweetVue v-for="tweet in tweets" :tweet="tweet" />
@@ -27,6 +26,12 @@ onMounted(async () => {
 <style scoped lang="scss">
 .home-page {
   height: 110vh;
+}
+
+.inline-tweet-editor {
+  @include respond(sm) {
+    display: none;
+  }
 }
 
 .tweet-list {

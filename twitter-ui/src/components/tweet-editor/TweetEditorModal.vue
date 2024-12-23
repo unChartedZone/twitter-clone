@@ -59,6 +59,10 @@ const toggleTweetModal = ref<boolean>(false);
 }
 
 .tweet-editor {
+  &__card {
+    width: 80%;
+  }
+
   &__card :deep(textarea) {
     min-height: 5rem;
   }

@@ -49,6 +49,11 @@ function onClose() {
     transform: translate(-50%, -50%);
     position: fixed;
     z-index: 2000;
+    width: 40%;
+
+    @include respond(sm) {
+      width: 100%;
+    }
   }
 }
 </style>
