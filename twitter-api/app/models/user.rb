@@ -30,8 +30,7 @@ class User < ApplicationRecord
 
   def profile_image_url
     if profile_image.attached?
-      Rails.application.routes.url_helpers.url_for(profile_image.representation(resize_to_limit: [500,
-                                                                                                  500]).processed.url)
+      Rails.application.routes.url_helpers.url_for(profile_image.variant(resize_to_limit: [150, 150], format: :jpg))
     else
       image_url('default-pfp.png')
     end
@@ -39,8 +38,7 @@ class User < ApplicationRecord
 
   def banner_image_url
     if banner_image.attached?
-      Rails.application.routes.url_helpers.url_for(banner_image.representation(resize_to_limit: [1000,
-                                                                                                 1000]).processed.url)
+      Rails.application.routes.url_helpers.url_for(banner_image.variant(resize_to_limit: [650, 650], format: :jpg))
     else
       '/images/default-banner.avif'
     end
