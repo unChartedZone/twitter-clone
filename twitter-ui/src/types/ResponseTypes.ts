@@ -2,6 +2,7 @@ import type { BaseTweet } from "@/models/Tweet";
 import { type BaseUser } from "@/models/User";
 import type User from "@/models/User";
 import type Comment from "@/models/Comment";
+import type Notification from "@/models/Notification";
 
 interface RelationData {
   id: string;
@@ -64,6 +65,7 @@ export interface TweetListResponse {
 
 export interface CommentListResponse extends ResponseList<Comment> {}
 export interface CommentResponse extends Response<Comment> {}
+export interface NotificationListResponse extends ResponseList<Notification> {}
 
 export interface ErrorResponse {
   data: {
