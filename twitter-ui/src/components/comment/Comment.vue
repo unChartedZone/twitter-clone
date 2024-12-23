@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import type Comment from "@/models/Comment";
 import AvatarCircle from "../AvatarCircle.vue";
-import Button from "../common/Button.vue";
-import Icon from "../icons/Icon.vue";
+import PostHeader from "../PostHeader.vue";
 import TweetAction from "../tweet/TweetAction.vue";
-import dayjs from "dayjs";
 
 interface CommentProps {
   comment: Comment;
@@ -21,21 +19,11 @@ const size = "icon-sm";
       <AvatarCircle :src="comment.user.profileImageUrl" />
     </section>
     <section class="comment__content">
-      <div class="comment__header">
-        <div class="comment__user">
-          <h3>{{ comment.user.name }}</h3>
-          <p>@{{ comment.user.username }}</p>
-          <span>&middot;</span>
-          <span class="created-timestamp">
-            {{ dayjs(comment.createdAt).format("MMM D, YYYY") }}
-          </span>
-        </div>
-        <div>
-          <Button variant="icon-ghost" size="icon">
-            <Icon variant="ellipsis" />
-          </Button>
-        </div>
-      </div>
+      <PostHeader
+        :name="comment.user.name"
+        :username="comment.user.username"
+        :createdAt="comment.createdAt"
+      />
       <div>
         <p>{{ comment.content }}</p>
       </div>
