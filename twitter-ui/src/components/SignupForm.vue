@@ -36,6 +36,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from "vue";
+import dayjs from "dayjs";
 import * as api from "@/api/endpoints";
 import router from "@/router";
 import Button from "./common/Button.vue";
@@ -51,7 +52,7 @@ const formState = reactive({
   name: "",
   email: "",
   password: "",
-  birthDate: new Date(),
+  birthDate: dayjs().format("YYYY-MM-DD"),
 });
 
 const loading = ref(false);

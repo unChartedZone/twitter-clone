@@ -11,13 +11,13 @@ import { reactive, computed, watch } from "vue";
 import dayjs from "dayjs";
 
 interface DateSelectorProps {
-  modelValue?: Date;
+  modelValue?: string;
 }
 
 const props = defineProps<DateSelectorProps>();
 const emit = defineEmits(["update:modelValue"]);
 
-const date = dayjs(props.modelValue).toDate();
+const date = dayjs(props.modelValue, "YYYY-MM-DD").toDate();
 const dateState = reactive<{
   month: string;
   day?: number;

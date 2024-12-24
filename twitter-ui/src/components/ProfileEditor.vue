@@ -106,7 +106,7 @@ const profileFormState = reactive<UserPatch>({
   bio: authStore.user?.bio,
   location: authStore.user?.location,
   website: authStore.user?.website,
-  birthDate: new Date(authStore.user?.birthDate ?? ""),
+  birthDate: authStore.user?.birthDate,
 });
 
 const profileImageSrc = computed(() => {

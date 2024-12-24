@@ -21,7 +21,7 @@ export async function signupUser(payload: {
   name: string;
   email: string;
   password: string;
-  birthDate: Date;
+  birthDate: string;
 }) {
   const res = await client.post<LoginResponse>("/signup", { user: payload });
   return res.data;
@@ -50,11 +50,7 @@ export async function patchUser(
   // Add and text fields from user patch
   Object.keys(userPatch).forEach((key) => {
     const value = userPatch[key as keyof UserPatch];
-    value &&
-      formData.append(
-        `user[${key}]`,
-        value instanceof Date ? value.toString() : value
-      );
+    value && formData.append(`user[${key}]`, value);
   });
 
   // Dont make a request if no data was modified

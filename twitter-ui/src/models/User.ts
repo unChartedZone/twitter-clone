@@ -4,7 +4,7 @@ export interface BaseUser {
   username: string;
   name: string;
   bio?: string;
-  birthDate?: string;
+  birthDate?: string; // YYYY-MM-DD
   joinDate: Date;
   location?: string;
   website?: string;
@@ -20,7 +20,7 @@ export interface BaseUser {
 export interface UserPatch {
   name?: string;
   bio?: string;
-  birthDate?: Date;
+  birthDate?: string; // YYYY-MM-DD
   location?: string;
   website?: string;
 }
