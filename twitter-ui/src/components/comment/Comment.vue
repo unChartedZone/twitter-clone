@@ -63,26 +63,5 @@ const size = "icon-sm";
   &__content {
     flex: 1;
   }
-
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  &__user {
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-
-    h3 {
-      font-size: 1rem;
-    }
-
-    p {
-      font-size: 0.9rem;
-      color: $gray-300;
-    }
-  }
 }
 </style>

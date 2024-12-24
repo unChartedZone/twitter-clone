@@ -13,7 +13,12 @@
         <AvatarCircle :src="tweet.user?.profileImage" />
       </div>
       <div class="tweet__body">
-        <TweetHeader :tweet="tweet" />
+        <PostHeader
+          v-if="tweet.user"
+          :name="tweet.user?.name"
+          :username="tweet.user.username"
+          :createdAt="tweet.createdAt"
+        />
         <div class="tweet__text">
           <p>{{ tweet.text }}</p>
         </div>
@@ -37,7 +42,7 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import type Tweet from "@/models/Tweet";
-import TweetHeader from "./tweet/TweetHeader.vue";
+import PostHeader from "./PostHeader.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import AvatarCircle from "./AvatarCircle.vue";
 import Image from "./common/Image.vue";
@@ -56,7 +61,6 @@ defineProps<TweetProps>();
   grid-template-columns: 10% 90%;
   gap: 0.25rem;
   padding: 0.5rem 0.75rem 1rem 0;
-  font-size: 15px;
   cursor: pointer;
 
   &:hover {

@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import { exploreUserTweets } from "@/api/endpoints/tweets";
 import type TweetType from "@/models/Tweet";
+import PageHeader from "@/components/PageHeader.vue";
 import Tweet from "@/components/Tweet.vue";
 import NoTweetsMessage from "@/components/NoTweetsMessage.vue";
 
@@ -14,6 +15,7 @@ onMounted(async () => {
 
 <template>
   <div>
+    <PageHeader title="Explore" />
     <div>
       <NoTweetsMessage v-if="tweets.length == 0" />
       <ul>
