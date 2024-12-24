@@ -1,25 +1,19 @@
 <script setup lang="ts">
-import type { LoadingState } from "@/types/LoadingState";
-import { ref } from "vue";
+import { useImage } from "@vueuse/core";
 
 interface ImageProps {
   src: string;
   alt?: string;
 }
 
-withDefaults(defineProps<ImageProps>(), { src: "" });
-const isLoading = ref<LoadingState>("idle");
+const props = withDefaults(defineProps<ImageProps>(), { src: "" });
+const { isLoading } = useImage({ src: props.src });
 </script>
 
 <template>
   <div class="image__container">
-    <div v-if="isLoading == 'idle'" class="image__loader"></div>
-    <img
-      class="object-cover object-center"
-      :src="src"
-      :alt="alt"
-      @load="isLoading = 'resolved'"
-    />
+    <div v-if="isLoading" class="image__loader" />
+    <img class="object-cover object-center" :src="src" :alt="alt" />
   </div>
 </template>
 
