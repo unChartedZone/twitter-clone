@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from "vue";
+import { onMounted, watch } from "vue";
 import { useRoute, RouterView, RouterLink } from "vue-router";
 import { useProfileStore } from "@/stores/profile";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -14,6 +14,15 @@ const {
   fetchUserProfile,
   loading: profileLoading,
 } = useUserProfile(route.params.username[0]);
+
+onMounted(() => {
+  if (profileStore.username !== route.params.username[0]) {
+    profileStore.$reset();
+    return;
+  }
+
+  profileStore.setUsername(route.params.username[0]);
+});
 
 // Watch for route change and refresh profile user
 watch(

@@ -17,7 +17,7 @@
           v-if="tweet.user"
           :name="tweet.user?.name"
           :username="tweet.user.username"
-          :createdAt="tweet.createdAt"
+          :createdAt="dayjs(tweet.createdAt).toDate()"
         />
         <div class="tweet__text">
           <p>{{ tweet.text }}</p>
@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import dayjs from "dayjs";
 import type Tweet from "@/models/Tweet";
 import PostHeader from "./PostHeader.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";

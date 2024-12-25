@@ -37,6 +37,7 @@ export function useProfileTweets(segment: TweetListSegment) {
     () => route.params.username[0],
     async (user, oldUsername) => {
       if (user === oldUsername) return;
+      profileStore.setUsername(user);
       await fetchProfileTweets();
     }
   );

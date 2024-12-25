@@ -65,18 +65,6 @@ export const useAuthStore = defineStore("auth", () => {
     // TODO: fix this so it updates load user correctly
     // If name was updated we should update any tweets of the user to match new name
     if (userPatch.name) {
-      const modifiedTweets: Tweet[] = profileStore.tweets.map((tweet) => {
-        return tweet.user?.name == user.value?.name
-          ? ({
-              ...tweet,
-              user: {
-                ...tweet.user,
-                name: userPatch.name,
-              },
-            } as Tweet)
-          : tweet;
-      });
-      profileStore.setTweets(modifiedTweets);
     }
 
     user.value = {
