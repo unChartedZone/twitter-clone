@@ -62,9 +62,25 @@ export const useAuthStore = defineStore("auth", () => {
       profileImage
     );
 
-    // TODO: fix this so it updates load user correctly
     // If name was updated we should update any tweets of the user to match new name
-    if (userPatch.name) {
+    if (!!userPatch.name && user.value.username === profileStore.username) {
+      profileStore.tweetLists.default.tweets = [
+        ...profileStore.tweetLists.default.tweets.map((tweet) => {
+          if (tweet.user?.username === user.value?.username) {
+            return {
+              ...tweet,
+              user: {
+                ...tweet.user,
+                name: userPatch.name,
+              },
+            } as Tweet;
+          }
+
+          return {
+            ...tweet,
+          };
+        }),
+      ];
     }
 
     user.value = {
