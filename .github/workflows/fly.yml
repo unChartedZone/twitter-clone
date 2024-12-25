@@ -2,8 +2,8 @@ name: Fly Deploy
 on:
   push:
     branches: ["main"] # Runs on pushes targeting the default branch
-  paths:
-    - "twitter-api/**" # Trigger only on changes in the api folder
+    paths:
+      - "twitter-api/**" # Trigger only on changes in the api folder
   workflow_dispatch:
 jobs:
   deploy:
