@@ -6,6 +6,8 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import PageHeader from "@/components/PageHeader.vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import PageLoader from "@/components/PageLoader.vue";
+import TabHeader from "@/components/common/tab/TabHeader.vue";
+import TabRow from "@/components/common/tab/TabRow.vue";
 
 const profileStore = useProfileStore();
 const route = useRoute();

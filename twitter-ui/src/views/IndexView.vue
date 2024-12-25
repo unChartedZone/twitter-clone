@@ -2,6 +2,8 @@
 import { ref, computed } from "vue";
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
+import Link from "@/components/common/Link.vue";
+import Modal from "@/components/common/Modal.vue";
 import SignupForm from "@/components/SignupForm.vue";
 import GuestMessage from "@/components/GuestMessage.vue";
 

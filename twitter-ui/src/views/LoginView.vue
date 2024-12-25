@@ -4,8 +4,11 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 import type { ErrorResponse } from "@/types/ResponseTypes";
+import Alert from "@/components/common/Alert.vue";
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
+import Textfield from "@/components/common/Textfield.vue";
+import Link from "@/components/common/Link.vue";
 import GuestMessage from "@/components/GuestMessage.vue";
 
 const router = useRouter();

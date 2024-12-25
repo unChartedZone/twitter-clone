@@ -17,7 +17,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0.5rem;
+  padding: 0 0.5rem 0.5rem;
 
   &__content {
     flex: 2;
@@ -25,7 +25,12 @@
 
   &__left,
   &__right {
+    display: flex;
     flex: 1;
+  }
+
+  &__right {
+    justify-content: end;
   }
 }
 </style>

@@ -3,6 +3,6 @@ import type { UserSummary } from "./User";
 export default interface Notification {
   id: string;
   text: string;
-  createdAt: Date;
+  createdAt: string;
   initiator: UserSummary;
 }

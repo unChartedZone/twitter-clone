@@ -4,10 +4,11 @@ import dayjs from "dayjs";
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import type { BaseUser } from "@/models/User";
-import Modal from "../common/Modal.vue";
 import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
+import Link from '@/components/common/Link.vue'
 import Image from "../common/Image.vue";
+import Modal from "../common/Modal.vue";
 import ProfileEditor from "../ProfileEditor.vue";
 
 interface ProfileHeaderProps {

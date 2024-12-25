@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import Button from "../common/Button.vue";
+import Card from "../common/Card.vue";
+import CardHeader from "../common/card/CardHeader.vue";
+import Icon from "@/components/icons/Icon.vue";
+import Image from "../common/Image.vue";
+
 interface MediaEditorProps {
   imageUrl?: string;
 }
@@ -9,19 +15,19 @@ defineEmits(["onCancel", "onApplyImage"]);
 
 <template>
   <Card>
-    <template v-slot:header>
-      <div class="profile-editor__header">
-        <Button @click="$emit('onCancel')" icon="left-arrow" />
-        <h1>Edit media</h1>
+    <CardHeader>
+      <template #left>
+        <Button variant="icon-ghost" size="icon" @click="$emit('onCancel')">
+          <Icon variant="left-arrow" />
+        </Button>
+      </template>
+      <div class="flex justify-center">
+        <h1>Edit Media</h1>
       </div>
-      <Button @click="$emit('onApplyImage')">Apply</Button>
-    </template>
-    <div style="height: 70vh; width: 100%; overflow: hidden">
-      <img
-        style="width: 100%; height: 100%; object-fit: cover"
-        :src="imageUrl"
-        alt="Uploaded image for profile"
-      />
-    </div>
+      <template #right>
+        <Button @click="$emit('onApplyImage')">Apply</Button>
+      </template>
+    </CardHeader>
+    <Image :src="imageUrl" alt="Uploaded image for profile" />
   </Card>
 </template>

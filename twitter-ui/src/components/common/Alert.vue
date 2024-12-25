@@ -3,7 +3,7 @@ import { watch } from "vue";
 
 interface AlertProps {
   modelValue: boolean;
-  color: string;
+  color?: string;
   delay?: number;
 }
 

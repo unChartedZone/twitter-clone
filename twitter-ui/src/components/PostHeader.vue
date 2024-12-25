@@ -7,7 +7,7 @@ import Icon from "./icons/Icon.vue";
 interface PostHeaderProps {
   name: string;
   username: string;
-  createdAt: Date;
+  createdAt: string | Date;
 }
 
 defineProps<PostHeaderProps>();

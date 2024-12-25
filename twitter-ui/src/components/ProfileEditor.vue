@@ -79,9 +79,13 @@
 import { ref, reactive, computed, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import Button from "./common/Button.vue";
+import Card from "./common/Card.vue";
 import Icon from "./icons/Icon.vue";
+import FileInput from "@/components/common/FileInput.vue";
 import MediaEditor from "./profile-editor/MediaEditor.vue";
 import DateSelector from "./DateSelector.vue";
+import Textfield from "@/components/common/Textfield.vue";
+import Textarea from "@/components/common/Textarea.vue";
 import type { UserPatch } from "@/models/User";
 
 const authStore = useAuthStore();
