@@ -1,11 +1,18 @@
 <template>
-  <Card>
-    <CardHeader center>
-      <Icon variant="bird" style="height: 2rem" />
+  <Card class="signup-form">
+    <CardHeader>
+      <template #left>
+        <Button variant="icon-ghost" size="icon" @click="$emit('closeForm')">
+          <Icon variant="cross" />
+        </Button>
+      </template>
+      <div class="flex justify-center items-center">
+        <Icon variant="bird" style="height: 2rem" />
+      </div>
     </CardHeader>
     <CardBody>
       <div>
-        <h2>Create new account</h2>
+        <h2 class="mb-4">Create new account</h2>
         <form @submit.prevent="signupUser">
           <div class="space-y-4">
             <Textfield v-model="formState.username" label="Username" />
@@ -45,6 +52,7 @@ import DateSelector from "./DateSelector.vue";
 import CardBody from "./common/card/CardBody.vue";
 import { useAuthStore } from "@/stores/auth";
 
+const emit = defineEmits(["closeForm"]);
 const authStore = useAuthStore();
 
 const formState = reactive({
@@ -73,6 +81,13 @@ async function signupUser() {
 </script>
 
 <style scoped lang="scss">
+.signup-form {
+  @include respond(md) {
+    height: 50vh;
+    overflow-y: scroll;
+  }
+}
+
 .birth-date-field {
   display: flex;
   flex-direction: column;

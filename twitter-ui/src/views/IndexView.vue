@@ -49,8 +49,8 @@ const toggleSignupModal = ref<boolean>(false);
       </ul>
     </footer>
   </main>
-  <Modal v-model="toggleSignupModal">
-    <SignupForm />
+  <Modal class="signup-modal" v-model="toggleSignupModal">
+    <SignupForm @closeForm="toggleSignupModal = false" />
   </Modal>
   <GuestMessage v-if="toggleSignupModal" />
 </template>
@@ -135,6 +135,13 @@ const toggleSignupModal = ref<boolean>(false);
 
   &__links {
     width: 20rem;
+  }
+}
+
+// Need to push up signup form up a bit to make room for guest message
+.signup-modal :deep(.modal__content) {
+  @include respond(lg) {
+    top: 30%;
   }
 }
 </style>
