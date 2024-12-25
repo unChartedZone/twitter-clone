@@ -87,6 +87,7 @@ async function logout() {
 
   h3 {
     font-size: 0.95rem;
+    white-space: nowrap;
   }
 
   svg {
