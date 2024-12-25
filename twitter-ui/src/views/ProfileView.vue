@@ -16,7 +16,10 @@ const {
 } = useUserProfile(route.params.username[0]);
 
 onMounted(() => {
-  if (profileStore.username !== route.params.username[0]) {
+  if (
+    profileStore.username !== route.params.username[0] &&
+    profileStore.username !== ""
+  ) {
     profileStore.$reset();
     return;
   }

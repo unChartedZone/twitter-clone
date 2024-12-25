@@ -1,9 +1,12 @@
 import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
 import { useProfileStore } from "@/stores/profile";
 import { postTweet } from "@/api/endpoints/tweets";
 
 export function useTweetEditor() {
   const profileStore = useProfileStore();
+  const authStore = useAuthStore();
+
   const tweetText = ref<string>("");
 
   async function publishTweet() {
@@ -13,7 +16,9 @@ export function useTweetEditor() {
 
     try {
       const tweet = await postTweet({ text: tweetText.value });
-      profileStore.addTweetToProfile(tweet);
+      if (profileStore.username === authStore.user?.username) {
+        profileStore.tweetLists.default.tweets.unshift(tweet);
+      }
     } catch (err) {
       // TODO: show some error message
     } finally {
