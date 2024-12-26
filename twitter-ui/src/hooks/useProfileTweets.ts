@@ -14,31 +14,25 @@ export function useProfileTweets(segment: TweetListSegment) {
   const profileStore = useProfileStore();
   const { isBottom } = useIsBottom();
 
-  const fetchProfileTweets = useDebounceFn(async () => {
-    await profileStore.loadTweets(route.params["username"][0], segment);
-  }, 300);
+  // const fetchProfileTweets = useDebounceFn(async () => {
+  //   await profileStore.loadTweets(route.params["username"][0], 1, segment);
+  // }, 300);
 
-  // User has navigated to a completely 'new' profile page, so a refresh needs
-  // to be done
   onMounted(async () => {
-    await fetchProfileTweets();
+    if (profileStore.tweetLists[segment].tweets.length > 0) return;
+
+    await profileStore.loadTweets(route.params.username[0], 1, segment);
   });
 
-  // For when a user scrolls to the bottom of a page
+  // // For when a user scrolls to the bottom of a page
   watch(isBottom, async (val, oldVal) => {
-    if (val) {
-      await fetchProfileTweets();
+    if (val && profileStore.tweetLists[segment].hasMore) {
+      await profileStore.loadTweets(
+        route.params.username[0],
+        profileStore.tweetLists[segment].page,
+        segment
+      );
+      // await fetchProfileTweets();
     }
   });
-
-  // Used for when navigation between one user profile page and another, this
-  // wouldn't cause a remounting of profile tweets view
-  watch(
-    () => route.params.username[0],
-    async (user, oldUsername) => {
-      if (user === oldUsername) return;
-      profileStore.setUsername(user);
-      await fetchProfileTweets();
-    }
-  );
 }

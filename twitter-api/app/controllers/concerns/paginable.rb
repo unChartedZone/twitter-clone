@@ -8,6 +8,8 @@ module Paginable
         last: send(link_paths, page: collection.total_pages),
         prev: send(link_paths, page: collection.prev_page),
         next: send(link_paths, page: collection.next_page),
+        currentPage: collection.current_page,
+        nextPage: collection.next_page,
         hasMore: !collection.last_page?
       }
     }

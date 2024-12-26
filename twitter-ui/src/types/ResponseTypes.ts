@@ -25,6 +25,8 @@ export interface Pagination {
   last: string;
   next: string;
   prev: string;
+  currentPage: number;
+  nextPage?: number;
   hasMore: boolean;
 }
 

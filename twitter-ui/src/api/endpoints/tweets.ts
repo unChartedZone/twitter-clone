@@ -29,10 +29,9 @@ export async function fetchTweets(
   page: number = 1,
   segment: TweetListSegment
 ): Promise<{ tweets: Tweet[]; links: Pagination }> {
-  const url =
-    segment == "default"
-      ? `/tweets/profile/${username}`
-      : `/tweets/profile/${username}/${segment}`;
+  const url = `/tweets/profile/${username}/${
+    segment === "default" ? "" : segment
+  }`;
 
   const res = (
     await authClient.get<TweetListResponse>(url, {

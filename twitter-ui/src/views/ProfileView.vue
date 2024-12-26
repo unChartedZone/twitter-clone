@@ -2,55 +2,46 @@
 import { onMounted, watch } from "vue";
 import { useRoute, RouterView, RouterLink } from "vue-router";
 import { useProfileStore } from "@/stores/profile";
-import { useUserProfile } from "@/hooks/useUserProfile";
 import PageHeader from "@/components/PageHeader.vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import PageLoader from "@/components/PageLoader.vue";
 import TabHeader from "@/components/common/tab/TabHeader.vue";
 import TabRow from "@/components/common/tab/TabRow.vue";
 
-const profileStore = useProfileStore();
 const route = useRoute();
-const {
-  currentUser,
-  fetchUserProfile,
-  loading: profileLoading,
-} = useUserProfile(route.params.username[0]);
+const profileStore = useProfileStore();
 
 onMounted(() => {
-  if (
-    profileStore.username !== route.params.username[0] &&
-    profileStore.username !== ""
-  ) {
+  const username = route.params.username[0];
+  if (username !== profileStore.profileUser?.username) {
     profileStore.$reset();
-    return;
   }
 
-  profileStore.setUsername(route.params.username[0]);
+  if (!!profileStore.profileUser) return;
+
+  profileStore.loadProfileUser(username);
 });
 
-// Watch for route change and refresh profile user
 watch(
-  () => route.params.username,
-  async (value, oldValue) => {
-    if (value[0] === oldValue[0]) return;
+  () => route.params.username[0],
+  (u, _u) => {
     profileStore.$reset();
-    await fetchUserProfile(value[0]);
+    profileStore.loadProfileUser(u);
   }
 );
 </script>
 
 <template>
-  <main class="profile">
+  <PageLoader v-if="profileStore.isLoadingUser" />
+  <main v-else class="profile">
     <PageHeader
-      v-if="!!currentUser"
-      :title="`${currentUser?.name}`"
-      :subtitle="`${currentUser?.totalTweets} tweets`"
+      :title="`${profileStore.profileUser?.name}`"
+      subtitle="24 tweets"
     />
-    <PageLoader v-if="profileLoading === 'idle' && !currentUser" />
-    <div v-else>
-      <ProfileHeader :user="currentUser!" />
-    </div>
+    <ProfileHeader
+      v-if="profileStore.profileUser"
+      :user="profileStore.profileUser"
+    />
     <section>
       <TabRow>
         <TabHeader :to="{ name: 'profile' }">Tweets</TabHeader>

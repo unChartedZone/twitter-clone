@@ -1,15 +1,18 @@
-import { ref, reactive } from "vue";
+import { ref, reactive, watch, computed } from "vue";
 import { defineStore } from "pinia";
-import { fetchTweets } from "@/api/endpoints/tweets";
+import * as tweetApi from "@/api/endpoints/tweets";
+import { fetchUserByUsername } from "@/api/endpoints";
 import { useAuthStore } from "./auth";
 import { getQueryParams } from "@/api/helpers";
 import type { LoadingState } from "@/types/LoadingState";
 import type { TweetListSegment, TweetListState } from "@/types/TweetList";
+import type { BaseUser } from "@/models/User";
 
 export const useProfileStore = defineStore("profile", () => {
   const authStore = useAuthStore();
   // User of profile currently loaded
-  const username = ref<string>("");
+  const loadingUser = ref<LoadingState>();
+  const profileUser = ref<BaseUser>();
 
   const initalTweetListState: TweetListState = {
     loading: "idle",
@@ -35,45 +38,63 @@ export const useProfileStore = defineStore("profile", () => {
     },
   };
 
-  const tweetLists = reactive<TweetListState>(
-    structuredClone(initalTweetListState)
-  );
+  const tweetLists = reactive(structuredClone(initalTweetListState));
 
-  async function loadTweets(username: string, segment: TweetListSegment) {
-    // The respective segment cannot fetch anymore tweets so we just leave
-    if (!tweetLists[segment].hasMore) return;
+  const isLoadingUser = computed(() => loadingUser.value === "idle");
 
+  async function loadTweets(
+    username: string,
+    page: number,
+    segment: TweetListSegment
+  ) {
     tweetLists.loading = "idle";
 
-    const response = await fetchTweets(
-      username,
-      tweetLists[segment].page,
-      segment
-    );
-    const params = getQueryParams(response.links.next);
-    tweetLists[segment].tweets = [
-      ...tweetLists[segment].tweets,
-      ...response.tweets,
-    ];
-    tweetLists[segment].page = !params["page"] ? 1 : parseInt(params["page"]);
-    tweetLists[segment].hasMore = response.links.hasMore;
-    tweetLists.loading = "resolved";
+    try {
+      const { tweets, links } = await tweetApi.fetchTweets(
+        username,
+        page,
+        segment
+      );
+      tweetLists.loading = "resolved";
+      tweetLists[segment].tweets = [...tweetLists[segment].tweets, ...tweets];
+      tweetLists[segment].hasMore = links.hasMore;
+      if (links.hasMore && !!links.nextPage) {
+        tweetLists[segment].page = links.nextPage;
+      }
+    } catch (e) {
+      tweetLists.loading = "rejected";
+    }
   }
 
-  function setUsername(u: string) {
-    username.value = u;
+  async function loadProfileUser(username: string) {
+    loadingUser.value = "idle";
+
+    try {
+      const user = await fetchUserByUsername(username);
+      setProfileUser(user);
+      loadingUser.value = "resolved";
+    } catch (e) {
+      loadingUser.value = "rejected";
+    }
+  }
+
+  function setProfileUser(user: BaseUser) {
+    profileUser.value = { ...user };
   }
 
   function $reset() {
-    username.value = "";
-    Object.assign(tweetLists, structuredClone(initalTweetListState));
+    loadingUser.value = undefined;
+    profileUser.value = undefined;
+    Object.assign(tweetLists, { ...structuredClone(initalTweetListState) });
   }
 
   return {
-    username,
-    setUsername,
     tweetLists,
+    profileUser,
+    isLoadingUser,
     loadTweets,
+    loadProfileUser,
+    setProfileUser,
     $reset,
   };
 });
