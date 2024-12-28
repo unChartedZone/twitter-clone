@@ -5,15 +5,25 @@ import Icon from "./icons/Icon.vue";
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
+  hideBackButton?: boolean;
 }
 
-withDefaults(defineProps<PageHeaderProps>(), { title: "", subtitle: "" });
+withDefaults(defineProps<PageHeaderProps>(), {
+  title: "",
+  subtitle: "",
+  hideBackButton: false,
+});
 </script>
 
 <template>
   <header class="page-header">
     <div class="page-header__content">
-      <Button variant="icon-ghost" size="icon" @click="$router.go(-1)">
+      <Button
+        v-if="!hideBackButton"
+        variant="icon-ghost"
+        size="icon"
+        @click="$router.go(-1)"
+      >
         <Icon variant="left-arrow" />
       </Button>
       <div>
