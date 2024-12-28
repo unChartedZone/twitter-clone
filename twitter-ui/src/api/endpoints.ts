@@ -1,3 +1,4 @@
+import axios from "axios";
 import { authClient, client } from "./client";
 import type User from "@/models/User";
 import type Tweet from "@/models/Tweet";
@@ -11,6 +12,7 @@ import type {
   FollowingResponse,
 } from "@/types/ResponseTypes";
 import type { LoginPayload } from "@/types/RequestPayloads";
+import { AxiosError } from "axios";
 
 export async function login(user: LoginPayload): Promise<LoginResponse> {
   return (await client.post<LoginResponse>("/login", { user })).data;
@@ -33,6 +35,20 @@ export async function refresh(): Promise<LoginResponse> {
 
 export async function logout() {
   return client.post("/logout");
+}
+
+export async function changePassword(passwordPatch: {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}) {
+  return await authClient
+    .patch("/password", passwordPatch)
+    .catch((e: Error | AxiosError) => {
+      if (axios.isAxiosError(e)) {
+        return Promise.reject(new Error(e.response?.data.message));
+      }
+    });
 }
 
 export async function patchUser(
