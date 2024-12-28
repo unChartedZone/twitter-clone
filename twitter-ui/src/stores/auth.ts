@@ -63,7 +63,10 @@ export const useAuthStore = defineStore("auth", () => {
     );
 
     // If name was updated we should update any tweets of the user to match new name
-    if (!!userPatch.name && user.value.username === profileStore.username) {
+    if (
+      !!userPatch.name &&
+      user.value.username === profileStore.profileUser?.username
+    ) {
       profileStore.tweetLists.default.tweets = [
         ...profileStore.tweetLists.default.tweets.map((tweet) => {
           if (tweet.user?.username === user.value?.username) {

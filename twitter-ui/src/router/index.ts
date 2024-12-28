@@ -69,7 +69,35 @@ const router = createRouter({
       path: "/bookmarks",
       name: "bookmarks",
       component: () => import("../views/BookmarksView.vue"),
+      meta: {
+        requiresAuth: true,
+        layout: Default,
+        sidebarComponents: [SearchField, WhoToFollow],
+      },
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: () => import("../views/SettingsView.vue"),
+      redirect: "/settings/account",
       meta: { requiresAuth: true, layout: Default },
+      children: [
+        {
+          name: "account-settings",
+          path: "account",
+          component: () => import("../views/settings/SettingsAccount.vue"),
+        },
+        {
+          name: "security-settings",
+          path: "security",
+          component: () => import("../views/settings/SettingsSecurity.vue"),
+        },
+        {
+          name: "chnage-password",
+          path: "password",
+          component: () => import("../views/settings/ChangePasswordView.vue"),
+        },
+      ],
     },
     {
       path: "/:username(.*)*",
