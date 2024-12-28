@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { ref } from "vue";
+import { RouterLink } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import Icon from "../icons/Icon.vue";
 import { type IconVariant } from "@/types/IconVariants";
 import NavLink from "./NavLink.vue";
+import List from "../common/List.vue";
+import ListItem from "../common/ListItem.vue";
+import Menu from "@/components/common/Menu.vue";
 import UserPill from "./UserPill.vue";
 import TweetEditorModal from "../tweet-editor/TweetEditorModal.vue";
 
@@ -14,6 +19,7 @@ interface NavLink {
 }
 
 const authStore = useAuthStore();
+const toggleOptions = ref<boolean>(false);
 
 const links: NavLink[] = [
   { text: "Home", to: "/home", icon: "home-outline", activeIcon: "home" },
@@ -61,7 +67,23 @@ const links: NavLink[] = [
               :text="link.text"
               :to="link.to"
             />
-            <NavLink class="more-options" text="More" icon="ellipsis" />
+            <Menu v-model="toggleOptions">
+              <template #activator>
+                <NavLink
+                  @click="toggleOptions = true"
+                  class="more-options"
+                  text="More"
+                  icon="ellipsis"
+                />
+              </template>
+              <List>
+                <ListItem>Lists</ListItem>
+                <ListItem>Follower requests</ListItem>
+                <RouterLink :to="{ name: 'settings' }">
+                  <ListItem>Settings and privacy</ListItem>
+                </RouterLink>
+              </List>
+            </Menu>
           </div>
           <div>
             <TweetEditorModal />
