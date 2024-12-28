@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   post 'refresh', to: 'auth#refresh_current_token'
   post 'logout', to: 'auth#logout'
 
+  # Settings Endpoints
+  patch 'password', to: 'settings#change_password'
+
   # User endpoints
   get 'me', to: 'users#me'
   resources :users, only: %i[index show update] do
