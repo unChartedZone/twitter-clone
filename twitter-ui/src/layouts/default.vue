@@ -17,7 +17,13 @@ const route = useRoute();
     </main>
     <!-- Additional sidebar component -->
     <section class="sidebar">
-      <div class="sidebar__components">
+      <div
+        v-if="
+          route.meta.sidebarComponents &&
+          route.meta.sidebarComponents?.length > 0
+        "
+        class="sidebar__components"
+      >
         <component
           v-for="sidebarComponent in route.meta.sidebarComponents"
           :is="sidebarComponent"
@@ -32,15 +38,15 @@ const route = useRoute();
   min-height: 100vh;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 17rem 4fr 2.5fr;
+  grid-template-columns: 17rem 4fr fit-content(22rem);
   max-width: 1300px;
 
   @include respond(xl) {
-    grid-template-columns: 5rem 4fr 2.5fr;
+    grid-template-columns: 5rem 4fr fit-content(22rem);
   }
 
   @include respond(lg) {
-    grid-template-columns: 5rem 6fr 1fr;
+    grid-template-columns: 5rem 6fr 0fr;
 
     & > :nth-child(3) {
       display: none;
@@ -70,12 +76,17 @@ const route = useRoute();
 .sidebar {
   position: relative;
 
+  &:empty {
+    width: 0;
+  }
+
   &__components {
-    position: fixed;
+    position: sticky;
+    top: 0;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin: 0.5rem 0 0 0.5rem;
+    margin: 0 0 0 0.5rem;
     z-index: 1;
   }
 }
