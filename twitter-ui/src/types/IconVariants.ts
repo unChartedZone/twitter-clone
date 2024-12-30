@@ -14,6 +14,8 @@ export const iconVariants = [
   "download",
   "ellipsis",
   "feather",
+  "gear",
+  "gif",
   "heart",
   "heart-outline",
   "home",
@@ -21,6 +23,7 @@ export const iconVariants = [
   "key",
   "left-arrow",
   "list",
+  "list-outline",
   "location",
   "magnifying-glass",
   "magnifying-glass-bold",
@@ -30,11 +33,13 @@ export const iconVariants = [
   "person-outline",
   "picture",
   "profile",
+  "profile-follow",
   "profile-outline",
   "pound",
   "reply",
   "retweet",
   "share",
+  "smiley",
 ] as const;
 
 export type IconVariant = (typeof iconVariants)[number];
