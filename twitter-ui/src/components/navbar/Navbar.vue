@@ -77,10 +77,10 @@ const links: NavLink[] = [
                 />
               </template>
               <List>
-                <ListItem>Lists</ListItem>
-                <ListItem>Follower requests</ListItem>
+                <ListItem icon="list-outline">Lists</ListItem>
+                <ListItem icon="profile-follow">Follower requests</ListItem>
                 <RouterLink :to="{ name: 'settings' }">
-                  <ListItem>Settings and privacy</ListItem>
+                  <ListItem icon="gear">Settings and privacy</ListItem>
                 </RouterLink>
               </List>
             </Menu>
