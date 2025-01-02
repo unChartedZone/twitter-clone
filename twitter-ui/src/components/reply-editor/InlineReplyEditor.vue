@@ -6,30 +6,22 @@ import AvatarCircle from "../AvatarCircle.vue";
 import Button from "../common/Button.vue";
 import Textfield from "../common/Textfield.vue";
 import type { LoadingState } from "@/types/LoadingState";
+import type Comment from "@/models/Comment";
+import useReplyEditor from "@/hooks/useReplyEditor";
 
 interface ReplyEditorProps {
   tweetId: string;
 }
 
 const props = defineProps<ReplyEditorProps>();
-const emit = defineEmits(["onCommentCreated"]);
-
-const loading = ref<LoadingState>();
+const emit = defineEmits<{
+  (event: "onCommentCreated", createdComment: Comment): void;
+}>();
 const authStore = useAuthStore();
-const commentText = ref<string>("");
-
-async function postComment() {
-  if (commentText.value === "") return;
-
-  loading.value = "idle";
-
-  const createdComment = await commentApi.createComment(props.tweetId, {
-    content: commentText.value,
-  });
-  loading.value = "resolved";
-  commentText.value = "";
-  emit("onCommentCreated", createdComment);
-}
+const { commentText, postComment, isLoading } = useReplyEditor(
+  props.tweetId,
+  emit
+);
 </script>
 
 <template>
@@ -42,7 +34,7 @@ async function postComment() {
         placeholder="Tweet your reply"
       />
     </div>
-    <Button @click="postComment" :loading="loading === 'idle'">Post</Button>
+    <Button @click="postComment" :loading="isLoading">Post</Button>
   </section>
 </template>
 

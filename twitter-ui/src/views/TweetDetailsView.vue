@@ -11,7 +11,8 @@ import Image from "@/components/common/Image.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import PageLoader from "@/components/PageLoader.vue";
 import Comment from "@/components/comment/Comment.vue";
-import ReplyEditor from "@/components/comment/ReplyEditor.vue";
+
+import ReplyEditor from "@/components/reply-editor/ReplyEditor.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import dayjs from "dayjs";
 import { useQuery } from "@/hooks/useQuery";
@@ -68,8 +69,7 @@ function addCommentToThread(comment: CommentType) {
           <p>{{ dayjs(tweet?.createdAt).format("MMM D, YYYY") }}</p>
         </div>
       </section>
-      <TweetActionRow v-if="!!tweet" :tweet="tweet" size="icon" />
-      <ReplyEditor
+      <InlineReplyEditor
         v-if="!!tweet"
         :tweetId="tweet.id"
         @onCommentCreated="addCommentToThread"
