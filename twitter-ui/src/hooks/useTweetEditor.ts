@@ -16,7 +16,7 @@ export function useTweetEditor() {
 
     try {
       const tweet = await postTweet({ text: tweetText.value });
-      if (profileStore.username === authStore.user?.username) {
+      if (profileStore.profileUser?.username === authStore.user?.username) {
         profileStore.tweetLists.default.tweets.unshift(tweet);
       }
     } catch (err) {

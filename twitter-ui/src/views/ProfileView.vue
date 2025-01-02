@@ -36,7 +36,7 @@ watch(
   <main v-else class="profile">
     <PageHeader
       :title="`${profileStore.profileUser?.name}`"
-      subtitle="24 tweets"
+      :subtitle="`${profileStore.profileUser?.totalTweets} tweets`"
     />
     <ProfileHeader
       v-if="profileStore.profileUser"

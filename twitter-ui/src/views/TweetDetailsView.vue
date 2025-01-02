@@ -8,6 +8,7 @@ import AvatarCircle from "@/components/AvatarCircle.vue";
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 import Image from "@/components/common/Image.vue";
+import Modal from "@/components/common/Modal.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import PageLoader from "@/components/PageLoader.vue";
 import Comment from "@/components/comment/Comment.vue";
@@ -17,8 +18,9 @@ import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import dayjs from "dayjs";
 import { useQuery } from "@/hooks/useQuery";
 
-const props = defineProps<{ tweetId: string }>();
+const props = defineProps<{ tweetId: string; username: string }>();
 const comments = ref<CommentType[]>([]);
+const toggleReplyEditor = ref<boolean>(false);
 
 const { result: tweet, loading } = useQuery<Tweet | undefined>(
   () => tweetApi.fetchSingleTweet(props.tweetId),
@@ -31,6 +33,13 @@ onMounted(async () => {
 
 function addCommentToThread(comment: CommentType) {
   comments.value.push(comment);
+}
+
+// Handle event comment was created, we want to close the editor and add the new
+// comment to the comment list.
+function closeReplyEditor(comment: CommentType) {
+  addCommentToThread(comment);
+  toggleReplyEditor.value = false;
 }
 </script>
 
@@ -69,6 +78,12 @@ function addCommentToThread(comment: CommentType) {
           <p>{{ dayjs(tweet?.createdAt).format("MMM D, YYYY") }}</p>
         </div>
       </section>
+      <TweetActionRow
+        v-if="!!tweet"
+        :tweet="tweet"
+        size="icon"
+        @replyTriggered="toggleReplyEditor = true"
+      />
       <InlineReplyEditor
         v-if="!!tweet"
         :tweetId="tweet.id"
@@ -84,6 +99,13 @@ function addCommentToThread(comment: CommentType) {
       </section>
     </article>
   </main>
+  <Modal v-model="toggleReplyEditor">
+    <ReplyEditor
+      v-if="!!tweet"
+      :tweetId="tweet.id"
+      @onCommentCreated="closeReplyEditor"
+    />
+  </Modal>
 </template>
 
 <style scoped lang="scss">

@@ -1,58 +1,69 @@
 <template>
-  <RouterLink
-    :to="{
-      name: 'TweetDetails',
-      params: {
-        tweetId: tweet.id,
-        username: tweet.user?.username,
-      },
-    }"
+  <div
+    @click="
+      $router.push({
+        name: 'TweetDetails',
+        params: {
+          tweetId: tweet.id,
+          username: tweet.user?.username,
+        },
+      })
+    "
+    class="tweet"
   >
-    <div class="tweet">
-      <div class="tweet__profile-pic">
-        <AvatarCircle :src="tweet.user?.profileImage" />
-      </div>
-      <div class="tweet__body">
-        <PostHeader
-          v-if="tweet.user"
-          :name="tweet.user?.name"
-          :username="tweet.user.username"
-          :createdAt="dayjs(tweet.createdAt).toDate()"
-        />
-        <div class="tweet__text">
-          <p>{{ tweet.text }}</p>
-        </div>
-        <div
-          class="tweet__media"
-          v-if="!!tweet.medium && tweet.medium.length > 0"
-        >
-          <Image
-            v-for="media in tweet.medium"
-            :key="media.id"
-            :src="media.url"
-            :alt="media.description"
-          />
-        </div>
-        <TweetActionRow :tweet="tweet" size="icon-sm" />
-      </div>
+    <div class="tweet__profile-pic">
+      <AvatarCircle :src="tweet.user?.profileImage" />
     </div>
-  </RouterLink>
+    <div class="tweet__body">
+      <PostHeader
+        v-if="tweet.user"
+        :name="tweet.user?.name"
+        :username="tweet.user.username"
+        :createdAt="dayjs(tweet.createdAt).toDate()"
+      />
+      <div class="tweet__text">
+        <p>{{ tweet.text }}</p>
+      </div>
+      <div
+        class="tweet__media"
+        v-if="!!tweet.medium && tweet.medium.length > 0"
+      >
+        <Image
+          v-for="media in tweet.medium"
+          :key="media.id"
+          :src="media.url"
+          :alt="media.description"
+        />
+      </div>
+      <TweetActionRow
+        :tweet="tweet"
+        size="icon-sm"
+        @replyTriggered="toggleReplyEditor = true"
+      />
+    </div>
+  </div>
+  <Modal v-model="toggleReplyEditor">
+    <ReplyEditor :tweetId="tweet.id" @closeEditor="toggleReplyEditor = false" />
+  </Modal>
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
+import { ref } from "vue";
 import dayjs from "dayjs";
 import type Tweet from "@/models/Tweet";
 import PostHeader from "./PostHeader.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import AvatarCircle from "./AvatarCircle.vue";
 import Image from "./common/Image.vue";
+import Modal from "./common/Modal.vue";
+import ReplyEditor from "./reply-editor/ReplyEditor.vue";
 
 interface TweetProps {
   tweet: Tweet;
 }
 
 defineProps<TweetProps>();
+const toggleReplyEditor = ref<boolean>(false);
 </script>
 
 <style scoped lang="scss">

@@ -1,7 +1,12 @@
 <template>
   <div class="tweet__actions">
     <div class="main-actions">
-      <TweetAction icon="reply" :text="`${tweet.totalComments}`" :size="size" />
+      <TweetAction
+        icon="reply"
+        :text="`${tweet.totalComments}`"
+        :size="size"
+        @action="$emit('replyTriggered', tweet.id)"
+      />
       <TweetAction
         icon="retweet"
         :text="`${tweet.totalRetweets}`"
@@ -51,6 +56,9 @@ interface TweetActionRowProps {
 }
 
 const props = defineProps<TweetActionRowProps>();
+const emit = defineEmits<{
+  (event: "replyTriggered", tweetId: string): void;
+}>();
 
 async function addBookmark() {
   try {

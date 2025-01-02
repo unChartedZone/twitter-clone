@@ -152,7 +152,7 @@ const router = createRouter({
       },
     },
     {
-      path: "/:username(.*)*/status/:tweetId",
+      path: "/:username/status/:tweetId",
       name: "TweetDetails",
       component: () => import("../views/TweetDetailsView.vue"),
       props: true,
