@@ -23,8 +23,6 @@ withDefaults(defineProps<ButtonProps>(), {
   type: "button",
   size: "default",
 });
-
-defineEmits(["click"]);
 </script>
 
 <template>
@@ -32,7 +30,6 @@ defineEmits(["click"]);
     :type="type"
     class="btn"
     :class="[`btn--${variant}`, `btn--size-${size}`, block && 'btn--block']"
-    @click.stop.prevent="$emit('click', $event)"
   >
     <LoadingIcon v-if="loading" class="btn__loader" :size="16" />
     <div class="btn__content" :class="[loading && 'loading']">
