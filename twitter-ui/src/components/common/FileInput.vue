@@ -24,7 +24,9 @@ const props = withDefaults(defineProps<FileInputProps>(), {
   multiple: false,
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits<{
+  (event: "update:modelValue", file: File | File[]): void;
+}>();
 
 const fileInputRef = ref<HTMLInputElement | null>(null);
 

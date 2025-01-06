@@ -1,19 +1,26 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useImage } from "@vueuse/core";
 
 interface ImageProps {
-  src: string;
+  src: string | File;
   alt?: string;
 }
 
 const props = withDefaults(defineProps<ImageProps>(), { src: "" });
-const { isLoading } = useImage({ src: props.src });
+const imgSrc = computed(() => {
+  if (typeof props.src === "string") {
+    return props.src;
+  }
+  return URL.createObjectURL(props.src);
+});
+const { isLoading } = useImage({ src: imgSrc.value });
 </script>
 
 <template>
   <div class="image__container">
     <div v-if="isLoading" class="image__loader" />
-    <img class="object-cover object-center" :src="src" :alt="alt" />
+    <img class="object-cover object-center" :src="imgSrc" :alt="alt" />
   </div>
 </template>
 

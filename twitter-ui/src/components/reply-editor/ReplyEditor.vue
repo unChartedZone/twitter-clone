@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import type Comment from "@/models/Comment";
 import AvatarCircle from "../AvatarCircle.vue";

@@ -6,7 +6,7 @@ import { useAuthStore } from "@/stores/auth";
 import type { BaseUser } from "@/models/User";
 import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
-import Link from '@/components/common/Link.vue'
+import Link from "@/components/common/Link.vue";
 import Image from "../common/Image.vue";
 import Modal from "../common/Modal.vue";
 import ProfileEditor from "../ProfileEditor.vue";
@@ -110,6 +110,8 @@ function formatLink(link: string): string {
       align-items: center;
       gap: 0.15rem;
       height: 1.2rem;
+      color: $gray-300;
+      fill: $gray-300;
     }
   }
 
