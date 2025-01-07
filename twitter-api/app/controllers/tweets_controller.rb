@@ -51,12 +51,10 @@ class TweetsController < ApplicationController
   # Fetch tweets that have a media attachments
   def media_tweets
     user = User.find_by_username(params[:username])
-    tweets = Tweet
-               .where(user_id: user.id)
-               .joins(:tweet_media).distinct
-               .order(created_at: :desc)
-               .page(current_page)
-               .per(per_page)
+    tweets = Tweet.where(id: Medium.select(:tweet_id).where.not(tweet_id: nil).where(user_id: user.id))
+                  .order(created_at: :desc)
+                  .page(current_page)
+                  .per(per_page)
     options = generate_tweet_options(tweets, 'media_tweets_path')
     render json: TweetSerializer.new(tweets, options).serializable_hash.to_json
   end

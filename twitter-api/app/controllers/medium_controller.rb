@@ -1,5 +1,6 @@
 class MediumController < ApplicationController
-  before_action :is_authenticated, only: [:create]
+  before_action :is_authenticated, only: [:index, :create]
+  before_action :set_tweet, only: [:create]
 
   def index
     medium = Medium.all
@@ -11,20 +12,25 @@ class MediumController < ApplicationController
       @media = Medium.new
       @media.image.attach(new_media_params[:image])
       @media.description = new_media_params[:description]
-      @media.user = current_user
+      @media.tweet = @tweet
 
-      if @media.save
-        @media.url = url_for(@media.image)
-        render json: { media: @media }
+      if @tweet.save && @media.save
+        render json: TweetSerializer.new(@tweet, { include: [:user], params: { current_user: current_user } }), status: :created
       else
-        render json: { errors: @media.errors }, status: :bad_request
+        render json: { media_errors: @media.errors, tweet_errors: @tweet.errors }, status: :bad_request
       end
     end
   end
 
   private
 
+  def set_tweet
+    @tweet = Tweet.find(params[:tweet_id])
+  rescue ActiveRecord::RecordNotFound
+    @tweet = Tweet.new(user: current_user)
+  end
+
   def new_media_params
-    params.permit(:image, :description)
+    params.permit(:image, :description, :tweet_id)
   end
 end
