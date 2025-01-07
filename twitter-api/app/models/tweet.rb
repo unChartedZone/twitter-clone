@@ -1,13 +1,14 @@
 class Tweet < ApplicationRecord
   belongs_to :user, counter_cache: true
 
-  has_many :tweet_media, dependent: :destroy
-  has_many :medium, through: :tweet_media, dependent: :destroy
+  has_many :medium, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :retweets, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_by_users, through: :bookmarks, source: :user
   has_many :comments, dependent: :destroy
+
+  validate :text_or_media_present
 
   def bookmarked?(user)
     bookmarks.exists?(user_id: user.id)
@@ -23,5 +24,13 @@ class Tweet < ApplicationRecord
     retweet = Retweet.new(tweet_id: id, user_id:)
     retweet.save
     yield retweet if block_given?
+  end
+
+  private
+
+  def text_or_media_present
+    if text.blank? && medium.blank?
+      errors.add(:base, "A tweet must have either text or media.")
+    end
   end
 end

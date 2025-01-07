@@ -1,6 +1,4 @@
 class Medium < ApplicationRecord
-  belongs_to :user
-  has_many :tweet_media
-  has_many :tweets, through: :tweet_media
+  belongs_to :tweet
   has_one_attached :image
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_22_073121) do
+ActiveRecord::Schema.define(version: 2025_01_07_023954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,10 +90,10 @@ ActiveRecord::Schema.define(version: 2024_12_22_073121) do
   create_table "media", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "url"
     t.string "description"
-    t.uuid "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_media_on_user_id"
+    t.uuid "tweet_id", default: "bd1d4f55-1886-4acf-8980-232113971181", null: false
+    t.index ["tweet_id"], name: "index_media_on_tweet_id"
   end
 
   create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -114,15 +114,6 @@ ActiveRecord::Schema.define(version: 2024_12_22_073121) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["tweet_id"], name: "index_retweets_on_tweet_id"
     t.index ["user_id"], name: "index_retweets_on_user_id"
-  end
-
-  create_table "tweet_media", force: :cascade do |t|
-    t.uuid "tweet_id", null: false
-    t.uuid "medium_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["medium_id"], name: "index_tweet_media_on_medium_id"
-    t.index ["tweet_id"], name: "index_tweet_media_on_tweet_id"
   end
 
   create_table "tweets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -164,12 +155,10 @@ ActiveRecord::Schema.define(version: 2024_12_22_073121) do
   add_foreign_key "followers", "users"
   add_foreign_key "likes", "tweets"
   add_foreign_key "likes", "users"
-  add_foreign_key "media", "users"
+  add_foreign_key "media", "tweets"
   add_foreign_key "notifications", "users", column: "initiator_id"
   add_foreign_key "notifications", "users", column: "recipient_id"
   add_foreign_key "retweets", "tweets"
   add_foreign_key "retweets", "users"
-  add_foreign_key "tweet_media", "media"
-  add_foreign_key "tweet_media", "tweets"
   add_foreign_key "tweets", "users"
 end
