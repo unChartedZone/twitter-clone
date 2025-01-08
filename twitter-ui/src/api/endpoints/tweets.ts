@@ -85,6 +85,20 @@ export async function postTweet(tweetPayload: any) {
   return transformTweetResponse(res.data);
 }
 
+export async function appendTweetMedia(
+  payload: { image: File; description?: string },
+  tweetId?: string
+): Promise<Tweet> {
+  const formData = new FormData();
+  formData.append("image", payload.image);
+  payload.description && formData.append("description", payload.description);
+
+  const res = await authClient.post<TweetResponse>("/media", formData, {
+    params: { tweetId },
+  });
+  return transformTweetResponse(res.data);
+}
+
 export async function fetchSingleTweet(tweetId: string): Promise<Tweet> {
   const res = await authClient.get<TweetResponse>(`/tweets/${tweetId}`);
   return transformTweetResponse(res.data);
