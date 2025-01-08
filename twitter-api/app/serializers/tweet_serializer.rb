@@ -13,7 +13,7 @@ class TweetSerializer
 
   attribute :medium do |object|
     object.medium.each do |o|
-      o.url = Rails.application.routes.url_helpers.url_for(o.image) if o.image.present?
+      o.url = o.media_url
     end
   end
 
