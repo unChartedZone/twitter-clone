@@ -93,13 +93,8 @@ const toggleReplyEditor = ref<boolean>(false);
   &__media {
     border: 1px solid rgba(207, 217, 222, 1);
     border-radius: 1rem;
-    width: 100%;
+    height: clamp(10rem, 20rem, 30rem);
     overflow: hidden;
-
-    img {
-      height: 100%;
-      object-fit: contain;
-    }
   }
 }
 </style>

@@ -12,7 +12,7 @@ import Modal from "@/components/common/Modal.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import PageLoader from "@/components/PageLoader.vue";
 import Comment from "@/components/comment/Comment.vue";
-
+import InlineReplyEditor from "@/components/reply-editor/InlineReplyEditor.vue";
 import ReplyEditor from "@/components/reply-editor/ReplyEditor.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import dayjs from "dayjs";
@@ -124,7 +124,9 @@ function closeReplyEditor(comment: CommentType) {
     }
   }
 
+  // TODO: support showing multiple images in a grid pattern
   &__images {
+    display: grid;
     border: 1px solid rgba(207, 217, 222, 1);
     border-radius: 1rem;
     width: 100%;

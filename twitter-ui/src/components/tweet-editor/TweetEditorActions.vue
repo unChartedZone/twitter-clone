@@ -1,24 +1,38 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
+import FileInput from "../common/FileInput.vue";
 
-const emit = defineEmits<{ (event: "publishTweet"): Promise<void> }>();
-const loading = ref<boolean>(false); // TODO: Should define some loading state instead of boolean for failure scenario
+defineProps<{ isPublishing?: boolean }>();
 
-async function publishTweet() {
-  loading.value = true;
-  await emit("publishTweet");
-  loading.value = false;
-}
+const emit = defineEmits<{
+  (event: "publishTweet"): Promise<void>;
+  (event: "mediaAdded", media: File[]): void;
+}>();
 </script>
 
 <template>
   <div class="actions">
-    <Button variant="icon-ghost" size="icon">
-      <Icon variant="picture" />
+    <FileInput
+      accept=".jpg, .jpeg, .png"
+      multiple
+      @update:modelValue="
+        (files) => {
+          if (Array.isArray(files)) {
+            $emit('mediaAdded', files);
+          }
+        }
+      "
+    >
+      <template v-slot="{ onClick }">
+        <Button variant="icon-ghost" size="icon" @click="onClick">
+          <Icon variant="picture" />
+        </Button>
+      </template>
+    </FileInput>
+    <Button @click="$emit('publishTweet')" :loading="isPublishing">
+      Tweet
     </Button>
-    <Button @click="publishTweet" :loading="loading">Tweet</Button>
   </div>
 </template>
 

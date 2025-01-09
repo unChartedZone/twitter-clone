@@ -30,6 +30,7 @@ const { isLoading } = useImage({ src: imgSrc.value });
     position: relative;
     overflow: hidden;
     background-color: $white;
+    height: 100%;
 
     img {
       height: 100%;

@@ -124,6 +124,10 @@ function handleChange(value: string) {
     .label {
       display: none;
     }
+
+    .input {
+      padding: 0.5rem 0.55rem;
+    }
   }
 
   &__icon {

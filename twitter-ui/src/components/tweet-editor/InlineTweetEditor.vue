@@ -4,21 +4,37 @@ import { useTweetEditor } from "@/hooks/useTweetEditor";
 import AvatarCircle from "../AvatarCircle.vue";
 import Textarea from "@/components/common/Textarea.vue";
 import TweetEditorActions from "./TweetEditorActions.vue";
+import TweetMediaGrid from "./TweetMediaGrid.vue";
 
 const authStore = useAuthStore();
-const { tweetText, publishTweet } = useTweetEditor();
+const {
+  tweetText,
+  tweetMedia,
+  addMediaItems,
+  removeMediaItem,
+  publishTweet,
+  isPublishing,
+} = useTweetEditor();
 </script>
 
 <template>
   <div class="inline-tweet-editor">
     <AvatarCircle :src="authStore.user?.profileImage" />
-    <div class="temp">
+    <div class="content">
       <Textarea
         borderless
         placeholder="What is happening?!"
         v-model="tweetText"
       />
-      <TweetEditorActions @publishTweet="publishTweet" />
+      <TweetMediaGrid
+        :mediaItems="tweetMedia"
+        @onRemoveMediaItem="(index) => removeMediaItem(index)"
+      />
+      <TweetEditorActions
+        :isPublishing="isPublishing"
+        @publishTweet="publishTweet"
+        @mediaAdded="(files) => addMediaItems(files)"
+      />
     </div>
   </div>
 </template>
@@ -30,7 +46,13 @@ const { tweetText, publishTweet } = useTweetEditor();
   gap: 0.5rem;
 }
 
-.temp {
+.content {
   flex: 1;
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
 }
 </style>

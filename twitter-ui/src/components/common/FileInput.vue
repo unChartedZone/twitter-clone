@@ -15,7 +15,7 @@ import { ref } from "vue";
 
 interface FileInputProps {
   modelValue?: File | File[];
-  accept: string;
+  accept?: string;
   multiple?: boolean;
 }
 
