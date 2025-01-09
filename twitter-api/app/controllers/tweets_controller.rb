@@ -51,7 +51,7 @@ class TweetsController < ApplicationController
   # Fetch tweets that have a media attachments
   def media_tweets
     user = User.find_by_username(params[:username])
-    tweets = Tweet.where(id: Medium.select(:tweet_id).where.not(tweet_id: nil).where(user_id: user.id))
+    tweets = Tweet.where(id: Medium.select(:tweet_id).where.not(tweet_id: nil))
                   .order(created_at: :desc)
                   .page(current_page)
                   .per(per_page)
