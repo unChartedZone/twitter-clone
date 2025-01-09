@@ -49,7 +49,7 @@ watch(
         <TabHeader :to="{ name: 'media' }">Media</TabHeader>
         <TabHeader :to="{ name: 'likes' }">Likes</TabHeader>
       </TabRow>
-      <RouterView />
     </section>
   </main>
+  <RouterView />
 </template>
