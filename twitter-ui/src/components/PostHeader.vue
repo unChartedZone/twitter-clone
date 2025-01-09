@@ -16,7 +16,7 @@ defineProps<PostHeaderProps>();
 <template>
   <div class="post-header">
     <div class="post-header__text">
-      <RouterLink class="link" :to="`/${username}`">
+      <RouterLink @click.stop.prevent class="link" :to="`/${username}`">
         <strong class="name">{{ name }}</strong>
         <span class="username">@{{ username }}</span>
       </RouterLink>
