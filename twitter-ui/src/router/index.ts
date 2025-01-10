@@ -100,6 +100,12 @@ const router = createRouter({
       ],
     },
     {
+      name: "NotImplemented",
+      path: "/not-implemented",
+      component: () => import("../views/NotImplementedView.vue"),
+      meta: { requiresAuth: true, layout: Default },
+    },
+    {
       path: "/:username(.*)*",
       name: "UserProfile",
       component: () => import("../views/ProfileView.vue"),
