@@ -4,17 +4,18 @@ import type { Meta, StoryObj } from "@storybook/vue3";
 // import Button from './Button.vue';
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
+import { iconVariants } from "@/types/IconVariants";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories
 const meta = {
   title: "Example/Button",
-  component: Button,
   // This component will have an automatically generated docsPage entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
   argTypes: {
     // size: { control: 'select', options: ['small', 'medium', 'large'] },
     // backgroundColor: { control: 'color' },
     loading: { control: "boolean" },
+    iconVariant: { control: "select" },
   },
   args: {
     loading: false,
@@ -30,7 +31,7 @@ const meta = {
     template:
       '<div><Button :variant="args.variant" :loading="args.loading">Example</Button></div>',
   }),
-} satisfies Meta<typeof Button>;
+} satisfies Meta;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -80,6 +81,13 @@ export const IconFab: Story = {
   args: {
     variant: "icon",
     size: "icon",
+    iconVariant: "feather",
+  },
+  argTypes: {
+    iconVariant: {
+      options: [...iconVariants],
+      control: "select",
+    },
   },
   render: (args: any) => ({
     components: { Button, Icon },
@@ -88,9 +96,8 @@ export const IconFab: Story = {
     },
     template: `
       <Button v-bind="args">
-        <Icon variant="feather" />
+        <Icon :variant="args.iconVariant" />
       </Button>
-
     `,
   }),
 };
@@ -99,6 +106,13 @@ export const IconMonochrome: Story = {
   args: {
     variant: "icon-monochrome",
     size: "icon",
+    iconVariant: "cross",
+  },
+  argTypes: {
+    iconVariant: {
+      options: [...iconVariants],
+      control: "select",
+    },
   },
   render: (args: any) => ({
     components: { Button, Icon },
@@ -106,8 +120,8 @@ export const IconMonochrome: Story = {
       return { args };
     },
     template: `
-      <Button v-bind="args">
-        <Icon variant="feather" />
+      <Button :variant="args.variant" :size="args.size">
+        <Icon :variant="args.iconVariant" />
       </Button>
 
     `,

@@ -60,6 +60,7 @@ $rounded: 1.5rem;
   justify-content: center;
   align-items: center;
   grid-template-areas: "stack";
+  padding: 0;
   border: none;
   outline: none;
   cursor: pointer;
@@ -74,7 +75,14 @@ $rounded: 1.5rem;
     grid-area: stack; // Helps stack button content and loading icon on top of each other
     justify-self: center;
     height: 100%;
+    width: 100%;
     position: relative;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .loading {
@@ -204,12 +212,21 @@ $rounded: 1.5rem;
     height: 35px;
     width: 35px;
     padding: 0.5rem;
+
+    // Need this because svg will look smaller in Firefox
+    :deep(svg) {
+      width: 100%;
+    }
   }
 
   &--size-icon-sm {
     height: 30px;
     width: 30px;
     padding: 0.45rem;
+
+    :deep(svg) {
+      width: 100%;
+    }
   }
 
   &--block {
