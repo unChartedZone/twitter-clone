@@ -85,15 +85,32 @@ const router = createRouter({
         {
           name: "account-settings",
           path: "account",
-          component: () => import("../views/settings/SettingsAccount.vue"),
+          component: () => import("../views/settings/SettingsAccountView.vue"),
         },
         {
           name: "security-settings",
           path: "security",
-          component: () => import("../views/settings/SettingsSecurity.vue"),
+          component: () => import("../views/settings/SettingsSecurityView.vue"),
         },
         {
-          name: "chnage-password",
+          name: "privacy-settings",
+          path: "privacy",
+          component: () => import("../views/settings/SettingsPrivacyView.vue"),
+        },
+        {
+          name: "notification-settings",
+          path: "notifications",
+          component: () =>
+            import("../views/settings/SettingsNotificationView.vue"),
+        },
+        {
+          name: "accessibility-settings",
+          path: "accessibility",
+          component: () =>
+            import("../views/settings/SettingsAccessibilityView.vue"),
+        },
+        {
+          name: "change-password",
           path: "password",
           component: () => import("../views/settings/ChangePasswordView.vue"),
         },

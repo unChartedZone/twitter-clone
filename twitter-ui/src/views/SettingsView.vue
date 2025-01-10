@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router";
+import { computed } from "vue";
+import { RouterView, useRoute } from "vue-router";
 import PageHeader from "@/components/PageHeader.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import SettingsLink from "@/components/settings/SettingsLink.vue";
+
+const route = useRoute();
+
+const isParentRoute = computed(() => route.matched.length === 1);
 </script>
 
 <template>
   <main class="settings">
-    <section class="settings__navbar">
+    <section
+      class="settings__navbar"
+      :class="{ 'mobile-hide': !isParentRoute }"
+    >
       <PageHeader title="Settings" />
       <div class="px-4">
         <Textfield
@@ -31,7 +39,7 @@ import SettingsLink from "@/components/settings/SettingsLink.vue";
         <SettingsLink title="Additional resources" to="/settings/account" />
       </div>
     </section>
-    <section>
+    <section :class="{ 'mobile-hide': isParentRoute }">
       <RouterView />
     </section>
   </main>
@@ -41,6 +49,10 @@ import SettingsLink from "@/components/settings/SettingsLink.vue";
 .settings {
   display: grid;
   grid-template-columns: 1fr 1fr;
+
+  @include respond(sm) {
+    grid-template-columns: 1fr;
+  }
 
   &__navbar {
     border-right: 1px solid $gray-100;
@@ -67,6 +79,12 @@ import SettingsLink from "@/components/settings/SettingsLink.vue";
       height: 1rem;
       fill: $gray-300;
     }
+  }
+}
+
+.mobile-hide {
+  @include respond(sm) {
+    display: none;
   }
 }
 </style>
