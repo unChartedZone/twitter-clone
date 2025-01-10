@@ -30,13 +30,12 @@ const isParentRoute = computed(() => route.matched.length === 1);
           title="Security and account access"
           to="/settings/security"
         />
-        <SettingsLink title="Privacy and safety" to="/settings/security" />
-        <SettingsLink title="Notifications" to="/settings/account" />
+        <SettingsLink title="Privacy and safety" to="/settings/privacy" />
+        <SettingsLink title="Notifications" to="/settings/notifications" />
         <SettingsLink
           title="Accessibility, display, and languages"
-          to="/settings/account"
+          to="/settings/accessibility"
         />
-        <SettingsLink title="Additional resources" to="/settings/account" />
       </div>
     </section>
     <section :class="{ 'mobile-hide': isParentRoute }">
