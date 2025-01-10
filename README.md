@@ -1,11 +1,14 @@
 # Twitter Clone
 
-A feature-rich twitter clone, the stack is a Vue 3 frontend with Rails api backend, and PostgreSQL for database management.
+A feature-rich twitter clone built with Vue 3 + Typescript for the frontend, a Rails REST API backend that uses PostgreSQL for database management.
 
-## Starting up the UI
+## Setting up the UI
 
-From the `twitter-ui`, first run `yarn` to install all the dependencies. Then
-run `yarn dev` to startup the dev server.
+Please do the following:
+
+1. `cd` into the `twitter-ui` folder
+2. Run `yarn` or `npm install` to install dependencies
+3. Run `yarn dev` to start up the vue dev server
 
 ## Setting up the API
 
