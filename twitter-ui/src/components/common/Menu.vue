@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, reactive, watch } from "vue";
 
 interface MenuProps {
   modelValue?: boolean;
@@ -8,10 +8,19 @@ interface MenuProps {
 const props = defineProps<MenuProps>();
 const emit = defineEmits(["update:modelValue"]);
 const target = ref<HTMLElement | null>(null);
-const displaceContent = ref<boolean>(false);
+
+const contentBlocked = reactive({
+  top: false,
+  bottom: false,
+  left: false,
+  right: false,
+});
 
 function handleChange() {
-  displaceContent.value = false;
+  contentBlocked.top = false;
+  contentBlocked.bottom = false;
+  contentBlocked.left = false;
+  contentBlocked.right = false;
   emit("update:modelValue", !props.modelValue);
 }
 
@@ -23,16 +32,20 @@ watch(
     if (!!target.value) {
       const rect = target.value.getBoundingClientRect();
 
-      const calculation =
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <=
-          (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <=
-          (window.innerWidth || document.documentElement.clientWidth);
-
-      if (!calculation) {
-        displaceContent.value = true;
+      if (rect.top <= 0) {
+        contentBlocked.top = true;
+      }
+      if (
+        rect.bottom >=
+        (window.innerHeight || document.documentElement.clientHeight)
+      ) {
+        contentBlocked.bottom = true;
+      }
+      if (
+        rect.right >=
+        (window.innerWidth || document.documentElement.clientWidth)
+      ) {
+        contentBlocked.right = true;
       }
     }
   }
@@ -48,7 +61,12 @@ watch(
       v-if="modelValue"
       ref="target"
       class="menu__content"
-      :class="{ reverse: displaceContent }"
+      :class="{
+        'push-top': contentBlocked.top,
+        'push-bottom': contentBlocked.bottom,
+        'push-left': contentBlocked.left,
+        'push-right': contentBlocked.right,
+      }"
       @click="handleChange"
     >
       <slot />
@@ -64,12 +82,27 @@ watch(
   &__content {
     position: absolute;
     top: -180%;
+    left: 0;
     z-index: 200;
   }
 
-  .reverse {
+  .push-top {
     top: 50%;
-    left: 0;
+    bottom: unset;
+  }
+  .push-bottom {
+    bottom: 50%;
+    top: unset;
+  }
+
+  .push-left {
+    left: 0%;
+    right: unset;
+  }
+
+  .push-right {
+    right: -20%;
+    left: unset;
   }
 
   &__bg {
