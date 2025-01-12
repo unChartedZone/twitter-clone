@@ -203,10 +203,4 @@ const links: NavLink[] = [
     transform: translateX(-50%);
   }
 }
-
-.more-options {
-  @include respond(sm) {
-    display: none;
-  }
-}
 </style>

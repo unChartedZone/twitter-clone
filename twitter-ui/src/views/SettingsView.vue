@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { RouterView, useRoute } from "vue-router";
+import { computed, onMounted } from "vue";
+import { RouterView, useRoute, useRouter } from "vue-router";
+import { useScreenSize } from "@/hooks/useScreenSize";
 import PageHeader from "@/components/PageHeader.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import SettingsLink from "@/components/settings/SettingsLink.vue";
 
 const route = useRoute();
+const router = useRouter();
+const { isSmallScreen } = useScreenSize();
 
 const isParentRoute = computed(() => route.matched.length === 1);
+
+onMounted(() => {
+  if (!isSmallScreen.value) {
+    router.replace({ name: "account-settings" });
+  }
+});
 </script>
 
 <template>
