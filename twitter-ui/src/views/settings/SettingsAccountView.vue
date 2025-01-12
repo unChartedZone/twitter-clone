@@ -17,7 +17,7 @@ const { isSmallScreen } = useScreenSize();
       title="Account information"
       subtitle="See your account information like your phone number and email address."
       to="/not-implemented"
-      icon="profile"
+      icon="profile-outline"
     />
     <SettingsLink
       title="Change your password"

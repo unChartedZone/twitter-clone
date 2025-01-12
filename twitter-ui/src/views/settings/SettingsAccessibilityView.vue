@@ -17,25 +17,25 @@ const { isSmallScreen } = useScreenSize();
       title="Accessibility"
       subtitle="Manage aspects of your Twitter experience such as limiting color contrast and motion."
       to="/not-implemented"
-      icon="profile"
+      icon="eye-slash"
     />
     <SettingsLink
       title="Display"
       subtitle="Manage your font size, color, and background. These settings affect all the Twitter accounts on this browser."
       to="/not-implemented"
-      icon="download"
+      icon="paint-brush"
     />
     <SettingsLink
       title="Languages"
       subtitle="Manage which langauges are used to personalize your Twitter experience."
       to="/not-implemented"
-      icon="broken-heart"
+      icon="globe"
     />
     <SettingsLink
       title="Data usage"
       subtitle="Limit how Twitter uses some of your network data on this device."
       to="/not-implemented"
-      icon="profile"
+      icon="metrics"
     />
   </div>
 </template>

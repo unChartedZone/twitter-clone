@@ -17,13 +17,13 @@ const { isSmallScreen } = useScreenSize();
       title="Filters"
       subtitle="Choose the notifications you'd like to see - and those you don't."
       to="/not-implemented"
-      icon="profile"
+      icon="filters"
     />
     <SettingsLink
       title="Preferences"
       subtitle="Select your preferences by notification type."
       to="/not-implemented"
-      icon="profile"
+      icon="mobile-signal"
     />
   </div>
 </template>

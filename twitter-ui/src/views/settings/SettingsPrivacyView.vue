@@ -14,37 +14,37 @@ const { isSmallScreen } = useScreenSize();
       title="Audience, media, and tagging"
       subtitle="Manage what information you allow other people on Twitter to see."
       to="/not-implemented"
-      icon="profile"
+      icon="people-group"
     />
     <SettingsLink
       title="Your posts"
       subtitle="Manage the information associated with your posts."
       to="/not-implemented"
-      icon="download"
+      icon="pencil"
     />
     <SettingsLink
       title="Content you see"
       subtitle="Decide what you see on Twitter based on your preferences like Topics and interests."
       to="/not-implemented"
-      icon="broken-heart"
+      icon="content"
     />
     <SettingsLink
       title="Mute and block"
       subtitle="Manage the accounts, words, and notifications that you've muted or blocked."
       to="/not-implemented"
-      icon="broken-heart"
+      icon="speaker-muted"
     />
     <SettingsLink
       title="Direct Messages"
       subtitle="Manage who can message you directly."
       to="/not-implemented"
-      icon="broken-heart"
+      icon="message-outline"
     />
     <SettingsLink
       title="Discoverability and contacts"
       subtitle="Control your discoverability settings and manage contacts you've imported."
       to="/not-implemented"
-      icon="broken-heart"
+      icon="magnifying-glass-person"
     />
   </div>
 </template>

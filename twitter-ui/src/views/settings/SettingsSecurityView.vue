@@ -20,13 +20,13 @@ const { isSmallScreen } = useScreenSize();
       title="Security"
       subtitle="Manage your acount's security"
       to="/not-implemented"
-      icon="profile"
+      icon="lock"
     />
     <SettingsLink
       title="Apps and sessions"
       subtitle="See information about when you logged into your account and the apps you connected to your account."
       to="/not-implemented"
-      icon="profile"
+      icon="copy"
     />
     <SettingsLink
       title="Connected accounts"
@@ -38,7 +38,7 @@ const { isSmallScreen } = useScreenSize();
       title="Delegate"
       subtitle="See information about when you logged into your account and the apps you connected to your account."
       to="/not-implemented"
-      icon="profile"
+      icon="transfer"
     />
   </section>
 </template>
