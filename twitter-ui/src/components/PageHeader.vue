@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import Button from "./common/Button.vue";
 import Icon from "./icons/Icon.vue";
+import LoadingIcon from "./common/LoadingIcon.vue";
 
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
   hideBackButton?: boolean;
+  loading?: boolean;
 }
 
 withDefaults(defineProps<PageHeaderProps>(), {
@@ -26,7 +28,8 @@ withDefaults(defineProps<PageHeaderProps>(), {
       >
         <Icon variant="left-arrow" />
       </Button>
-      <div>
+      <LoadingIcon v-if="loading" />
+      <div v-else>
         <h2>{{ title }}</h2>
         <span>{{ subtitle }}</span>
       </div>

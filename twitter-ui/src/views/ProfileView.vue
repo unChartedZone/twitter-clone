@@ -32,12 +32,13 @@ watch(
 </script>
 
 <template>
+  <PageHeader
+    :title="`${profileStore.profileUser?.name}`"
+    :subtitle="`${profileStore.profileUser?.totalTweets} tweets`"
+    :loading="profileStore.isLoadingUser"
+  />
   <PageLoader v-if="profileStore.isLoadingUser" />
   <main v-else class="profile">
-    <PageHeader
-      :title="`${profileStore.profileUser?.name}`"
-      :subtitle="`${profileStore.profileUser?.totalTweets} tweets`"
-    />
     <ProfileHeader
       v-if="profileStore.profileUser"
       :user="profileStore.profileUser"
