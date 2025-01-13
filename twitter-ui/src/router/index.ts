@@ -31,11 +31,6 @@ const router = createRouter({
       meta: { requiresAuth: false },
     },
     {
-      path: "/signup",
-      name: "signup",
-      component: () => import("../views/SignupView.vue"),
-    },
-    {
       path: "/home",
       name: "home",
       component: () => import("../views/HomeView.vue"),
