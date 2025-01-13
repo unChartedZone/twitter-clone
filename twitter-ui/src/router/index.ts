@@ -191,7 +191,7 @@ router.beforeEach(async (to) => {
   const authStore = useAuthStore();
 
   // attempt to refresh user session
-  if (!authStore.accessToken) {
+  if (!authStore.loggedIn && authStore.userFetchState !== "rejected") {
     await authStore.refreshUser();
     await setupAuthClient();
   }

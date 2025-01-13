@@ -9,7 +9,7 @@ import type { LoginPayload } from "@/types/RequestPayloads";
 import type { LoadingState } from "@/types/LoadingState";
 
 export const useAuthStore = defineStore("auth", () => {
-  const userFetchState = ref<LoadingState>("idle");
+  const userFetchState = ref<LoadingState>();
   const accessToken = ref<string>();
   const user = ref<User>();
   const profileStore = useProfileStore();
@@ -119,6 +119,7 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     accessToken,
     user,
+    userFetchState,
     userFetchStateLoading,
     loggedIn,
     loginUser,

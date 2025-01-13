@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 import Link from "@/components/common/Link.vue";
@@ -7,8 +8,28 @@ import Modal from "@/components/common/Modal.vue";
 import SignupForm from "@/components/SignupForm.vue";
 import GuestMessage from "@/components/GuestMessage.vue";
 
+const route = useRoute();
+const router = useRouter();
 const year = computed(() => new Date().getFullYear());
 const toggleSignupModal = ref<boolean>(false);
+
+function openSigupModal() {
+  router.push({ name: "index", query: { modal: "signup" } });
+}
+
+function closeSignupModal() {
+  router.push({ name: "index" });
+}
+
+const checkForSignupModal = () => {
+  toggleSignupModal.value = route.query.modal === "signup";
+};
+
+onMounted(() => {
+  checkForSignupModal();
+});
+
+watch(() => route.query.modal, checkForSignupModal);
 </script>
 
 <template>
@@ -22,9 +43,7 @@ const toggleSignupModal = ref<boolean>(false);
         <h1>Happening now</h1>
         <h2>Join Twitter Today.</h2>
         <div class="action-section__links space-y-4">
-          <Button size="xl" block @click="toggleSignupModal = true">
-            Sign up
-          </Button>
+          <Button size="xl" block @click="openSigupModal">Sign up</Button>
           <Link to="/login" block outline>Log in</Link>
         </div>
       </section>
@@ -51,8 +70,12 @@ const toggleSignupModal = ref<boolean>(false);
       </ul>
     </footer>
   </main>
-  <Modal class="signup-modal" v-model="toggleSignupModal">
-    <SignupForm @closeForm="toggleSignupModal = false" />
+  <Modal
+    class="signup-modal"
+    v-model="toggleSignupModal"
+    @on-close="closeSignupModal"
+  >
+    <SignupForm @closeForm="closeSignupModal" />
   </Modal>
   <GuestMessage v-if="toggleSignupModal" />
 </template>
