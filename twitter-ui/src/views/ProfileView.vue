@@ -27,6 +27,7 @@ watch(
   (u, _u) => {
     profileStore.$reset();
     profileStore.loadProfileUser(u);
+    profileStore.loadTweets(u, 1, "default");
   }
 );
 </script>
@@ -37,8 +38,8 @@ watch(
     :subtitle="`${profileStore.profileUser?.totalTweets} tweets`"
     :loading="profileStore.isLoadingUser"
   />
-  <PageLoader v-if="profileStore.isLoadingUser" />
-  <main v-else class="profile">
+  <main class="profile">
+    <PageLoader v-if="profileStore.isLoadingUser" />
     <ProfileHeader
       v-if="profileStore.profileUser"
       :user="profileStore.profileUser"
@@ -51,6 +52,6 @@ watch(
         <TabHeader :to="{ name: 'likes' }">Likes</TabHeader>
       </TabRow>
     </section>
+    <RouterView />
   </main>
-  <RouterView />
 </template>

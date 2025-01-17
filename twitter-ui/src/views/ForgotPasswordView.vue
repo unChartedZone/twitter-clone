@@ -20,14 +20,12 @@ async function submitPasswordResetRequest() {
 </script>
 
 <template>
-  <main class="container mx-auto">
-    <PageHeader title="Forgot Password" />
-    <div>
-      <form @submit.prevent="submitPasswordResetRequest">
-        <Textfield v-model="email" label="Email" />
-        <Button type="submit">Submit</Button>
-      </form>
-    </div>
-    <Alert v-model="alert.show" :delay="10">{{ alert.text }}</Alert>
-  </main>
+  <form @submit.prevent="submitPasswordResetRequest">
+    <main class="container mx-auto space-y-4">
+      <PageHeader title="Forgot Password" />
+      <Textfield v-model="email" label="Email" />
+      <Button type="submit">Submit</Button>
+    </main>
+  </form>
+  <Alert v-model="alert.show" :delay="10">{{ alert.text }}</Alert>
 </template>

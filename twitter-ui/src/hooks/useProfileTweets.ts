@@ -23,10 +23,14 @@ export function useProfileTweets(segment: TweetListSegment) {
       )
   );
 
-  onMounted(async () => {
-    if (profileStore.tweetLists[segment].tweets.length > 0) return;
+  onMounted(() => {
+    if (
+      profileStore.tweetLists[segment].tweets.length > 0 &&
+      route.params.username[0] === profileStore.profileUser?.username
+    )
+      return;
 
-    await profileStore.loadTweets(route.params.username[0], 1, segment);
+    profileStore.loadTweets(route.params.username[0], 1, segment);
   });
 
   // For when a user scrolls to the bottom of a page
