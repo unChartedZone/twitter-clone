@@ -31,6 +31,18 @@ const router = createRouter({
       meta: { requiresAuth: false },
     },
     {
+      name: "forgot-password",
+      path: "/forgot-password",
+      component: () => import("../views/ForgotPasswordView.vue"),
+      meta: { requiresAuth: false },
+    },
+    {
+      name: "password-reset",
+      path: "/password-reset",
+      component: () => import("../views/PasswordResetView.vue"),
+      meta: { requiresAuth: false },
+    },
+    {
       path: "/home",
       name: "home",
       component: () => import("../views/HomeView.vue"),

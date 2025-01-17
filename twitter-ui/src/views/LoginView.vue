@@ -73,7 +73,7 @@ function isValidEmail(email: string): boolean {
         <Button block type="submit">Log in</Button>
       </form>
       <div class="login__footer">
-        <Link text>Forgot Password?</Link>
+        <Link :to="{ name: 'forgot-password' }" text>Forgot Password?</Link>
         <span>·</span>
         <Link :to="{ name: 'index', query: { modal: 'signup' } }" text>
           Sign up for Twitter
