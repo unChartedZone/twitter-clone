@@ -48,4 +48,9 @@ Rails.application.routes.draw do
   resources :notifications, only: [:index]
 
   resources :medium, only: %i[index create], path: :media
+
+  # Password Endpoints
+  post '/password/reset', to: 'password#create'
+  get '/password/reset/valid', to: 'password#valid_token'
+  post '/password/update', to: 'password#update'
 end
