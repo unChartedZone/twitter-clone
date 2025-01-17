@@ -26,3 +26,15 @@ You can also get this project up and running with Docker Compose, with Docker in
 ```
 docker compose up --build
 ```
+
+## Features :sparkles:
+- User signup flow
+- JWT user authentication
+- Forgot password flow 
+- Tweet posting with images
+- Tweet liking
+- Tweet retweeting
+- Tweet bookmarking
+- Followers and followings
+- Tweet feed
+- Profile tweets lists for default, retweeted, media, and liked
