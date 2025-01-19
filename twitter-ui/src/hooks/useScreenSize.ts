@@ -15,7 +15,6 @@ export function useScreenSize() {
   });
 
   watch(width, (val) => {
-    console.log("Val: ", val);
     if (val <= SM_SCREEN_SIZE) {
       isSmallScreen.value = true;
     } else {

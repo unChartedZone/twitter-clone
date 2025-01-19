@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed, onMounted, watch } from "vue";
 import { RouterView, useRoute, useRouter } from "vue-router";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import PageHeader from "@/components/PageHeader.vue";
@@ -16,6 +16,12 @@ onMounted(() => {
   if (!isSmallScreen.value) {
     router.replace({ name: "account-settings" });
   }
+});
+
+// Watch for change of screen size. If user is on root settings page and screen
+// is bigger than sm then we want to redirect to account-settings
+watch([isParentRoute, isSmallScreen], ([ipr, iss], _oldVal) => {
+  if (ipr && !iss) router.push({ name: "account-settings" });
 });
 </script>
 
