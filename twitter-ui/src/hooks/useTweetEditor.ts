@@ -23,23 +23,33 @@ export function useTweetEditor() {
   }
 
   async function publishTweet() {
-    if (tweetText.value.length < 1) {
+    const hasText = !!tweetText.value;
+    const hasMedia = tweetMedia.value.length > 0;
+
+    if (!hasText && !hasMedia) {
       return;
     }
 
     loadingState.value = "idle";
+
     try {
-      let tweet = await tweetApi.postTweet({ text: tweetText.value });
-      if (tweetMedia.value.length > 0) {
+      let tweet;
+
+      if (hasText) {
+        tweet = await tweetApi.postTweet({ text: tweetText.value });
+      }
+
+      if (hasMedia) {
         tweet = await tweetApi.appendTweetMedia(
           { image: tweetMedia.value[0].file },
-          tweet.id
+          tweet?.id ?? undefined
         );
       }
 
       if (profileStore.profileUser?.username === authStore.user?.username) {
-        profileStore.tweetLists.default.tweets.unshift(tweet);
+        profileStore.tweetLists.default.tweets.unshift(tweet!);
       }
+
       loadingState.value = "resolved";
     } catch (err) {
       loadingState.value = "rejected";
