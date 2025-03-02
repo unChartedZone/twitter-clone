@@ -11,8 +11,6 @@ COPY ./package.json ./
 
 COPY ./yarn.lock ./
 
-RUN ls -la 
-
 # Install dependencies using Yarn
 RUN yarn install
 
