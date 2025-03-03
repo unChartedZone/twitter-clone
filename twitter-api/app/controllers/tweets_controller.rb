@@ -141,8 +141,7 @@ class TweetsController < ApplicationController
   def explore_user_tweets
     users = User.where.not(id: current_user.following.pluck(:id)).where.not(id: current_user.id)
     tweets = Tweet.where(user_id: users)
-                  .or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: users)))
-                  .sort_by(&:created_at).reverse
+                  .or(Tweet.where(id: Retweet.select(:tweet_id).where(user_id: users))).order(created_at: :desc).page(current_page).per(per_page)
     render json: TweetSerializer.new(tweets,
                                      { include: [:user],
                                        params: { current_user: @current_user } }).serializable_hash.to_json
