@@ -38,11 +38,11 @@ const route = useRoute();
   min-height: 100vh;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 17rem 4fr fit-content(22rem);
+  grid-template-columns: 17rem 4fr fit-content(24rem);
   max-width: 1300px;
 
   @include respond(xl) {
-    grid-template-columns: 5rem 4fr fit-content(22rem);
+    grid-template-columns: 5rem 4fr fit-content(24rem);
   }
 
   @include respond(lg) {
@@ -87,6 +87,7 @@ const route = useRoute();
     flex-direction: column;
     gap: 1rem;
     margin: 0 0 0 0.5rem;
+    padding: 0 0.5rem;
     z-index: 1;
   }
 }

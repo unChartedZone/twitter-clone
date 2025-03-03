@@ -1,10 +1,9 @@
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useWindowSize } from "@vueuse/core";
 
 export function useScreenSize() {
   const { width } = useWindowSize();
   const SM_SCREEN_SIZE = 639;
-  const MD_SCREEN_SIZE = 639;
 
   const isSmallScreen = ref<boolean>(false);
 
