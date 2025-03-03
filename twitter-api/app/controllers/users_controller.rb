@@ -19,7 +19,7 @@ class UsersController < ApplicationController
   def show_by_username
     @user = User.find_by(username: params[:username])
     if @user
-      render json: UserSerializer.new(@user).serializable_hash.to_json
+      render json: UserSerializer.new(@user, { params: { current_user: current_user } }).serializable_hash.to_json
     else
       render json: { message: 'User not found' }, status: 404
     end
