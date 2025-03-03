@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  include Paginable
   before_action :set_user, only: %i[show update destroy follow_user]
   before_action :is_authenticated,
                 only: %i[me update destroy following followers follow_user unfollow_user explore_users]
@@ -96,7 +97,7 @@ class UsersController < ApplicationController
 
   def explore_users
     # Return users that you are not following
-    users = User.where.not(id: current_user.following.pluck(:id)).where.not(id: current_user.id)
+    users = User.where.not(id: current_user.following.pluck(:id)).where.not(id: current_user.id).page(current_page).per(per_page)
     render json: UserSerializer.new(users), status: :ok
   end
 
