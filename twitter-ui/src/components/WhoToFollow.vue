@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import type { User } from "@/models/User";
 import { exploreUsers, followUser } from "@/api/endpoints";
 import { useAuthStore } from "@/stores/auth";
@@ -7,6 +8,7 @@ import AvatarCircle from "./AvatarCircle.vue";
 import FollowButton from "./profile/FollowButton.vue";
 
 const authStore = useAuthStore();
+const router = useRouter();
 const users = ref<User[]>([]);
 
 onMounted(async () => {
@@ -17,6 +19,10 @@ async function onFollow(followedUser: User) {
   const index = users.value.findIndex((x) => x.id == followedUser.id);
   users.value.splice(index, 1);
   authStore.incrementFollowingCount();
+}
+
+function navigateToUserProfile(user: User) {
+  router.push(`/${user.username}`);
 }
 </script>
 
@@ -31,7 +37,7 @@ async function onFollow(followedUser: User) {
               :src="user.profileImage"
               :alt="`Profile image for ${user.username}`"
             />
-            <div>
+            <div class="user__link" @click="navigateToUserProfile(user)">
               <h3 class="user__name">{{ user.name }}</h3>
               <p class="user__username">@{{ user.username }}</p>
             </div>
@@ -65,6 +71,16 @@ async function onFollow(followedUser: User) {
   display: flex;
   gap: 1.5rem;
   justify-content: space-between;
+
+  &__link {
+    &:hover {
+      cursor: pointer;
+
+      p {
+        text-decoration: underline;
+      }
+    }
+  }
 
   &__content {
     display: flex;
