@@ -10,6 +10,7 @@ import Link from "@/components/common/Link.vue";
 import Image from "../common/Image.vue";
 import Modal from "../common/Modal.vue";
 import ProfileEditor from "../ProfileEditor.vue";
+import FollowButton from "./FollowButton.vue";
 
 interface ProfileHeaderProps {
   user: User;
@@ -18,6 +19,7 @@ interface ProfileHeaderProps {
 const props = defineProps<ProfileHeaderProps>();
 const authStore = useAuthStore();
 const showProfileEditor = ref<boolean>(false);
+const showFollowButton = ref<boolean>(true);
 
 const birthDate = computed(() =>
   dayjs(props.user.birthDate).format("MMM D, YYYY")
@@ -31,6 +33,10 @@ function closeProfileEditor() {
 
 function formatLink(link: string): string {
   return link.replace(/^https?:\/\//, "");
+}
+
+function onFollow() {
+  showFollowButton.value = false;
 }
 </script>
 
@@ -53,10 +59,22 @@ function formatLink(link: string): string {
         </template>
         <ProfileEditor @onClose="closeProfileEditor" />
       </Modal>
+      <FollowButton
+        v-if="
+          user.id !== authStore.user?.id &&
+          !user.isFollowing &&
+          showFollowButton
+        "
+        :userId="user.id"
+        @onFollow="onFollow"
+      />
     </div>
-    <div class="profile__name mb-2">
+    <div class="profile__name">
       <h3>{{ user.name }}</h3>
       <p>@{{ user.username }}</p>
+    </div>
+    <div class="py-3">
+      <p>{{ user.bio }}</p>
     </div>
     <div class="profile__info mb-2">
       <span v-if="user.location">
