@@ -73,7 +73,7 @@ async function signupUser() {
   try {
     const res = await api.signupUser(formState);
     const user = res.data.attributes;
-    authStore.setUser(user);
+    authStore.setUserAuthState(user, res.meta.accessToken);
     router.push("/home");
   } catch (e) {
     console.log(e);

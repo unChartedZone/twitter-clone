@@ -23,8 +23,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   async function loginUser(payload: LoginPayload) {
     const res = await login(payload);
-    accessToken.value = res.meta.accessToken;
-    user.value = res.data.attributes;
+    setUserAuthState(res.data.attributes, res.meta.accessToken);
   }
 
   async function refreshUser() {
@@ -61,6 +60,8 @@ export const useAuthStore = defineStore("auth", () => {
       profileImage
     );
 
+    profileStore.setProfileUser({ ...updatedUser });
+
     // If name was updated we should update any tweets of the user to match new name
     if (
       !!userPatch.name &&
@@ -91,8 +92,9 @@ export const useAuthStore = defineStore("auth", () => {
     };
   }
 
-  function setUser(userValue: User) {
+  function setUserAuthState(userValue: User, token: string) {
     user.value = userValue;
+    accessToken.value = token;
   }
 
   /**
@@ -124,7 +126,7 @@ export const useAuthStore = defineStore("auth", () => {
     loginUser,
     refreshUser,
     logoutUser,
-    setUser,
+    setUserAuthState,
     updateUser,
     incrementFollowingCount,
   };
