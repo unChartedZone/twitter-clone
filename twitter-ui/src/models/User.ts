@@ -1,4 +1,4 @@
-export interface BaseUser {
+export interface User {
   id: string;
   email: string;
   username: string;
@@ -30,8 +30,4 @@ export interface UserSummary {
   name: string;
   username: string;
   profileImageUrl: string;
-}
-
-export default interface User extends BaseUser {
-  accessToken: string;
 }

@@ -1,9 +1,8 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { login, logout, refresh, patchUser } from "@/api/endpoints";
-import type User from "@/models/User";
 import { useProfileStore } from "./profile";
-import type { BaseUser, UserPatch } from "@/models/User";
+import type { User, UserPatch } from "@/models/User";
 import type Tweet from "@/models/Tweet";
 import type { LoginPayload } from "@/types/RequestPayloads";
 import type { LoadingState } from "@/types/LoadingState";

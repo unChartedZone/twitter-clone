@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { followUser } from "@/api/endpoints";
-import type { BaseUser } from "@/models/User";
+import type { User } from "@/models/User";
 import Button from "../common/Button.vue";
 import type { LoadingState } from "@/types/LoadingState";
 
@@ -12,7 +12,7 @@ interface FollowButtonProps {
 const loading = ref<LoadingState>();
 const props = defineProps<FollowButtonProps>();
 const emit = defineEmits<{
-  (e: "onFollow", followedUser: BaseUser): Promise<void>;
+  (e: "onFollow", followedUser: User): Promise<void>;
 }>();
 
 async function follow() {

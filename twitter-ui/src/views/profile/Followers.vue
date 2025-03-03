@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import type { BaseUser } from "@/models/User";
+import type { User } from "@/models/User";
 import { fetchFollowers } from "@/api/endpoints";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import PageHeader from "@/components/PageHeader.vue";
@@ -12,7 +12,7 @@ import UnfollowButton from "@/components/profile/UnfollowButton.vue";
 
 const route = useRoute();
 const { loading, currentUser } = useUserProfile(route.params.username[0]);
-const followers = ref<BaseUser[]>([]);
+const followers = ref<User[]>([]);
 
 onMounted(async () => {
   followers.value = await fetchFollowers(route.params.username[0]);

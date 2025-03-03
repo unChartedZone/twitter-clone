@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import type { BaseUser } from "@/models/User";
+import type { User } from "@/models/User";
 import { exploreUsers, followUser } from "@/api/endpoints";
 import { useAuthStore } from "@/stores/auth";
 import AvatarCircle from "./AvatarCircle.vue";
 import FollowButton from "./profile/FollowButton.vue";
 
 const authStore = useAuthStore();
-const users = ref<BaseUser[]>([]);
+const users = ref<User[]>([]);
 
 onMounted(async () => {
   users.value = await exploreUsers();
 });
 
-async function onFollow(followedUser: BaseUser) {
+async function onFollow(followedUser: User) {
   const index = users.value.findIndex((x) => x.id == followedUser.id);
   users.value.splice(index, 1);
   authStore.incrementFollowingCount();

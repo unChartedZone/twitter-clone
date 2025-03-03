@@ -7,11 +7,11 @@ import PageHeader from "@/components/PageHeader.vue";
 import UnfollowButton from "@/components/profile/UnfollowButton.vue";
 import FollowerTabs from "./FollowerTabs.vue";
 import FollowsList from "@/components/profile/FollowsList.vue";
-import type { BaseUser } from "@/models/User";
+import type { User } from "@/models/User";
 
 const route = useRoute();
 const { currentUser } = useUserProfile(route.params.username[0]);
-const following = ref<BaseUser[]>([]);
+const following = ref<User[]>([]);
 
 onMounted(async () => {
   following.value = await fetchFollowing(route.params.username[0]);

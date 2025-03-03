@@ -1,11 +1,11 @@
 import { ref, onMounted } from "vue";
 import type { LoadingState } from "@/types/LoadingState";
-import type { BaseUser } from "@/models/User";
+import type { User } from "@/models/User";
 import { fetchUserByUsername } from "@/api/endpoints";
 
 export function useUserProfile(routeUsername: string) {
   const loading = ref<LoadingState>("idle");
-  const currentUser = ref<BaseUser>();
+  const currentUser = ref<User>();
 
   onMounted(async () => {
     await fetchUserProfile(routeUsername);

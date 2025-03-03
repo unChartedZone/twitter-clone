@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 import dayjs from "dayjs";
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
-import type { BaseUser } from "@/models/User";
+import type { User } from "@/models/User";
 import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
 import Link from "@/components/common/Link.vue";
@@ -12,7 +12,7 @@ import Modal from "../common/Modal.vue";
 import ProfileEditor from "../ProfileEditor.vue";
 
 interface ProfileHeaderProps {
-  user: BaseUser;
+  user: User;
 }
 
 const props = defineProps<ProfileHeaderProps>();

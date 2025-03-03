@@ -3,7 +3,7 @@ import type {
   TweetListResponse,
   Data,
 } from "@/types/ResponseTypes";
-import type { BaseUser } from "@/models/User";
+import type { User } from "@/models/User";
 import type Tweet from "@/models/Tweet";
 
 export function transformTweetResponse(res: TweetResponse): Tweet {
@@ -26,14 +26,14 @@ export function transformTweetListResponse(res: TweetListResponse): Tweet[] {
   }));
 }
 
-function createUserMap(userData: Data<BaseUser>[]): Map<string, BaseUser> {
+function createUserMap(userData: Data<User>[]): Map<string, User> {
   return userData.reduce((acc, value) => {
     acc.set(value.id, {
       ...value.attributes,
       id: value.id,
     });
     return acc;
-  }, new Map<string, BaseUser>());
+  }, new Map<string, User>());
 }
 
 export function getQueryParams(url: string): Record<string, string> {

@@ -1,6 +1,5 @@
 import type { BaseTweet } from "@/models/Tweet";
-import { type BaseUser } from "@/models/User";
-import type User from "@/models/User";
+import { type User } from "@/models/User";
 import type Comment from "@/models/Comment";
 import type Notification from "@/models/Notification";
 
@@ -45,23 +44,23 @@ export interface LoginResponse extends BaseResponse<User> {
     accessToken: string;
   };
 }
-export interface UserResponse extends BaseResponse<BaseUser> {}
+export interface UserResponse extends BaseResponse<User> {}
 export interface ExploreUsersResponse {
-  data: Data<BaseUser>[];
+  data: Data<User>[];
 }
 
 export interface FollowingResponse {
-  data: Data<BaseUser>[];
+  data: Data<User>[];
 }
 
 export interface TweetResponse {
   data: Data<BaseTweet>;
-  included: Data<BaseUser>[];
+  included: Data<User>[];
 }
 
 export interface TweetListResponse {
   data: Data<BaseTweet>[];
-  included: Data<BaseUser>[];
+  included: Data<User>[];
   links: Pagination;
 }
 

@@ -1,8 +1,7 @@
 import axios from "axios";
 import { authClient, client } from "./client";
-import type User from "@/models/User";
 import type Tweet from "@/models/Tweet";
-import type { BaseUser, UserPatch } from "@/models/User";
+import type { User, UserPatch } from "@/models/User";
 import type {
   LoginResponse,
   UserResponse,
@@ -56,7 +55,7 @@ export async function patchUser(
   userPatch: UserPatch,
   bannerImage?: File,
   profileImage?: File
-): Promise<BaseUser> {
+): Promise<User> {
   const formData = new FormData();
 
   // Add images to form data if they exist
@@ -84,27 +83,25 @@ export async function patchUser(
   return res.data.data.attributes;
 }
 
-export async function exploreUsers(): Promise<BaseUser[]> {
+export async function exploreUsers(): Promise<User[]> {
   const res = await authClient.get<ExploreUsersResponse>("/users/explore");
   return res.data.data.map((x) => x.attributes);
 }
 
-export async function fetchUserByUsername(username: string): Promise<BaseUser> {
-  const res = await authClient.get<BaseResponse<BaseUser>>(
-    `/users/${username}`
-  );
+export async function fetchUserByUsername(username: string): Promise<User> {
+  const res = await authClient.get<BaseResponse<User>>(`/users/${username}`);
 
   return res.data.data.attributes;
 }
 
-export async function fetchFollowing(username: string): Promise<BaseUser[]> {
+export async function fetchFollowing(username: string): Promise<User[]> {
   const res = await authClient.get<FollowingResponse>("/users/following", {
     params: { username },
   });
   return res.data.data.map((x) => x.attributes);
 }
 
-export async function fetchFollowers(username: string): Promise<BaseUser[]> {
+export async function fetchFollowers(username: string): Promise<User[]> {
   const res = await authClient.get<FollowingResponse>("/users/followers", {
     params: { username },
   });
@@ -113,7 +110,7 @@ export async function fetchFollowers(username: string): Promise<BaseUser[]> {
 
 export async function followUser(userId: string) {
   // TODO: update this when I create a serializer for followers
-  const res = await authClient.post<{ followed_user: BaseUser }>(
+  const res = await authClient.post<{ followed_user: User }>(
     `/users/follow/${userId}`
   );
   return res.data;

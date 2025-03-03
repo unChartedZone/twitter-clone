@@ -2,17 +2,14 @@ import { ref, reactive, watch, computed } from "vue";
 import { defineStore } from "pinia";
 import * as tweetApi from "@/api/endpoints/tweets";
 import { fetchUserByUsername } from "@/api/endpoints";
-import { useAuthStore } from "./auth";
-import { getQueryParams } from "@/api/helpers";
 import type { LoadingState } from "@/types/LoadingState";
 import type { TweetListSegment, TweetListState } from "@/types/TweetList";
-import type { BaseUser } from "@/models/User";
+import type { User } from "@/models/User";
 
 export const useProfileStore = defineStore("profile", () => {
-  const authStore = useAuthStore();
   // User of profile currently loaded
   const loadingUser = ref<LoadingState>();
-  const profileUser = ref<BaseUser>();
+  const profileUser = ref<User>();
 
   const initalTweetListState: TweetListState = {
     loading: "idle",
@@ -78,7 +75,7 @@ export const useProfileStore = defineStore("profile", () => {
     }
   }
 
-  function setProfileUser(user: BaseUser) {
+  function setProfileUser(user: User) {
     profileUser.value = { ...user };
   }
 
