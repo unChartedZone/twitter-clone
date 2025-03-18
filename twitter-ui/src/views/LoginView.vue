@@ -34,10 +34,6 @@ async function handleLoginSubmit() {
     router.push("/home");
   } catch (err: any) {
     showErrorMessage.value = true;
-    if (axios.isAxiosError(err)) {
-      const res = err.response as ErrorResponse; // TODO: probably better way of typing this...
-      console.log("Message: ", res.data.message);
-    }
   }
 }
 
@@ -81,7 +77,7 @@ function isValidEmail(email: string): boolean {
       </div>
     </div>
   </main>
-  <Alert v-model="showErrorMessage">Wrong password!</Alert>
+  <Alert v-model="showErrorMessage">Username or password was incorrect</Alert>
   <GuestMessage />
 </template>
 
