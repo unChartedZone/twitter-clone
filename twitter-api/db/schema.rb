@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_07_023954) do
+ActiveRecord::Schema.define(version: 2025_04_11_164341) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,30 @@ ActiveRecord::Schema.define(version: 2025_01_07_023954) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["tweet_id"], name: "index_bookmarks_on_tweet_id"
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
+
+  create_table "chat_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "body"
+    t.uuid "user_id", null: false
+    t.uuid "chat_thread_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chat_thread_id"], name: "index_chat_messages_on_chat_thread_id"
+    t.index ["user_id"], name: "index_chat_messages_on_user_id"
+  end
+
+  create_table "chat_thread_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "chat_thread_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chat_thread_id"], name: "index_chat_thread_participants_on_chat_thread_id"
+    t.index ["user_id"], name: "index_chat_thread_participants_on_user_id"
+  end
+
+  create_table "chat_threads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "comment_media", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -149,6 +173,10 @@ ActiveRecord::Schema.define(version: 2025_01_07_023954) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookmarks", "tweets"
   add_foreign_key "bookmarks", "users"
+  add_foreign_key "chat_messages", "chat_threads"
+  add_foreign_key "chat_messages", "users"
+  add_foreign_key "chat_thread_participants", "chat_threads"
+  add_foreign_key "chat_thread_participants", "users"
   add_foreign_key "comment_media", "comments"
   add_foreign_key "comments", "tweets"
   add_foreign_key "comments", "users"
