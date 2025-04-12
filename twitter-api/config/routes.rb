@@ -49,6 +49,8 @@ Rails.application.routes.draw do
 
   resources :medium, only: %i[index create], path: :media
 
+  # Chat Threads Endpoints
+  resources :chat_threads, only: [:index, :create], path: :threads
   # Password Endpoints
   post '/password/reset', to: 'password#create'
   get '/password/reset/valid', to: 'password#valid_token'
