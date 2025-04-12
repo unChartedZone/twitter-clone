@@ -3,7 +3,7 @@ class BookmarksController < ApplicationController
   before_action :set_tweet, only: %i[create destroy]
 
   def index
-    bookmarks = current_user.bookmarked_tweets
+    bookmarks = current_user.bookmarked_tweets.order(created_at: :desc)
     options = { include: [:user], params: { current_user: } }
     render json: TweetSerializer.new(bookmarks, options).serializable_hash.to_json, status: :ok
   end
