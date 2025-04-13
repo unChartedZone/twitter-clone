@@ -36,6 +36,7 @@ export const iconVariants = [
   "magnifying-glass-person",
   "message",
   "message-outline",
+  "message-plus",
   "metrics",
   "mobile-signal",
   "more",
