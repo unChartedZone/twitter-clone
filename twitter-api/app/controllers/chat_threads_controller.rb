@@ -13,7 +13,7 @@ class ChatThreadsController < ApplicationController
     participant_ids = params[:user_ids].uniq
     participant_ids << current_user.id unless participant_ids.include?(current_user.id)
     chat_thread = ChatService.new.create_thread(participant_ids)
-    render json: chat_thread, status: :created
+    render json: ChatThreadSerializer.new(chat_thread).serializable_hash.to_json, status: :created
   rescue ActiveRecord::RecordInvalid => e
     render json: { error: e.message }, status: :unprocessable_entity
   end

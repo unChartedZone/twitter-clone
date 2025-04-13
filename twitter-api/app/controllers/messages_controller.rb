@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+  include Paginable
   before_action :is_authenticated, only: [:index, :create]
 
   def index
@@ -8,17 +9,19 @@ class MessagesController < ApplicationController
       return render json: { error: "You do not have access to this thread" }, status: :forbidden
     end
 
-    messages = chat_thread.chat_messages.includes(:user).order(created_at: :asc)
-    render json: messages, status: :ok
+    messages = chat_thread.chat_messages.includes(:user).order(created_at: :desc).page(current_page).per(per_page)
+    render json: ChatMessageSerializer.new(messages), status: :ok
   end
 
   def create
     @chat_thread = ChatThread.find(params[:chat_thread_id])
     @message = @chat_thread.chat_messages.new(message_params.merge(user: current_user))
 
+    # TODO: validate that current user is a participant of thread
+
     if @message.save
       ChatThreadChannel.broadcast_to(@chat_thread, {
-        message: @message.to_json
+        message: ChatMessageSerializer.new(@message).serializable_hash.to_json
       })
 
       render json: @message, status: :created
