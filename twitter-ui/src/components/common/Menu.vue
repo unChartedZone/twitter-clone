@@ -24,6 +24,8 @@ function handleChange() {
   emit("update:modelValue", !props.modelValue);
 }
 
+// Watch for changes in position and dynamically change the menu's position
+// accordingly
 watch(
   () => [props.modelValue, target.value],
   (val, _oldVal) => {

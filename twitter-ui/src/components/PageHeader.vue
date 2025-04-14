@@ -29,10 +29,11 @@ withDefaults(defineProps<PageHeaderProps>(), {
         <Icon variant="left-arrow" />
       </Button>
       <LoadingIcon v-if="loading" />
-      <div v-else>
+      <div class="page-header__title" v-else>
         <h2>{{ title }}</h2>
         <span>{{ subtitle }}</span>
       </div>
+      <slot name="actions" />
     </div>
   </header>
 </template>
@@ -55,6 +56,10 @@ withDefaults(defineProps<PageHeaderProps>(), {
     align-items: center;
     gap: 2rem;
     padding: 0.5rem 0.5rem;
+  }
+
+  &__title {
+    flex: 1;
   }
 
   h2 {
