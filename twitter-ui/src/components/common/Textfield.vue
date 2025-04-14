@@ -36,7 +36,7 @@ function handleChange(value: string) {
     <input
       class="input"
       :name="name?.toLowerCase() ?? label?.toLowerCase()"
-      :placeholder="placeholder ? placeholder : label"
+      :placeholder="!!placeholder && !label ? placeholder : ''"
       :type="type"
       :value="modelValue"
       :autocomplete="!autocomplete ? 'off' : 'on'"
@@ -94,10 +94,6 @@ function handleChange(value: string) {
       &:not(:focus) + label {
         color: rgba(107, 114, 128, 1);
       }
-
-      &::placeholder {
-        opacity: 0;
-      }
     }
   }
 
@@ -110,7 +106,7 @@ function handleChange(value: string) {
     }
 
     & .input {
-      padding: 0.75rem 0.5rem;
+      padding: 0.75rem 1rem;
     }
 
     & .input::placeholder {
