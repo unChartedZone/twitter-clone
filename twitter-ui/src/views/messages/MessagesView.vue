@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-import * as messagesApi from "@/api/endpoints/messages";
+import { onMounted } from "vue";
+import { useRouter, RouterView } from "vue-router";
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
 import Modal from "@/components/common/Modal.vue";
@@ -9,15 +8,15 @@ import NewChatList from "@/components/messages/NewChatList.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import ChatThreadList from "@/components/messages/ChatThreadList.vue";
 import Textfield from "@/components/common/Textfield.vue";
-import type Thread from "@/models/Thread";
+import { useChatStore } from "@/stores/chat";
 
 const router = useRouter();
-const newChatModal = ref(false);
-const threads = ref<Thread[]>([]);
+const chatStore = useChatStore();
 
-onMounted(async () => {
-  const ts = await messagesApi.fetchChatThreads();
-  threads.value = [...ts];
+onMounted(() => {
+  if (chatStore.threads.length === 0) {
+    chatStore.fetchThreads();
+  }
 });
 
 function navigateToThread(threadId: string) {
@@ -26,27 +25,46 @@ function navigateToThread(threadId: string) {
 </script>
 
 <template>
-  <PageHeader title="Messages">
-    <template #actions>
-      <Button variant="icon-ghost" size="icon" @click="newChatModal = true">
-        <Icon variant="message-plus" />
-      </Button>
-    </template>
-  </PageHeader>
-  <Modal v-model="newChatModal">
+  <Modal v-model="chatStore.newChatModal">
     <NewChatList @onCreate="(threadId) => navigateToThread(threadId)" />
   </Modal>
-  <div class="mx-2">
-    <Textfield
-      variant="rounded"
-      placeholder="Search direct messages"
-      icon="magnifying-glass"
-    />
-  </div>
-  <ChatThreadList
-    :threads="threads"
-    @onClick="(threadId) => navigateToThread(threadId)"
-  />
+  <main class="messages-container">
+    <section>
+      <PageHeader title="Messages">
+        <template #actions>
+          <Button
+            variant="icon-ghost"
+            size="icon"
+            @click="chatStore.toggleNewChatModal"
+          >
+            <Icon variant="message-plus" />
+          </Button>
+        </template>
+      </PageHeader>
+      <div class="mx-2">
+        <Textfield
+          variant="rounded"
+          placeholder="Search direct messages"
+          icon="magnifying-glass"
+        />
+      </div>
+      <ChatThreadList
+        :threads="chatStore.threads"
+        @onClick="(threadId) => navigateToThread(threadId)"
+      />
+    </section>
+    <section>
+      <router-view />
+    </section>
+  </main>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.messages-container {
+  display: flex;
+
+  section {
+    flex: 1;
+  }
+}
+</style>

@@ -45,6 +45,7 @@ const messageTimestamp = computed(() =>
   &__timestamp {
     font-size: 0.8rem;
     text-align: end;
+    margin-top: 0.25rem;
   }
 }
 

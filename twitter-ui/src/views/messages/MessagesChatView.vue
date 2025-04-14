@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { useRoute } from "vue-router";
 import { connectToThread, disconnect } from "@/api/websocket";
 import * as messagesApi from "@/api/endpoints/messages";
@@ -10,8 +10,12 @@ import Textfield from "@/components/common/Textfield.vue";
 import { useAuthStore } from "@/stores/auth";
 import type { Message } from "@/models/Message";
 import type { ChatMessageResponse } from "@/types/ResponseTypes";
+import { useChatStore } from "@/stores/chat";
+
+const props = defineProps<{ threadId: string }>();
 
 const authStore = useAuthStore();
+const chatStore = useChatStore();
 const route = useRoute();
 const messages = ref<Message[]>([]);
 const newChatText = ref("");
@@ -19,25 +23,30 @@ const newChatText = ref("");
 onMounted(async () => {
   if (!authStore.accessToken) return;
 
-  const threadId = route.params.threadId as string;
-
-  await fetchMessages(threadId);
-
-  connectToThread(
-    threadId,
-    authStore.accessToken,
-    (messagePayload: { message: string }) => {
-      const newMessage = JSON.parse(
-        messagePayload.message
-      ) as ChatMessageResponse;
-      messages.value.push(newMessage.data.attributes);
-    }
-  );
+  await fetchMessages(props.threadId);
+  chatStore.setSelectedThread(props.threadId);
+  connectToThread(props.threadId, authStore.accessToken, addMessageFromSocket);
 });
 
 onBeforeUnmount(() => {
   disconnect();
 });
+
+watch(
+  () => props.threadId,
+  (threadId, _oldThreadId) => {
+    disconnect();
+    messages.value = [];
+    chatStore.setSelectedThread(threadId);
+    connectToThread(threadId, authStore.accessToken!, addMessageFromSocket);
+    fetchMessages(threadId);
+  }
+);
+
+function addMessageFromSocket(messagePayload: { message: string }) {
+  const newMessage = JSON.parse(messagePayload.message) as ChatMessageResponse;
+  messages.value.push(newMessage.data.attributes);
+}
 
 async function fetchMessages(threadId: string) {
   const ms = await messagesApi.fetchMessages(threadId);
@@ -55,7 +64,7 @@ async function sendMessage() {
 
 <template>
   <div class="messages-view">
-    <PageHeader title="Thread" />
+    <PageHeader :title="chatStore.participant" hideBackButton />
     <div class="chat-container">
       <ul class="messages-list">
         <MessageBubble

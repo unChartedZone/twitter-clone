@@ -76,20 +76,22 @@ const router = createRouter({
       path: "/messages",
       name: "messages",
       component: () => import("../views/messages/MessagesView.vue"),
+      children: [
+        {
+          name: "select-chat-view",
+          path: "",
+          component: () => import("../views/messages/SelectChatView.vue"),
+        },
+        {
+          name: "messages-chat",
+          path: ":threadId",
+          component: () => import("../views/messages/MessagesChatView.vue"),
+          props: true,
+        },
+      ],
       meta: {
         requiresAuth: true,
         layout: Default,
-        sidebarComponents: [SearchField, WhoToFollow],
-      },
-    },
-    {
-      path: "/messages/:threadId",
-      name: "messages-chat",
-      component: () => import("../views/messages/MessagesChatView.vue"),
-      meta: {
-        requiresAuth: true,
-        layout: Default,
-        sidebarComponents: [],
       },
     },
     {
