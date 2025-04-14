@@ -36,6 +36,12 @@ const links: NavLink[] = [
     activeIcon: "bell",
   },
   {
+    text: "Messages",
+    to: "/messages",
+    icon: "message-outline",
+    activeIcon: "message",
+  },
+  {
     text: "Bookmarks",
     to: "/bookmarks",
     icon: "bookmark-outline",
