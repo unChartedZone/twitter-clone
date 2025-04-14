@@ -73,6 +73,26 @@ const router = createRouter({
       },
     },
     {
+      path: "/messages",
+      name: "messages",
+      component: () => import("../views/messages/MessagesView.vue"),
+      meta: {
+        requiresAuth: true,
+        layout: Default,
+        sidebarComponents: [SearchField, WhoToFollow],
+      },
+    },
+    {
+      path: "/messages/:threadId",
+      name: "messages-chat",
+      component: () => import("../views/messages/MessagesChatView.vue"),
+      meta: {
+        requiresAuth: true,
+        layout: Default,
+        sidebarComponents: [],
+      },
+    },
+    {
       path: "/bookmarks",
       name: "bookmarks",
       component: () => import("../views/BookmarksView.vue"),
