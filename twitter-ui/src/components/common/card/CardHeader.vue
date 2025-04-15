@@ -4,7 +4,9 @@
       <slot name="left" />
     </section>
     <section class="card-header__content">
-      <slot />
+      <h1>
+        <slot />
+      </h1>
     </section>
     <section class="card-header__right">
       <slot name="right" />
@@ -21,6 +23,11 @@
 
   &__content {
     flex: 2;
+
+    h1 {
+      text-align: center;
+      font-size: 1.2rem;
+    }
   }
 
   &__left,

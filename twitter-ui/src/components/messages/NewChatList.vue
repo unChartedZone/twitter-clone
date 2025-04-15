@@ -38,9 +38,7 @@ onMounted(() => {
 
 <template>
   <Card>
-    <CardHeader>
-      <h1>New Chat</h1>
-    </CardHeader>
+    <CardHeader>New Chat</CardHeader>
     <CardBody>
       <ul>
         <li

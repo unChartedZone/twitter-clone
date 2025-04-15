@@ -29,7 +29,7 @@ function navigateToThread(threadId: string) {
     <NewChatList @onCreate="(threadId) => navigateToThread(threadId)" />
   </Modal>
   <main class="messages-container">
-    <section>
+    <section class="thread-container">
       <PageHeader title="Messages">
         <template #actions>
           <Button
@@ -66,5 +66,9 @@ function navigateToThread(threadId: string) {
   section {
     flex: 1;
   }
+}
+
+.thread-container {
+  border-right: 1px solid $gray-100;
 }
 </style>
