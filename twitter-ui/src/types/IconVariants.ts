@@ -12,6 +12,7 @@ export const iconVariants = [
   "chevron-right",
   "content",
   "copy",
+  "copy-plus",
   "cross",
   "download",
   "ellipsis",
@@ -57,6 +58,7 @@ export const iconVariants = [
   "smiley",
   "speaker-muted",
   "transfer",
+  "trash-can",
 ] as const;
 
 export type IconVariant = (typeof iconVariants)[number];

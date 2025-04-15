@@ -14,6 +14,7 @@ import Chain from "./Chain.vue";
 import ChevronRight from "./ChevronRight.vue";
 import Content from "./Content.vue";
 import Copy from "./Copy.vue";
+import CopyPlus from "./CopyPlus.vue";
 import Cross from "./Cross.vue";
 import Download from "./Download.vue";
 import Ellipsis from "./Ellipsis.vue";
@@ -59,6 +60,7 @@ import Share from "./Share.vue";
 import Smiley from "./Smiley.vue";
 import SpeakerMuted from "./SpeakerMuted.vue";
 import Transfer from "./Transfer.vue";
+import TrashCan from "./TrashCan.vue";
 
 defineProps<{ variant: IconVariant }>();
 
@@ -76,6 +78,7 @@ iconComponentMap.set("chain", Chain);
 iconComponentMap.set("chevron-right", ChevronRight);
 iconComponentMap.set("content", Content);
 iconComponentMap.set("copy", Copy);
+iconComponentMap.set("copy-plus", CopyPlus);
 iconComponentMap.set("cross", Cross);
 iconComponentMap.set("download", Download);
 iconComponentMap.set("feather", Feather);
@@ -121,6 +124,7 @@ iconComponentMap.set("share", Share);
 iconComponentMap.set("smiley", Smiley);
 iconComponentMap.set("speaker-muted", SpeakerMuted);
 iconComponentMap.set("transfer", Transfer);
+iconComponentMap.set("trash-can", TrashCan);
 </script>
 
 <template>
