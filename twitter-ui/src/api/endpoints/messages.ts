@@ -20,16 +20,12 @@ async function createChatThread(userIds: string[]): Promise<Thread> {
 }
 
 async function createMessage(threadId: string, body: string) {
-  authClient.post(
-    `/messages`,
-    { message: { body } },
-    { params: { chatThreadId: threadId } }
-  );
+  authClient.post(`/messages`, { message: { body } }, { params: { threadId } });
 }
 
 async function fetchMessages(threadId: string): Promise<Message[]> {
   const res = await authClient.get<ChatMessageListResponse>("/messages", {
-    params: { chatThreadId: threadId },
+    params: { threadId },
   });
   return res.data.data
     .map((x) => x.attributes)
@@ -39,4 +35,19 @@ async function fetchMessages(threadId: string): Promise<Message[]> {
     );
 }
 
-export { fetchChatThreads, createChatThread, fetchMessages, createMessage };
+async function deleteMessage(
+  messageId: string,
+  threadId: string
+): Promise<void> {
+  await authClient.delete(`/messages/${messageId}`, {
+    params: { threadId },
+  });
+}
+
+export {
+  fetchChatThreads,
+  createChatThread,
+  fetchMessages,
+  createMessage,
+  deleteMessage,
+};
