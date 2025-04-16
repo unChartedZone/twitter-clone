@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
   include Paginable
   before_action :is_authenticated, only: [:index, :create, :destroy]
-  before_action :set_chat_thread, only: [:index, :create]
+  before_action :set_chat_thread, only: [:index, :create, :destroy]
   before_action :set_message, only: [:destroy]
   before_action :check_participant, only: [:index, :create, :destroy]
 
@@ -15,6 +15,7 @@ class MessagesController < ApplicationController
 
     if @message.save
       ChatThreadChannel.broadcast_to(@chat_thread, {
+        type: "message-created",
         message: ChatMessageSerializer.new(@message).serializable_hash.to_json
       })
 
@@ -26,6 +27,10 @@ class MessagesController < ApplicationController
 
   def destroy
     if @message.destroy
+      ChatThreadChannel.broadcast_to(@chat_thread, { 
+        type: "message-deleted",
+        message: @message&.id.to_s 
+      })
       head :no_content
     else
       render json: { message: 'Error deleting message' }, status: :bad_request

@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
-import { useRoute } from "vue-router";
+import { ref, reactive, onMounted, onBeforeUnmount, watch } from "vue";
 import { connectToThread, disconnect } from "@/api/websocket";
 import * as messagesApi from "@/api/endpoints/messages";
 import Button from "@/components/common/Button.vue";
+import Card from "@/components/common/Card.vue";
+import CardHeader from "@/components/common/card/CardHeader.vue";
+import CardBody from "@/components/common/card/CardBody.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import MessageBubble from "@/components/messages/MessageBubble.vue";
+import Modal from "@/components/common/Modal.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import { useAuthStore } from "@/stores/auth";
 import type { Message } from "@/models/Message";
@@ -16,16 +19,19 @@ const props = defineProps<{ threadId: string }>();
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();
-const route = useRoute();
 const messages = ref<Message[]>([]);
 const newChatText = ref("");
+const deleteMessageState = reactive({
+  toggleModal: false,
+  messageId: "",
+});
 
 onMounted(async () => {
   if (!authStore.accessToken) return;
 
   await fetchMessages(props.threadId);
   chatStore.setSelectedThread(props.threadId);
-  connectToThread(props.threadId, authStore.accessToken, addMessageFromSocket);
+  connectToThread(props.threadId, authStore.accessToken, handleSocketMessage);
 });
 
 onBeforeUnmount(() => {
@@ -38,14 +44,31 @@ watch(
     disconnect();
     messages.value = [];
     chatStore.setSelectedThread(threadId);
-    connectToThread(threadId, authStore.accessToken!, addMessageFromSocket);
+    connectToThread(threadId, authStore.accessToken!, handleSocketMessage);
     fetchMessages(threadId);
   }
 );
 
-function addMessageFromSocket(messagePayload: { message: string }) {
-  const newMessage = JSON.parse(messagePayload.message) as ChatMessageResponse;
-  messages.value.push(newMessage.data.attributes);
+function handleSocketMessage(messagePayload: {
+  type: string;
+  message: string;
+}) {
+  switch(messagePayload.type) {
+    case "message-created": {
+      const newMessage = JSON.parse(messagePayload.message) as ChatMessageResponse;
+      messages.value.push(newMessage.data.attributes);
+    }
+    case "message-deleted": {
+      const messageId = messagePayload.message
+      const index = messages.value.findIndex(m => m.id === messageId)
+      if(index !== -1) {
+        messages.value.splice(index, 1)
+      }
+    }
+    default: {
+      throw new Error("Unsupported message event type")
+    }
+  }
 }
 
 async function fetchMessages(threadId: string) {
@@ -56,9 +79,29 @@ async function fetchMessages(threadId: string) {
 async function sendMessage() {
   if (!newChatText.value) return;
 
-  const threadId = route.params.threadId as string;
-  await messagesApi.createMessage(threadId, newChatText.value);
+  await messagesApi.createMessage(props.threadId, newChatText.value);
   newChatText.value = "";
+}
+
+function initDeleteModal(messageId: string) {
+  deleteMessageState.toggleModal = true;
+  deleteMessageState.messageId = messageId;
+}
+
+function closeDeleteModal() {
+  deleteMessageState.messageId = "";
+  deleteMessageState.toggleModal = false;
+}
+
+async function deleteMessage() {
+  const index = messages.value.findIndex(
+    (m) => m.id === deleteMessageState.messageId
+  );
+  await messagesApi.deleteMessage(deleteMessageState.messageId, props.threadId);
+  if (index !== -1) {
+    messages.value.splice(index, 1);
+  }
+  closeDeleteModal();
 }
 </script>
 
@@ -72,6 +115,7 @@ async function sendMessage() {
           :key="message.id"
           :message="message"
           :isOwner="message.user.id === authStore.user!.id"
+          @deleteMessageClicked="(messageId) => initDeleteModal(messageId)"
         />
       </ul>
       <div class="chat-field">
@@ -84,6 +128,28 @@ async function sendMessage() {
       </div>
     </div>
   </div>
+  <Modal v-model="deleteMessageState.toggleModal">
+    <Card>
+      <CardHeader>Delete message?</CardHeader>
+      <CardBody>
+        <div class="delete-message">
+          <p>This message will be deleted for everyone in this conversation.</p>
+          <Button
+            variant="destructive"
+            secondaryText="Delete"
+            size="xl"
+            block
+            @click="deleteMessage"
+          >
+            Delete
+          </Button>
+          <Button variant="outline" size="xl" block @click="closeDeleteModal">
+            Cancel
+          </Button>
+        </div>
+      </CardBody>
+    </Card>
+  </Modal>
 </template>
 
 <style scoped lang="scss">
