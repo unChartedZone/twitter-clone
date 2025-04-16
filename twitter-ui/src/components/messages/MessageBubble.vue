@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { useClipboard } from "@vueuse/core";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import type { Message } from "@/models/Message";
+import Alert from "../common/Alert.vue";
 import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
 import List from "../common/List.vue";
@@ -19,11 +21,15 @@ const emit = defineEmits<{
   (e: "deleteMessageClicked", messageId: string): void;
 }>();
 dayjs.extend(relativeTime);
+
 const toggleMenu = ref(false);
+const { copy, copied } = useClipboard({ source: props.message.body });
 
 const messageTimestamp = computed(() =>
   dayjs(props.message.createdAt).format("MMMM D, YYYY, hh:mm A")
 );
+
+const copyMessage = () => copy(props.message.body);
 </script>
 
 <template>
@@ -40,7 +46,9 @@ const messageTimestamp = computed(() =>
             </Button>
           </template>
           <List>
-            <ListItem icon="copy-plus">Copy message</ListItem>
+            <ListItem icon="copy-plus" @click="copyMessage">
+              Copy message
+            </ListItem>
             <ListItem
               icon="trash-can"
               @click="emit('deleteMessageClicked', message.id)"
@@ -55,6 +63,7 @@ const messageTimestamp = computed(() =>
       <span>{{ messageTimestamp }}</span>
     </div>
   </li>
+  <Alert v-model="copied">Copied to clipboard</Alert>
 </template>
 
 <style scoped lang="scss">
