@@ -1,23 +1,17 @@
 class MessagesController < ApplicationController
   include Paginable
-  before_action :is_authenticated, only: [:index, :create]
+  before_action :is_authenticated, only: [:index, :create, :destroy]
+  before_action :set_chat_thread, only: [:index, :create]
+  before_action :set_message, only: [:destroy]
+  before_action :check_participant, only: [:index, :create, :destroy]
 
   def index
-    chat_thread = ChatThread.find(params[:chat_thread_id])
-
-    unless chat_thread.users.exists?(current_user.id)
-      return render json: { error: "You do not have access to this thread" }, status: :forbidden
-    end
-
-    messages = chat_thread.chat_messages.includes(:user).order(created_at: :desc).page(current_page).per(per_page)
+    messages = @chat_thread.chat_messages.includes(:user).order(created_at: :desc).page(current_page).per(per_page)
     render json: ChatMessageSerializer.new(messages), status: :ok
   end
 
   def create
-    @chat_thread = ChatThread.find(params[:chat_thread_id])
     @message = @chat_thread.chat_messages.new(message_params.merge(user: current_user))
-
-    # TODO: validate that current user is a participant of thread
 
     if @message.save
       ChatThreadChannel.broadcast_to(@chat_thread, {
@@ -30,10 +24,31 @@ class MessagesController < ApplicationController
     end
   end
 
+  def destroy
+    if @message.destroy
+      head :no_content
+    else
+      render json: { message: 'Error deleting message' }, status: :bad_request
+    end
+  end
+
   private
+
+  def set_chat_thread
+    @chat_thread = ChatThread.find(params[:thread_id])
+  end
+
+  def set_message
+    @message = ChatMessage.find(params[:id])
+  end
+
+  def check_participant
+    unless ChatThreadParticipant.exists?(user_id: current_user.id, chat_thread_id: params[:thread_id] || @message&.chat_thread_id)
+      render json: { error: "You do not have access to this thread" }, status: :forbidden
+    end
+  end
 
   def message_params
     params.require(:message).permit(:body)
   end
-
 end

@@ -52,7 +52,7 @@ Rails.application.routes.draw do
   # Chat Threads Endpoints
   resources :chat_threads, only: [:index, :create], path: :threads
   # Chat Messages Endpoints
-  resources :messages, only: [:index, :create], path: :messages
+  resources :messages, only: [:index, :create, :destroy], path: :messages
 
   # Password Endpoints
   post '/password/reset', to: 'password#create'
