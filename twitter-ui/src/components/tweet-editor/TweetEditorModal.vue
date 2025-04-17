@@ -70,6 +70,10 @@ const toggleTweetModal = ref<boolean>(false);
 .tweet-editor {
   &__card {
     width: 80%;
+
+    @include respond(sm) {
+      width: 100%;
+    }
   }
 
   &__card :deep(textarea) {
