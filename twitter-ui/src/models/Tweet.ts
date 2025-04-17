@@ -1,6 +1,7 @@
 import type Media from "./Media";
+import type { UserSummary } from "./User";
 
-export interface BaseTweet {
+export default interface Tweet {
   id: string;
   text: string;
   totalComments: number;
@@ -11,12 +12,5 @@ export interface BaseTweet {
   bookmarked: boolean;
   createdAt: Date;
   medium: Media[];
-}
-
-export default interface Tweet extends BaseTweet {
-  user?: {
-    username: string;
-    name: string;
-    profileImage?: string;
-  };
+  user?: UserSummary;
 }

@@ -1,6 +1,5 @@
 import { authClient } from "../client";
 import type { TweetListResponse } from "@/types/ResponseTypes";
-import { transformTweetListResponse } from "../helpers";
 import type Tweet from "@/models/Tweet";
 
 export async function bookmarkTweet(tweetId: string) {
@@ -12,7 +11,7 @@ export async function bookmarkTweet(tweetId: string) {
 
 export async function fetchBookmarkedTweets(): Promise<Tweet[]> {
   const res = await authClient.get<TweetListResponse>("/bookmarks");
-  return transformTweetListResponse(res.data);
+  return res.data.data.map((t) => t.attributes);
 }
 
 export async function removeBookmarkedTweet(tweetId: string) {

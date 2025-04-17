@@ -1,6 +1,5 @@
 import { authClient, client } from "../client";
 import type Tweet from "@/models/Tweet";
-import { transformTweetResponse, transformTweetListResponse } from "../helpers";
 import type {
   TweetListResponse,
   TweetResponse,
@@ -19,11 +18,22 @@ export async function fetchProtectedProfileTweets(
     )
   ).data;
   return {
-    tweets: transformTweetListResponse(res),
+    tweets: res.data.map((t) => t.attributes),
     links: res.links,
   };
 }
 
+/**
+ * Fetches tweets from a protected profile for a given username and page number.
+ *
+ * @param username - The username of the profile whose tweets are to be fetched.
+ * @param page - The page number for pagination (default is 1).
+ * @returns A promise that resolves to an object containing:
+ *          - `tweets`: An array of `Tweet` objects.
+ *          - `links`: Pagination information.
+ *
+ * @throws Will throw an error if the request fails.
+ */
 export async function fetchTweets(
   username: string,
   page: number = 1,
@@ -39,14 +49,14 @@ export async function fetchTweets(
     })
   ).data;
   return {
-    tweets: transformTweetListResponse(res),
+    tweets: res.data.map((t) => t.attributes),
     links: res.links,
   };
 }
 
 export async function fetchFeed(): Promise<Tweet[]> {
   const res = await authClient.get<TweetListResponse>("/tweets/feed");
-  return transformTweetListResponse(res.data);
+  return res.data.data.map((t) => t.attributes);
 }
 
 export async function fetchUserTweets(): Promise<Tweet[]> {
@@ -61,7 +71,6 @@ export async function fetchUserTweets(): Promise<Tweet[]> {
   );
 }
 
-// TODO: allow tweets of profile to be viewed in the future
 export async function fetchProfileTweets(
   username: string
 ): Promise<Tweet[] | undefined> {
@@ -69,7 +78,7 @@ export async function fetchProfileTweets(
     const res = (
       await client.get<TweetListResponse>(`/tweets/profile/${username}`)
     ).data;
-    return transformTweetListResponse(res);
+    return res.data.map((t) => t.attributes);
   } catch (e) {
     console.error(e);
   }
@@ -77,12 +86,13 @@ export async function fetchProfileTweets(
 
 export async function exploreUserTweets(): Promise<Tweet[]> {
   const res = await authClient.get<TweetListResponse>("/tweets/explore");
-  return transformTweetListResponse(res.data);
+  return res.data.data.map((t) => t.attributes);
 }
 
+// TODO: add typings to tweetPayload
 export async function postTweet(tweetPayload: any) {
   const res = await authClient.post<TweetResponse>("/tweets", tweetPayload);
-  return transformTweetResponse(res.data);
+  return res.data.data.attributes;
 }
 
 export async function appendTweetMedia(
@@ -96,10 +106,10 @@ export async function appendTweetMedia(
   const res = await authClient.post<TweetResponse>("/media", formData, {
     params: { tweetId },
   });
-  return transformTweetResponse(res.data);
+  return res.data.data.attributes;
 }
 
 export async function fetchSingleTweet(tweetId: string): Promise<Tweet> {
   const res = await authClient.get<TweetResponse>(`/tweets/${tweetId}`);
-  return transformTweetResponse(res.data);
+  return res.data.data.attributes;
 }

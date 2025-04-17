@@ -1,4 +1,4 @@
-import type { BaseTweet } from "@/models/Tweet";
+import type Tweet from "@/models/Tweet";
 import { type User } from "@/models/User";
 import type Comment from "@/models/Comment";
 import type Notification from "@/models/Notification";
@@ -56,12 +56,12 @@ export interface FollowingResponse {
 }
 
 export interface TweetResponse {
-  data: Data<BaseTweet>;
+  data: Data<Tweet>;
   included: Data<User>[];
 }
 
 export interface TweetListResponse {
-  data: Data<BaseTweet>[];
+  data: Data<Tweet>[];
   included: Data<User>[];
   links: Pagination;
 }

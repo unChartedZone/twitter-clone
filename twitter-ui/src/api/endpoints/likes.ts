@@ -1,11 +1,10 @@
 import type { TweetResponse } from "@/types/ResponseTypes";
 import { authClient } from "../client";
-import { transformTweetResponse } from "../helpers";
 import type Tweet from "@/models/Tweet";
 
 export async function likeTweet(tweetId: string): Promise<Tweet> {
   const res = await authClient.post<TweetResponse>(`/tweets/${tweetId}/like`);
-  return transformTweetResponse(res.data);
+  return res.data.data.attributes;
 }
 
 export async function unlikeTweet(tweetId: string): Promise<void> {

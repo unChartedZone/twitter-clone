@@ -12,7 +12,7 @@
     class="tweet"
   >
     <div class="tweet__profile-pic">
-      <AvatarCircle :src="tweet.user?.profileImage" />
+      <AvatarCircle :src="tweet.user?.profileImageUrl" />
     </div>
     <div class="tweet__body">
       <PostHeader
