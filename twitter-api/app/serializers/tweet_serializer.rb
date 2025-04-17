@@ -7,9 +7,9 @@ class TweetSerializer
   set_key_transform :camel_lower
 
   has_many :medium, attributes: [:description]
-  belongs_to :user, attributes: [:username]
+  belongs_to :user
 
-  attributes :text, :created_at
+  attributes :id, :text, :created_at
 
   attribute :medium do |object|
     object.medium.each do |o|
@@ -41,5 +41,9 @@ class TweetSerializer
     params[:current_user].present? && object.bookmarked?(params[:current_user])
   end
 
-  # cache_options store: Rails.cache, namespace: 'jsonapi-serializer', expires_in: 1.hour
+  attribute :user do |tweet|
+    UserSummarySerializer.new(tweet.user).serializable_hash[:data][:attributes]
+  end
+
+  cache_options store: Rails.cache, namespace: 'twitter-api', expires_in: 1.hour
 end
