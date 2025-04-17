@@ -11,15 +11,17 @@
   />
   <!-- default card -->
   <Card v-else>
-    <template v-slot:header>
-      <div class="profile-editor__header">
+    <CardHeader>
+      <template #left>
         <Button variant="icon-ghost" size="icon" @click="closeProfileEditor">
           <Icon variant="cross" />
         </Button>
-        <h1>Edit Profile</h1>
-      </div>
-      <Button variant="outline" @click="saveProfile">Save</Button>
-    </template>
+      </template>
+      Edit Profile
+      <template #right>
+        <Button variant="outline" @click="saveProfile">Save</Button>
+      </template>
+    </CardHeader>
     <div class="profile-editor__media">
       <section class="profile-editor__banner-image">
         <img v-if="!!bannerImageSrc" :src="bannerImageSrc" alt="" />
@@ -76,10 +78,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from "vue";
+import { reactive, computed, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import Button from "./common/Button.vue";
 import Card from "./common/Card.vue";
+import CardHeader from "./common/card/CardHeader.vue";
 import Icon from "./icons/Icon.vue";
 import FileInput from "@/components/common/FileInput.vue";
 import MediaEditor from "./profile-editor/MediaEditor.vue";

@@ -3,6 +3,8 @@ import { ref } from "vue";
 import TweetEditor from "./TweetEditor.vue";
 import Button from "@/components/common/Button.vue";
 import Card from "../common/Card.vue";
+import CardHeader from "../common/card/CardHeader.vue";
+import CardFooter from "../common/card/CardFooter.vue";
 import Modal from "@/components/common/Modal.vue";
 import Icon from "../icons/Icon.vue";
 
@@ -22,19 +24,24 @@ const toggleTweetModal = ref<boolean>(false);
   </div>
   <Modal v-model="toggleTweetModal">
     <Card class="tweet-editor__card">
-      <template v-slot:header>
-        <div>
-          <Button
-            variant="icon-ghost"
-            size="icon"
-            @click="toggleTweetModal = false"
-          >
-            <Icon variant="cross" />
-          </Button>
-        </div>
-        <Button variant="text">Drafts</Button>
-      </template>
+      <CardHeader>
+        <template #left>
+          <div>
+            <Button
+              variant="icon-ghost"
+              size="icon"
+              @click="toggleTweetModal = false"
+            >
+              <Icon variant="cross" />
+            </Button>
+          </div>
+        </template>
+        <template #right>
+          <Button variant="text">Drafts</Button>
+        </template>
+      </CardHeader>
       <TweetEditor @closeEditor="toggleTweetModal = false" />
+      <CardFooter />
     </Card>
   </Modal>
 </template>
