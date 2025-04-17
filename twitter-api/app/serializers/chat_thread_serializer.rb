@@ -13,4 +13,6 @@ class ChatThreadSerializer
       UserSummarySerializer.new(user).serializable_hash[:data][:attributes]
     end
   end
+
+  cache_options store: Rails.cache, namespace: 'twitter-api', expires_in: 1.hour
 end
