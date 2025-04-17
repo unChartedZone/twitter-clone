@@ -17,23 +17,22 @@
 <style scoped lang="scss">
 .card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 0.5rem 0.5rem;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem 0;
 
   &__content {
-    flex: 2;
+    flex: 1;
 
     h1 {
-      text-align: center;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      font-weight: 800;
     }
   }
 
   &__left,
   &__right {
     display: flex;
-    flex: 1;
   }
 
   &__right {
