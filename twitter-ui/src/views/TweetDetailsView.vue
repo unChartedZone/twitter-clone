@@ -49,13 +49,7 @@ function closeReplyEditor(comment: CommentType) {
     <PageLoader v-if="loading && !tweet" />
     <article v-else class="tweet">
       <header class="tweet__header">
-        <div class="flex items-center gap-4">
-          <AvatarCircle :src="tweet?.user?.profileImage" />
-          <div class="tweet__name">
-            <h3>{{ tweet?.user?.name }}</h3>
-            <p>@{{ tweet?.user?.username }}</p>
-          </div>
-        </div>
+        <UserCard v-if="!!tweet?.user" :user="tweet?.user" />
         <Button variant="icon-ghost" size="icon">
           <Icon variant="ellipsis" />
         </Button>
