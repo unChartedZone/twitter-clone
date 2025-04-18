@@ -26,7 +26,10 @@ function navigateToThread(threadId: string) {
 
 <template>
   <Modal v-model="chatStore.newChatModal">
-    <NewChatList @onCreate="(threadId) => navigateToThread(threadId)" />
+    <NewChatList
+      @onCreate="(threadId) => navigateToThread(threadId)"
+      @onClose="chatStore.toggleNewChatModal"
+    />
   </Modal>
   <main class="messages-container">
     <section class="thread-container">

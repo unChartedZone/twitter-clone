@@ -24,6 +24,10 @@ export const useChatStore = defineStore("chat", () => {
     threads.value = [...ts];
   }
 
+  function addThread(thread: Thread) {
+    threads.value.push(thread);
+  }
+
   function setSelectedThread(threadId: string) {
     const t = threads.value.find((t) => t.id === threadId);
     selectedThread.value = t;
@@ -38,6 +42,7 @@ export const useChatStore = defineStore("chat", () => {
     threads,
     selectedThread,
     participant,
+    addThread,
     setSelectedThread,
     toggleNewChatModal,
     fetchThreads,

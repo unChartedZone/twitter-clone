@@ -1,25 +1,31 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { fetchFollowers, fetchFollowing } from "@/api/endpoints";
+import * as userSumaryApi from "@/api/endpoints/userSummary";
 import * as messagesApi from "@/api/endpoints/messages";
 import { useAuthStore } from "@/stores/auth";
+import Button from "../common/Button.vue";
+import Icon from "../icons/Icon.vue";
 import Card from "@/components/common/Card.vue";
 import CardHeader from "@/components/common/card/CardHeader.vue";
 import CardBody from "@/components/common/card/CardBody.vue";
-// import List from "@/components/icons/List.vue";
-// import ListItem from "@/components/common/ListItem.vue";
-import type { User } from "@/models/User";
+import ListItem from "@/components/common/ListItem.vue";
+import UserCard from "../UserCard.vue";
+import Textfield from "../common/Textfield.vue";
+import type { UserSummary } from "@/models/User";
+import { useChatStore } from "@/stores/chat";
 
-const emit = defineEmits<{ (e: "onCreate", threadId: string): void }>();
+const emit = defineEmits<{
+  (e: "onCreate", threadId: string): void;
+  (e: "onClose"): void;
+}>();
 
 const authStore = useAuthStore();
-const users = ref<User[]>([]);
+const chatStore = useChatStore();
+const users = ref<UserSummary[]>([]);
 
 async function fetchUsers() {
   if (authStore.user?.username) {
-    const followers = await fetchFollowers(authStore.user?.username);
-    const followig = await fetchFollowing(authStore.user.username);
-    users.value = [...followers, ...followig];
+    users.value = await userSumaryApi.fetchUserSummaries();
   }
 }
 
@@ -28,7 +34,9 @@ async function createChatThread(userId: string) {
     authStore.user?.id!,
     userId,
   ]);
+  chatStore.addThread(thread);
   emit("onCreate", thread.id);
+  emit("onClose");
 }
 
 onMounted(() => {
@@ -38,17 +46,38 @@ onMounted(() => {
 
 <template>
   <Card>
-    <CardHeader>New Chat</CardHeader>
+    <CardHeader>
+      <template #left>
+        <Button variant="icon-ghost" size="icon" @click="emit('onClose')">
+          <Icon variant="cross" />
+        </Button>
+      </template>
+      New Chat
+    </CardHeader>
     <CardBody>
-      <ul>
-        <li
-          v-for="user in users"
-          :key="user.id"
-          @click="createChatThread(user.id)"
-        >
-          {{ user.username }}
-        </li>
-      </ul>
+      <div>
+        <Textfield
+          variant="ghost"
+          placeholder="Search people"
+          icon="magnifying-glass"
+        />
+      </div>
     </CardBody>
+    <ul class="user-list">
+      <ListItem
+        v-for="user in users"
+        :key="user.id"
+        @click="createChatThread(user.id)"
+      >
+        <UserCard :user="user" />
+      </ListItem>
+    </ul>
   </Card>
 </template>
+
+<style scoped lang="scss">
+.user-list {
+  padding: 0 0.5rem;
+  border-top: 1px solid $gray-200;
+}
+</style>
