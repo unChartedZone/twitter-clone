@@ -108,7 +108,7 @@ const links: NavLink[] = [
 .navbar {
   position: relative;
   width: inherit;
-  z-index: 500;
+  z-index: 400;
 
   &__container {
     position: fixed;

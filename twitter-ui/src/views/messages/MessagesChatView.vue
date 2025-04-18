@@ -130,7 +130,14 @@ async function deleteMessage() {
   </div>
   <Modal v-model="deleteMessageState.toggleModal">
     <Card>
-      <CardHeader>Delete message?</CardHeader>
+      <CardHeader>
+        <template #left>
+          <Button variant="icon-ghost" size="icon" @click="closeDeleteModal">
+            <Icon variant="cross" />
+          </Button>
+        </template>
+        Delete message?
+      </CardHeader>
       <CardBody>
         <div class="delete-message">
           <p>This message will be deleted for everyone in this conversation.</p>

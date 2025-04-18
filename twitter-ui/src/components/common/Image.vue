@@ -52,7 +52,7 @@ const { isLoading } = useImage({ src: imgSrc.value });
       rgba(lightgrey, 0) 100%
     );
     animation: loading 1s infinite;
-    z-index: 100;
+    z-index: 50;
   }
 }
 
