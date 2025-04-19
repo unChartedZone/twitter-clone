@@ -29,7 +29,15 @@ const messageTimestamp = computed(() =>
   dayjs(props.message.createdAt).format("MMMM D, YYYY, hh:mm A")
 );
 
-const copyMessage = () => copy(props.message.body);
+const copyMessage = () => {
+  toggleMenu.value = false;
+  copy(props.message.body);
+};
+
+const deleteMessage = (messageId: string) => {
+  toggleMenu.value = false;
+  emit("deleteMessageClicked", messageId);
+};
 </script>
 
 <template>
@@ -49,10 +57,7 @@ const copyMessage = () => copy(props.message.body);
             <ListItem icon="copy-plus" @click="copyMessage">
               Copy message
             </ListItem>
-            <ListItem
-              icon="trash-can"
-              @click="emit('deleteMessageClicked', message.id)"
-            >
+            <ListItem icon="trash-can" @click="deleteMessage(message.id)">
               Delete message
             </ListItem>
           </List>
