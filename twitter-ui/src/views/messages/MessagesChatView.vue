@@ -2,16 +2,9 @@
 import { ref, reactive, onMounted, onBeforeUnmount, watch } from "vue";
 import { connectToThread, disconnect } from "@/api/websocket";
 import * as messagesApi from "@/api/endpoints/messages";
-import Button from "@/components/common/Button.vue";
-import Icon from "@/components/icons/Icon.vue";
-import Card from "@/components/common/Card.vue";
-import CardHeader from "@/components/common/card/CardHeader.vue";
-import CardBody from "@/components/common/card/CardBody.vue";
-import CardFooter from "@/components/common/card/CardFooter.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import PageLoader from "@/components/loaders/PageLoader.vue";
-import MessageBubble from "@/components/messages/MessageBubble.vue";
-import Modal from "@/components/common/Modal.vue";
+import MessageList from "@/components/messages/MessageList.vue";
 import ChatInput from "@/components/messages/ChatInput.vue";
 import { useAuthStore } from "@/stores/auth";
 import type { Message } from "@/models/Message";
@@ -25,10 +18,6 @@ const authStore = useAuthStore();
 const chatStore = useChatStore();
 const messages = ref<Message[]>([]);
 const messagesLoading = ref<LoadingState>("idle");
-const deleteMessageState = reactive({
-  toggleModal: false,
-  messageId: "",
-});
 
 onMounted(async () => {
   if (!authStore.accessToken) return;
@@ -63,6 +52,7 @@ function handleSocketMessage(messagePayload: {
         messagePayload.message
       ) as ChatMessageResponse;
       messages.value.push(newMessage.data.attributes);
+      break;
     }
     case "message-deleted": {
       const messageId = messagePayload.message;
@@ -70,6 +60,7 @@ function handleSocketMessage(messagePayload: {
       if (index !== -1) {
         messages.value.splice(index, 1);
       }
+      break;
     }
     default: {
       throw new Error("Unsupported message event type");
@@ -87,27 +78,6 @@ async function fetchMessages(threadId: string) {
     messagesLoading.value = "rejected";
   }
 }
-
-function initDeleteModal(messageId: string) {
-  deleteMessageState.toggleModal = true;
-  deleteMessageState.messageId = messageId;
-}
-
-function closeDeleteModal() {
-  deleteMessageState.messageId = "";
-  deleteMessageState.toggleModal = false;
-}
-
-async function deleteMessage() {
-  const index = messages.value.findIndex(
-    (m) => m.id === deleteMessageState.messageId
-  );
-  await messagesApi.deleteMessage(deleteMessageState.messageId, props.threadId);
-  if (index !== -1) {
-    messages.value.splice(index, 1);
-  }
-  closeDeleteModal();
-}
 </script>
 
 <template>
@@ -116,49 +86,11 @@ async function deleteMessage() {
     <div class="chat-container">
       <div class="message-container">
         <PageLoader v-if="messagesLoading === 'idle'" />
-        <ul v-else class="messages-list">
-          <MessageBubble
-            v-for="message in messages"
-            :key="message.id"
-            :message="message"
-            :isOwner="message.user.id === authStore.user!.id"
-            @deleteMessageClicked="(messageId) => initDeleteModal(messageId)"
-          />
-        </ul>
+        <MessageList v-else :threadId="threadId" :messages="messages" />
       </div>
       <ChatInput :threadId="props.threadId" />
     </div>
   </div>
-  <Modal v-model="deleteMessageState.toggleModal">
-    <Card>
-      <CardHeader>
-        <template #left>
-          <Button variant="icon-ghost" size="icon" @click="closeDeleteModal">
-            <Icon variant="cross" />
-          </Button>
-        </template>
-        Delete message?
-      </CardHeader>
-      <CardBody>
-        <div class="delete-message">
-          <p>This message will be deleted for everyone in this conversation.</p>
-          <Button
-            variant="destructive"
-            secondaryText="Delete"
-            size="xl"
-            block
-            @click="deleteMessage"
-          >
-            Delete
-          </Button>
-          <Button variant="outline" size="xl" block @click="closeDeleteModal">
-            Cancel
-          </Button>
-        </div>
-      </CardBody>
-      <CardFooter />
-    </Card>
-  </Modal>
 </template>
 
 <style scoped lang="scss">
@@ -182,20 +114,5 @@ async function deleteMessage() {
   overflow-y: auto;
   padding: 1rem;
   margin: 0;
-}
-
-.messages-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-  margin: 0;
-  list-style: none;
-}
-
-.delete-message {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0 4rem;
 }
 </style>
