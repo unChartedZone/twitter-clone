@@ -4,7 +4,7 @@ import { useRoute, RouterView, RouterLink } from "vue-router";
 import { useProfileStore } from "@/stores/profile";
 import PageHeader from "@/components/PageHeader.vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import PageLoader from "@/components/PageLoader.vue";
+import PageLoader from "@/components/loaders/PageLoader.vue";
 import TabHeader from "@/components/common/tab/TabHeader.vue";
 import TabRow from "@/components/common/tab/TabRow.vue";
 

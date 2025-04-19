@@ -3,7 +3,7 @@ import * as notificationApi from "@/api/endpoints/notifications";
 import type Notification from "@/models/Notification";
 import { useQuery } from "@/hooks/useQuery";
 import PageHeader from "@/components/PageHeader.vue";
-import PageLoader from "@/components/PageLoader.vue";
+import PageLoader from "@/components/loaders/PageLoader.vue";
 import NotificationCard from "@/components/notifications/NotificationCard.vue";
 
 const { result: notifications, loading } = useQuery<Notification[]>(

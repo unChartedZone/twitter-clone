@@ -1,4 +1,4 @@
-import PageLoader from "@/components/PageLoader.vue";
+import PageLoader from "@/components/loaders/PageLoader.vue";
 import type { Meta, StoryObj } from "@storybook/vue3";
 
 const meta = {

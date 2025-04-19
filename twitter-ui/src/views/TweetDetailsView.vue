@@ -10,7 +10,7 @@ import Icon from "@/components/icons/Icon.vue";
 import Image from "@/components/common/Image.vue";
 import Modal from "@/components/common/Modal.vue";
 import PageHeader from "@/components/PageHeader.vue";
-import PageLoader from "@/components/PageLoader.vue";
+import PageLoader from "@/components/loaders/PageLoader.vue";
 import Comment from "@/components/comment/Comment.vue";
 import InlineReplyEditor from "@/components/reply-editor/InlineReplyEditor.vue";
 import ReplyEditor from "@/components/reply-editor/ReplyEditor.vue";
