@@ -3,24 +3,28 @@ import { ref, reactive, onMounted, onBeforeUnmount, watch } from "vue";
 import { connectToThread, disconnect } from "@/api/websocket";
 import * as messagesApi from "@/api/endpoints/messages";
 import Button from "@/components/common/Button.vue";
+import Icon from "@/components/icons/Icon.vue";
 import Card from "@/components/common/Card.vue";
 import CardHeader from "@/components/common/card/CardHeader.vue";
 import CardBody from "@/components/common/card/CardBody.vue";
+import CardFooter from "@/components/common/card/CardFooter.vue";
 import PageHeader from "@/components/PageHeader.vue";
+import PageLoader from "@/components/loaders/PageLoader.vue";
 import MessageBubble from "@/components/messages/MessageBubble.vue";
 import Modal from "@/components/common/Modal.vue";
-import Textfield from "@/components/common/Textfield.vue";
+import ChatInput from "@/components/messages/ChatInput.vue";
 import { useAuthStore } from "@/stores/auth";
 import type { Message } from "@/models/Message";
 import type { ChatMessageResponse } from "@/types/ResponseTypes";
 import { useChatStore } from "@/stores/chat";
+import type { LoadingState } from "@/types/LoadingState";
 
 const props = defineProps<{ threadId: string }>();
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();
 const messages = ref<Message[]>([]);
-const newChatText = ref("");
+const messagesLoading = ref<LoadingState>("idle");
 const deleteMessageState = reactive({
   toggleModal: false,
   messageId: "",
@@ -53,34 +57,35 @@ function handleSocketMessage(messagePayload: {
   type: string;
   message: string;
 }) {
-  switch(messagePayload.type) {
+  switch (messagePayload.type) {
     case "message-created": {
-      const newMessage = JSON.parse(messagePayload.message) as ChatMessageResponse;
+      const newMessage = JSON.parse(
+        messagePayload.message
+      ) as ChatMessageResponse;
       messages.value.push(newMessage.data.attributes);
     }
     case "message-deleted": {
-      const messageId = messagePayload.message
-      const index = messages.value.findIndex(m => m.id === messageId)
-      if(index !== -1) {
-        messages.value.splice(index, 1)
+      const messageId = messagePayload.message;
+      const index = messages.value.findIndex((m) => m.id === messageId);
+      if (index !== -1) {
+        messages.value.splice(index, 1);
       }
     }
     default: {
-      throw new Error("Unsupported message event type")
+      throw new Error("Unsupported message event type");
     }
   }
 }
 
 async function fetchMessages(threadId: string) {
-  const ms = await messagesApi.fetchMessages(threadId);
-  messages.value = [...ms];
-}
-
-async function sendMessage() {
-  if (!newChatText.value) return;
-
-  await messagesApi.createMessage(props.threadId, newChatText.value);
-  newChatText.value = "";
+  messagesLoading.value = "idle";
+  try {
+    const ms = await messagesApi.fetchMessages(threadId);
+    messages.value = [...ms];
+    messagesLoading.value = "resolved";
+  } catch (err) {
+    messagesLoading.value = "rejected";
+  }
 }
 
 function initDeleteModal(messageId: string) {
@@ -109,23 +114,19 @@ async function deleteMessage() {
   <div class="messages-view">
     <PageHeader :title="chatStore.participant" hideBackButton />
     <div class="chat-container">
-      <ul class="messages-list">
-        <MessageBubble
-          v-for="message in messages"
-          :key="message.id"
-          :message="message"
-          :isOwner="message.user.id === authStore.user!.id"
-          @deleteMessageClicked="(messageId) => initDeleteModal(messageId)"
-        />
-      </ul>
-      <div class="chat-field">
-        <Textfield
-          v-model="newChatText"
-          variant="rounded"
-          placeholder="Start a new message"
-        />
-        <Button @click="sendMessage">Send</Button>
+      <div class="message-container">
+        <PageLoader v-if="messagesLoading === 'idle'" />
+        <ul v-else class="messages-list">
+          <MessageBubble
+            v-for="message in messages"
+            :key="message.id"
+            :message="message"
+            :isOwner="message.user.id === authStore.user!.id"
+            @deleteMessageClicked="(messageId) => initDeleteModal(messageId)"
+          />
+        </ul>
       </div>
+      <ChatInput :threadId="props.threadId" />
     </div>
   </div>
   <Modal v-model="deleteMessageState.toggleModal">
@@ -155,6 +156,7 @@ async function deleteMessage() {
           </Button>
         </div>
       </CardBody>
+      <CardFooter />
     </Card>
   </Modal>
 </template>
@@ -175,16 +177,11 @@ async function deleteMessage() {
   overflow: hidden;
 }
 
-.chat-field {
+.message-container {
+  flex: 1;
+  overflow-y: auto;
   padding: 1rem;
-  display: flex;
-  gap: 1rem;
-  background-color: var($gray-100);
-  border-top: 1px solid $gray-200;
-
-  .textfield {
-    flex: 1;
-  }
+  margin: 0;
 }
 
 .messages-list {
@@ -193,5 +190,12 @@ async function deleteMessage() {
   padding: 1rem;
   margin: 0;
   list-style: none;
+}
+
+.delete-message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 4rem;
 }
 </style>
