@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onBeforeUnmount, watch } from "vue";
+import { useScroll } from "@vueuse/core";
 import { connectToThread, disconnect } from "@/api/websocket";
 import * as messagesApi from "@/api/endpoints/messages";
 import PageHeader from "@/components/PageHeader.vue";
@@ -17,7 +18,15 @@ const props = defineProps<{ threadId: string }>();
 const authStore = useAuthStore();
 const chatStore = useChatStore();
 const messages = ref<Message[]>([]);
+const pagination = reactive({
+  page: 1,
+  hasMore: false,
+});
 const messagesLoading = ref<LoadingState>("idle");
+
+const listRef = ref<HTMLElement | null>(null);
+const listEnd = ref<HTMLElement | null>(null);
+const { arrivedState } = useScroll(listRef);
 
 onMounted(async () => {
   if (!authStore.accessToken) return;
@@ -25,6 +34,7 @@ onMounted(async () => {
   await fetchMessages(props.threadId);
   chatStore.setSelectedThread(props.threadId);
   connectToThread(props.threadId, authStore.accessToken, handleSocketMessage);
+  listEnd.value?.scrollIntoView({ behavior: "smooth" });
 });
 
 onBeforeUnmount(() => {
@@ -36,9 +46,22 @@ watch(
   (threadId, _oldThreadId) => {
     disconnect();
     messages.value = [];
+    pagination.page = 1;
+    pagination.hasMore = false;
+
     chatStore.setSelectedThread(threadId);
     connectToThread(threadId, authStore.accessToken!, handleSocketMessage);
     fetchMessages(threadId);
+    listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }
+);
+
+watch(
+  () => arrivedState.top,
+  (top, _) => {
+    if (top && pagination.hasMore) {
+      fetchMessages(props.threadId);
+    }
   }
 );
 
@@ -71,8 +94,13 @@ function handleSocketMessage(messagePayload: {
 async function fetchMessages(threadId: string) {
   messagesLoading.value = "idle";
   try {
-    const ms = await messagesApi.fetchMessages(threadId);
-    messages.value = [...ms];
+    const { messages: ms, hasMore } = await messagesApi.fetchMessages(
+      threadId,
+      pagination.page
+    );
+    messages.value = [...ms, ...messages.value];
+    pagination.page++;
+    pagination.hasMore = hasMore;
     messagesLoading.value = "resolved";
   } catch (err) {
     messagesLoading.value = "rejected";
@@ -84,9 +112,10 @@ async function fetchMessages(threadId: string) {
   <div class="messages-view">
     <PageHeader :title="chatStore.participant" hideBackButton />
     <div class="chat-container">
-      <div class="message-container">
+      <div class="message-container" ref="listRef">
         <PageLoader v-if="messagesLoading === 'idle'" />
-        <MessageList v-else :threadId="threadId" :messages="messages" />
+        <MessageList :threadId="threadId" :messages="messages" />
+        <div ref="listEnd" style="height: 1rem; width: 100%" />
       </div>
       <ChatInput :threadId="props.threadId" />
     </div>
@@ -112,7 +141,7 @@ async function fetchMessages(threadId: string) {
 .message-container {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 1rem 1rem 0;
   margin: 0;
 }
 </style>

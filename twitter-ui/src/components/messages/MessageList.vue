@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { reactive, onMounted } from "vue";
+import { reactive } from "vue";
 import type { Message } from "@/models/Message";
 import { useAuthStore } from "@/stores/auth";
 import * as messagesApi from "@/api/endpoints/messages";
 import MessageBubble from "@/components/messages/MessageBubble.vue";
 import Modal from "../common/Modal.vue";
 import Button from "../common/Button.vue";
-import Icon from "../icons/Icon.vue";
 import Card from "../common/Card.vue";
 import CardBody from "../common/card/CardBody.vue";
 import CardHeader from "../common/card/CardHeader.vue";
@@ -22,10 +21,6 @@ const authStore = useAuthStore();
 const deleteMessageState = reactive({
   toggleModal: false,
   messageId: "",
-});
-
-onMounted(() => {
-  console.log("Message List mounted!");
 });
 
 function initDeleteModal(messageId: string) {
@@ -85,7 +80,7 @@ async function deleteMessage() {
 .message-list {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 1rem 1rem 0;
   margin: 0;
   list-style: none;
 }

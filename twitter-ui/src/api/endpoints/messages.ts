@@ -23,16 +23,24 @@ async function createMessage(threadId: string, body: string) {
   authClient.post(`/messages`, { message: { body } }, { params: { threadId } });
 }
 
-async function fetchMessages(threadId: string): Promise<Message[]> {
+async function fetchMessages(
+  threadId: string,
+  page: number = 1
+): Promise<{ messages: Message[]; hasMore: boolean }> {
   const res = await authClient.get<ChatMessageListResponse>("/messages", {
-    params: { threadId },
+    params: { threadId, page },
   });
-  return res.data.data
+  const messages = res.data.data
     .map((x) => x.attributes)
     .sort(
       (a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
+
+  return {
+    messages,
+    hasMore: res.data.links.hasMore,
+  };
 }
 
 async function deleteMessage(

@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
 
   def index
     messages = @chat_thread.chat_messages.includes(:user).order(created_at: :desc).page(current_page).per(per_page)
-    render json: ChatMessageSerializer.new(messages), status: :ok
+    render json: ChatMessageSerializer.new(messages, options(messages, 'messages_path')), status: :ok
   end
 
   def create
@@ -55,5 +55,9 @@ class MessagesController < ApplicationController
 
   def message_params
     params.require(:message).permit(:body)
+  end
+
+  def options(messages, path)
+    get_links_serializer_options(path, messages)
   end
 end
