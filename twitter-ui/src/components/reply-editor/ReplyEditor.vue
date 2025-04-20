@@ -3,7 +3,7 @@ import { useAuthStore } from "@/stores/auth";
 import type Comment from "@/models/Comment";
 import AvatarCircle from "../AvatarCircle.vue";
 import Button from "../common/Button.vue";
-import Card from "../common/Card.vue";
+import Card from "../common/card/Card.vue";
 import CardBody from "../common/card/CardBody.vue";
 import CardHeader from "../common/card/CardHeader.vue";
 import CardFooter from "../common/card/CardFooter.vue";

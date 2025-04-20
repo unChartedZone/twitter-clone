@@ -81,7 +81,7 @@
 import { reactive, computed, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import Button from "./common/Button.vue";
-import Card from "./common/Card.vue";
+import Card from "./common/card/Card.vue";
 import CardHeader from "./common/card/CardHeader.vue";
 import Icon from "./icons/Icon.vue";
 import FileInput from "@/components/common/FileInput.vue";

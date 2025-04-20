@@ -5,7 +5,7 @@ import * as messagesApi from "@/api/endpoints/messages";
 import { useAuthStore } from "@/stores/auth";
 import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
-import Card from "@/components/common/Card.vue";
+import Card from "@/components/common/card/Card.vue";
 import CardHeader from "@/components/common/card/CardHeader.vue";
 import CardBody from "@/components/common/card/CardBody.vue";
 import ListItem from "@/components/common/ListItem.vue";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Button from "../common/Button.vue";
-import Card from "../common/Card.vue";
+import Card from "../common/card/Card.vue";
 import CardHeader from "../common/card/CardHeader.vue";
 import Icon from "@/components/icons/Icon.vue";
 import Image from "../common/Image.vue";

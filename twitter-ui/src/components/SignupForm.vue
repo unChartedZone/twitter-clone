@@ -48,7 +48,7 @@ import * as api from "@/api/endpoints";
 import { useAuthStore } from "@/stores/auth";
 import router from "@/router";
 import Button from "./common/Button.vue";
-import Card from "./common/Card.vue";
+import Card from "./common/card/Card.vue";
 import CardBody from "./common/card/CardBody.vue";
 import CardHeader from "./common/card/CardHeader.vue";
 import DateSelector from "./DateSelector.vue";

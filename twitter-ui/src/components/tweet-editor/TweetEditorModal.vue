@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import TweetEditor from "./TweetEditor.vue";
 import Button from "@/components/common/Button.vue";
-import Card from "../common/Card.vue";
+import Card from "../common/card/Card.vue";
 import CardHeader from "../common/card/CardHeader.vue";
 import CardFooter from "../common/card/CardFooter.vue";
 import Modal from "@/components/common/Modal.vue";
