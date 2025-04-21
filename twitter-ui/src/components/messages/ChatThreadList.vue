@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type Thread from "@/models/Thread";
 import ChatThreadItem from "./ChatThreadItem.vue";
+import { RouterLink } from "vue-router";
 
 interface ChatThreadListProps {
   threads: Thread[];
@@ -12,11 +13,24 @@ const emit = defineEmits<{ (e: "onClick", threadId: string): void }>();
 
 <template>
   <ul class="mt-2">
-    <ChatThreadItem
+    <RouterLink
       v-for="thread in threads"
       :key="thread.id"
-      @click="emit('onClick', thread.id)"
-      :thread="thread"
-    />
+      :to="`/messages/${thread.id}`"
+      v-slot="{ isActive }"
+    >
+      <ChatThreadItem
+        :key="thread.id"
+        :thread="thread"
+        :class="{ active: isActive }"
+      />
+    </RouterLink>
   </ul>
 </template>
+
+<style scoped lang="scss">
+.active {
+  border-right: 2px solid $primary;
+  background-color: $gray;
+}
+</style>
