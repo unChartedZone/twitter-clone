@@ -28,8 +28,10 @@ async function fetchUsers() {
 }
 
 async function createChatThread(userId: string) {
+  if (!authStore.user) return;
+
   const thread = await messagesApi.createChatThread([
-    authStore.user?.id!,
+    authStore.user?.id,
     userId,
   ]);
   chatStore.addThread(thread);

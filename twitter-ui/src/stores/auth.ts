@@ -67,8 +67,8 @@ export const useAuthStore = defineStore("auth", () => {
       !!userPatch.name &&
       user.value.username === profileStore.profileUser?.username
     ) {
-      profileStore.tweetLists.default.tweets = [
-        ...profileStore.tweetLists.default.tweets.map((tweet) => {
+      profileStore.tweetLists.default.tweets =
+        profileStore.tweetLists.default.tweets.map((tweet) => {
           if (tweet.user?.username === user.value?.username) {
             return {
               ...tweet,
@@ -82,8 +82,7 @@ export const useAuthStore = defineStore("auth", () => {
           return {
             ...tweet,
           };
-        }),
-      ];
+        });
     }
 
     user.value = {
