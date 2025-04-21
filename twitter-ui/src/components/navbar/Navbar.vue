@@ -162,6 +162,7 @@ const links: NavLink[] = [
     }
 
     @include respond(sm) {
+      gap: 0.5rem;
       flex-direction: row;
     }
   }
@@ -176,6 +177,7 @@ const links: NavLink[] = [
       flex-direction: row;
       flex: 1;
       padding: 0 0.5rem;
+      gap: 0.75rem;
     }
   }
 
