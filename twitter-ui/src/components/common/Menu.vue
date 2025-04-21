@@ -7,48 +7,49 @@ interface MenuProps {
 
 const props = defineProps<MenuProps>();
 const emit = defineEmits(["update:modelValue"]);
-const target = ref<HTMLElement | null>(null);
+const activator = ref<HTMLElement | null>(null);
+const content = ref<HTMLElement | null>(null);
 
-const contentBlocked = reactive({
-  top: false,
-  bottom: false,
-  left: false,
-  right: false,
+const position = reactive({
+  top: 0,
+  left: 0,
+  transform: "",
 });
 
 function handleChange() {
-  contentBlocked.top = false;
-  contentBlocked.bottom = false;
-  contentBlocked.left = false;
-  contentBlocked.right = false;
   emit("update:modelValue", !props.modelValue);
 }
 
 // Watch for changes in position and dynamically change the menu's position
-// accordingly
 watch(
-  () => [props.modelValue, target.value],
-  (val, _oldVal) => {
-    if (!val) return;
+  () => [content.value, activator.value],
+  ([c, a], _oldVal) => {
+    if (!c || !a) return;
 
-    if (!!target.value) {
-      const rect = target.value.getBoundingClientRect();
+    const rect = a.getBoundingClientRect();
+    const contentHeight = c.offsetHeight || 0;
+    const contentWidth = c.offsetWidth || 0;
+    const windowWidth = window.innerWidth;
 
-      if (rect.top <= 0) {
-        contentBlocked.top = true;
-      }
-      if (
-        rect.bottom >=
-        (window.innerHeight || document.documentElement.clientHeight)
-      ) {
-        contentBlocked.bottom = true;
-      }
-      if (
-        rect.right >=
-        (window.innerWidth || document.documentElement.clientWidth)
-      ) {
-        contentBlocked.right = true;
-      }
+    // Calculate vertical position
+    if (rect.top - contentHeight < 0) {
+      // Not enough space above, position below
+      position.top = rect.bottom;
+      position.transform = "";
+    } else {
+      // Position above
+      position.top = rect.top;
+      position.transform = "translateY(-100%)";
+    }
+
+    // Calculate horizontal position
+    if (rect.left + contentWidth > windowWidth) {
+      // Not enough space on the right, align to the right
+      position.left = rect.right;
+      position.transform += " translateX(-100%)";
+    } else {
+      // Align to the left
+      position.left = rect.left;
     }
   }
 );
@@ -56,55 +57,39 @@ watch(
 
 <template>
   <div class="menu">
-    <div>
+    <div ref="activator">
       <slot name="activator" :onClick="handleChange" />
     </div>
-    <div
-      v-if="modelValue"
-      ref="target"
-      class="menu__content"
-      :class="{
-        'push-top': contentBlocked.top,
-        'push-bottom': contentBlocked.bottom,
-        'push-left': contentBlocked.left,
-        'push-right': contentBlocked.right,
-      }"
-      @click="handleChange"
-    >
-      <slot />
-    </div>
+    <Teleport to="body">
+      <div v-if="modelValue" class="menu__bg" @click="handleChange" />
+      <div
+        v-if="modelValue"
+        ref="content"
+        class="menu__content"
+        :style="{
+          top: `${position.top}px`,
+          left: `${position.left}px`,
+          transform: position.transform,
+        }"
+        @click.stop
+      >
+        <slot />
+      </div>
+    </Teleport>
   </div>
-  <div v-if="modelValue" class="menu__bg" @click="handleChange" />
 </template>
 
 <style scoped lang="scss">
 .menu {
   position: relative;
+  display: inline-block;
 
   &__content {
-    position: absolute;
-    top: -180%;
-    left: 0;
-    z-index: 200;
-  }
-
-  .push-top {
-    top: 50%;
-    bottom: unset;
-  }
-  .push-bottom {
-    bottom: 50%;
-    top: unset;
-  }
-
-  .push-left {
-    left: 0%;
-    right: unset;
-  }
-
-  .push-right {
-    right: -20%;
-    left: unset;
+    position: fixed;
+    z-index: 1000;
+    background: $white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
 
   &__bg {
@@ -113,7 +98,7 @@ watch(
     height: 100vh;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: 500;
   }
 }
 </style>
