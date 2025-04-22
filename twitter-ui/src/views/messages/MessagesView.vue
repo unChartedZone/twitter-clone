@@ -9,9 +9,11 @@ import PageHeader from "@/components/PageHeader.vue";
 import ChatThreadList from "@/components/messages/ChatThreadList.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import { useChatStore } from "@/stores/chat";
+import useResponsiveView from "@/hooks/useResponsiveView";
 
 const router = useRouter();
 const chatStore = useChatStore();
+const { isParentRoute } = useResponsiveView("select-chat-view");
 
 onMounted(() => {
   if (chatStore.threads.length === 0) {
@@ -32,7 +34,10 @@ function navigateToThread(threadId: string) {
     />
   </Modal>
   <main class="messages-container">
-    <section class="thread-container">
+    <section
+      class="thread-container"
+      :class="{ 'mobile-hide': !isParentRoute }"
+    >
       <PageHeader title="Messages">
         <template #actions>
           <Button
@@ -56,7 +61,7 @@ function navigateToThread(threadId: string) {
         @onClick="(threadId) => navigateToThread(threadId)"
       />
     </section>
-    <section>
+    <section :class="{ 'mobile-hide': isParentRoute }">
       <router-view />
     </section>
   </main>

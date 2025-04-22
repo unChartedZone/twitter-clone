@@ -1,28 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from "vue";
-import { RouterView, useRoute, useRouter } from "vue-router";
-import { useScreenSize } from "@/hooks/useScreenSize";
+import { RouterView } from "vue-router";
 import PageHeader from "@/components/PageHeader.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import SettingsLink from "@/components/settings/SettingsLink.vue";
+import useResponsiveView from "@/hooks/useResponsiveView";
 
-const route = useRoute();
-const router = useRouter();
-const { isSmallScreen } = useScreenSize();
-
-const isParentRoute = computed(() => route.matched.length === 1);
-
-onMounted(() => {
-  if (!isSmallScreen.value) {
-    router.replace({ name: "account-settings" });
-  }
-});
-
-// Watch for change of screen size. If user is on root settings page and screen
-// is bigger than sm then we want to redirect to account-settings
-watch([isParentRoute, isSmallScreen], ([ipr, iss], _oldVal) => {
-  if (ipr && !iss) router.push({ name: "account-settings" });
-});
+const { isParentRoute } = useResponsiveView("account-settings");
 </script>
 
 <template>
@@ -93,12 +76,6 @@ watch([isParentRoute, isSmallScreen], ([ipr, iss], _oldVal) => {
       height: 1rem;
       fill: $gray-300;
     }
-  }
-}
-
-.mobile-hide {
-  @include respond(sm) {
-    display: none;
   }
 }
 </style>

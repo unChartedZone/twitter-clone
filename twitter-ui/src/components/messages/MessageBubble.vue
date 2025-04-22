@@ -76,7 +76,6 @@ const deleteMessage = (messageId: string) => {
   display: flex;
   flex-direction: column;
   font-size: 1rem;
-  margin: 0 0 1rem;
 
   &__content {
     display: flex;

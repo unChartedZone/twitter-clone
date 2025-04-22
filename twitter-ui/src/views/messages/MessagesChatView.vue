@@ -109,8 +109,8 @@ async function fetchMessages(threadId: string) {
 </script>
 
 <template>
+  <PageHeader :title="chatStore.participant" hideBackButton />
   <div class="messages-view">
-    <PageHeader :title="chatStore.participant" hideBackButton />
     <div class="chat-container">
       <div class="message-container" ref="listRef">
         <PageLoader v-if="messagesLoading === 'idle'" />
@@ -126,8 +126,12 @@ async function fetchMessages(threadId: string) {
 .messages-view {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 2.75rem);
   overflow: hidden;
+
+  @include respond(sm) {
+    height: calc(100vh - 8.75rem);
+  }
 }
 
 .chat-container {
@@ -141,7 +145,5 @@ async function fetchMessages(threadId: string) {
 .message-container {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem 1rem 0;
-  margin: 0;
 }
 </style>

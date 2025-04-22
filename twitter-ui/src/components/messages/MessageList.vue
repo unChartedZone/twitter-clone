@@ -37,17 +37,15 @@ async function deleteMessage() {
 </script>
 
 <template>
-  <div>
-    <ul class="message-list">
-      <MessageBubble
-        v-for="message in messages"
-        :key="message.id"
-        :message="message"
-        :isOwner="message.user.id === authStore.user!.id"
-        @deleteMessageClicked="(messageId) => initDeleteModal(messageId)"
-      />
-    </ul>
-  </div>
+  <ul class="message-list">
+    <MessageBubble
+      v-for="message in messages"
+      :key="message.id"
+      :message="message"
+      :isOwner="message.user.id === authStore.user!.id"
+      @deleteMessageClicked="(messageId) => initDeleteModal(messageId)"
+    />
+  </ul>
   <Modal v-model="deleteMessageState.toggleModal">
     <Card>
       <CardHeader>Delete message?</CardHeader>
@@ -76,10 +74,9 @@ async function deleteMessage() {
 <style scoped lang="scss">
 .message-list {
   flex: 1;
-  overflow-y: auto;
-  padding: 1rem 1rem 0;
-  margin: 0;
+  padding: 0 0.75rem;
   list-style: none;
+  width: 100%;
 }
 
 .delete-message {
