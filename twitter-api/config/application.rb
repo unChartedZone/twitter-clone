@@ -37,6 +37,9 @@ module TwitterApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    # Specify action cable path 
+    config.action_cable.mount_path = '/cable'
+
     # create logger with file as a logging target
     config.logger = Logger.new('log/logs.log')
     # setup minimum log level
