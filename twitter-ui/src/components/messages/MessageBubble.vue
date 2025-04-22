@@ -101,7 +101,7 @@ const deleteMessage = (messageId: string) => {
 
   &__timestamp {
     font-size: 0.8rem;
-    margin-top: 0.25rem;
+    margin: 0.25rem 0 0.5rem;
   }
 }
 

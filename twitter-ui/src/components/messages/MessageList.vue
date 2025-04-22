@@ -77,6 +77,7 @@ async function deleteMessage() {
   padding: 0 0.75rem;
   list-style: none;
   width: 100%;
+  height: 100%;
 }
 
 .delete-message {
