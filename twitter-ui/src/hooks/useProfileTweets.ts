@@ -20,7 +20,8 @@ export function useProfileTweets(segment: TweetListSegment) {
         route.params.username[0],
         profileStore.tweetLists[segment].page,
         segment
-      )
+      ),
+    1000
   );
 
   onMounted(() => {
