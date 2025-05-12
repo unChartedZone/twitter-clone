@@ -10,7 +10,7 @@ module Paginable
         next: send(link_paths, page: collection.next_page),
         currentPage: collection.current_page,
         nextPage: collection.next_page,
-        hasMore: !collection.last_page?
+        hasMore: !collection.next_page.nil?,
       }
     }
   end
