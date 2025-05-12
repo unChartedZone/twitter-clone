@@ -25,17 +25,18 @@ export function useProfileTweets(segment: TweetListSegment) {
   );
 
   onMounted(() => {
+    // Only load if we don't have tweets for this segment
     if (
       profileStore.tweetLists[segment].tweets.length > 0 &&
       route.params.username[0] === profileStore.profileUser?.username
     )
       return;
 
-    profileStore.loadTweets(route.params.username[0], 1, segment);
+    throttledTweetFetch();
   });
 
   // For when a user scrolls to the bottom of a page
-  watch(isBottom, async (val, oldVal) => {
+  watch(isBottom, async (val, _oldVal) => {
     if (val && profileStore.tweetLists[segment].hasMore) {
       throttledTweetFetch();
     }
