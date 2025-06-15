@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  username: one
+  email: one@one.org
+  name: One Oney
+  password_digest: <%= BCrypt::Password.create('password123') %>
+  birth_date: "11-9-2001"
+  bio: I like to take long walks on the beach
+  website: http://one.example.com
+  location: UserLand
+
+two:
+  username: two
+  email: two@two.org
+  name: Two Twoey
+  password_digest: <%= BCrypt::Password.create('twoisbetter123') %>
+  birth_date: "10-9-2001"
+  bio: Licking door knobs on other planets is illegal
