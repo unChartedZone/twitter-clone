@@ -1,6 +1,6 @@
 class CreateUsers < ActiveRecord::Migration[8.0]
   def change
-    create_table :users do |t|
+    create_table :users, id: :uuid do |t|
       t.string :username
       t.string :email
       t.string :password_digest
@@ -9,9 +9,9 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :website
       t.string :location
       t.date   :birth_date
-      t.integer :tweet_count
-      t.integer :following_count
-      t.integer :follower_count
+      t.integer :tweets_count, default: 0
+      t.integer :followings_count, default: 0
+      t.integer :followers_count, default: 0
 
       t.index :username, unique: true
       t.index :email, unique: true
