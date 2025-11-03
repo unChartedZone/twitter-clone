@@ -141,6 +141,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_28_025801) do
   create_table "tweets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "text"
     t.integer "likes_count", default: 0
+    t.integer "retweets_count", default: 0
+    t.integer "comments_count", default: 0
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -4,6 +4,7 @@ class CreateTweets < ActiveRecord::Migration[8.0]
       t.string :text
       t.integer :likes_count, default: 0
       t.integer :retweets_count, default: 0
+      t.integer :comments_count, default: 0
       t.belongs_to :user, null: false, foreign_key: true, type: :uuid
 
       t.timestamps
