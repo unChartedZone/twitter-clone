@@ -1,4 +1,4 @@
-class CommentMedium < ApplicationRecord
+class CommentAttachment < ApplicationRecord
   belongs_to :comment
   has_one_attached :attachment
 

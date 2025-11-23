@@ -1,14 +1,15 @@
 class Tweet < ApplicationRecord
   belongs_to :user, counter_cache: true
 
-  has_many :medium, dependent: :destroy
+  has_many :attachments, -> { order(created_at: :asc) }, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :retweets, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_by_users, through: :bookmarks, source: :user
   has_many :comments, dependent: :destroy
 
-  validate :text_or_media_present
+  validates :text, length: { maximum: 280 }, allow_blank: true
+  # validate :text_or_media_present
 
   def bookmarked?(user)
     bookmarks.exists?(user_id: user.id)
@@ -29,7 +30,9 @@ class Tweet < ApplicationRecord
   private
 
   def text_or_media_present
-    if text.blank? && medium.blank?
+    puts "Attachment Size: #{attachments.size}"
+
+    if text.blank? && attachments.blank?
       errors.add(:base, "A tweet must have either text or media.")
     end
   end
