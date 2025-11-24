@@ -1,4 +1,4 @@
-import type Media from "./Media";
+import type Attachment from "./Attachment";
 import type { UserSummary } from "./User";
 
 export default interface Tweet {
@@ -11,6 +11,6 @@ export default interface Tweet {
   retweeted: boolean;
   bookmarked: boolean;
   createdAt: Date;
-  medium: Media[];
+  attachments: Attachment[];
   user?: UserSummary;
 }

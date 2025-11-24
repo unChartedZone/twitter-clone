@@ -17,9 +17,10 @@ export async function fetchProtectedProfileTweets(
       { params: { page } }
     )
   ).data;
+
   return {
-    tweets: res.data.map((t) => t.attributes),
-    links: res.links,
+    tweets: res.tweets,
+    links: res.meta.links,
   };
 }
 
@@ -49,14 +50,14 @@ export async function fetchTweets(
     })
   ).data;
   return {
-    tweets: res.data.map((t) => t.attributes),
-    links: res.links,
+    tweets: res.tweets,
+    links: res.meta.links,
   };
 }
 
 export async function fetchFeed(): Promise<Tweet[]> {
   const res = await authClient.get<TweetListResponse>("/tweets/feed");
-  return res.data.data.map((t) => t.attributes);
+  return res.data.tweets;
 }
 
 export async function fetchUserTweets(): Promise<Tweet[]> {
@@ -78,7 +79,7 @@ export async function fetchProfileTweets(
     const res = (
       await client.get<TweetListResponse>(`/tweets/profile/${username}`)
     ).data;
-    return res.data.map((t) => t.attributes);
+    return res.tweets;
   } catch (e) {
     console.error(e);
   }
@@ -86,13 +87,13 @@ export async function fetchProfileTweets(
 
 export async function exploreUserTweets(): Promise<Tweet[]> {
   const res = await authClient.get<TweetListResponse>("/tweets/explore");
-  return res.data.data.map((t) => t.attributes);
+  return res.data.tweets;
 }
 
 // TODO: add typings to tweetPayload
 export async function postTweet(tweetPayload: any) {
   const res = await authClient.post<TweetResponse>("/tweets", tweetPayload);
-  return res.data.data.attributes;
+  return res.data.tweet;
 }
 
 export async function appendTweetMedia(
@@ -103,13 +104,13 @@ export async function appendTweetMedia(
   formData.append("image", payload.image);
   payload.description && formData.append("description", payload.description);
 
-  const res = await authClient.post<TweetResponse>("/media", formData, {
+  const res = await authClient.post<TweetResponse>("/attachments", formData, {
     params: { tweetId },
   });
-  return res.data.data.attributes;
+  return res.data.tweet;
 }
 
 export async function fetchSingleTweet(tweetId: string): Promise<Tweet> {
   const res = await authClient.get<TweetResponse>(`/tweets/${tweetId}`);
-  return res.data.data.attributes;
+  return res.data.tweet;
 }

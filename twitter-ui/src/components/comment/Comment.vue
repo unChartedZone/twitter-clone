@@ -16,7 +16,7 @@ const size = "icon-sm";
 <template>
   <div class="comment">
     <section class="comment__profile-image">
-      <AvatarCircle :src="comment.user.profileImageUrl" />
+      <AvatarCircle :src="comment.user.profileImage" />
     </section>
     <section class="comment__content">
       <PostHeader

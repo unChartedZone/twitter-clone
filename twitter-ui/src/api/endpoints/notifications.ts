@@ -4,5 +4,5 @@ import { authClient } from "../client";
 
 export async function fetchNotifications(): Promise<Notification[]> {
   const res = await authClient.get<NotificationListResponse>("/notifications");
-  return res.data.data.map((x) => x.attributes);
+  return res.data.notifications;
 }

@@ -9,14 +9,14 @@ import type { Message } from "@/models/Message";
 
 async function fetchChatThreads(): Promise<Thread[]> {
   const res = await authClient.get<ChatThreadListResponse>("/threads");
-  return res.data.data.map((x) => x.attributes);
+  return res.data.threads;
 }
 
 async function createChatThread(userIds: string[]): Promise<Thread> {
   const res = await authClient.post<ChatThreadResponse>("/threads", {
     userIds,
   });
-  return res.data.data.attributes;
+  return res.data.thread;
 }
 
 async function createMessage(threadId: string, body: string) {
@@ -30,16 +30,13 @@ async function fetchMessages(
   const res = await authClient.get<ChatMessageListResponse>("/messages", {
     params: { threadId, page },
   });
-  const messages = res.data.data
-    .map((x) => x.attributes)
-    .sort(
-      (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
+  const messages = res.data.messages.sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
 
   return {
     messages,
-    hasMore: res.data.links.hasMore,
+    hasMore: res.data.meta.links.hasMore,
   };
 }
 

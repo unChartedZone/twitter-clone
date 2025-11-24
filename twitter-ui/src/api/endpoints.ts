@@ -85,27 +85,29 @@ export async function patchUser(
 
 export async function exploreUsers(): Promise<User[]> {
   const res = await authClient.get<ExploreUsersResponse>("/users/explore");
-  return res.data.data.map((x) => x.attributes);
+  return res.data.users;
 }
 
 export async function fetchUserByUsername(username: string): Promise<User> {
-  const res = await authClient.get<BaseResponse<User>>(`/users/${username}`);
+  const res = await authClient.get<Promise<{ user: User }>>(
+    `/users/${username}`
+  );
 
-  return res.data.data.attributes;
+  return (await res.data).user;
 }
 
 export async function fetchFollowing(username: string): Promise<User[]> {
   const res = await authClient.get<FollowingResponse>("/users/following", {
     params: { username },
   });
-  return res.data.data.map((x) => x.attributes);
+  return res.data.followers;
 }
 
 export async function fetchFollowers(username: string): Promise<User[]> {
   const res = await authClient.get<FollowingResponse>("/users/followers", {
     params: { username },
   });
-  return res.data.data.map((x) => x.attributes);
+  return res.data.followers;
 }
 
 export async function followUser(userId: string) {

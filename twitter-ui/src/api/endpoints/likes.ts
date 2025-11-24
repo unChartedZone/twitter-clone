@@ -4,7 +4,7 @@ import type Tweet from "@/models/Tweet";
 
 export async function likeTweet(tweetId: string): Promise<Tweet> {
   const res = await authClient.post<TweetResponse>(`/tweets/${tweetId}/like`);
-  return res.data.data.attributes;
+  return res.data.tweet;
 }
 
 export async function unlikeTweet(tweetId: string): Promise<void> {

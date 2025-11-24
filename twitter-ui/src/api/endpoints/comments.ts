@@ -14,7 +14,7 @@ export async function fetchComents(tweetId: string): Promise<Comment[]> {
   const res = await authClient.get<CommentListResponse>(
     `/comments?tweet_id=${tweetId}`
   );
-  return res.data.data.map((x) => x.attributes);
+  return res.data.comments;
 }
 
 export async function createComment(
@@ -27,5 +27,5 @@ export async function createComment(
     `/comments?tweet_id=${tweetId}`,
     formData
   );
-  return res.data.data.attributes;
+  return res.data.comment;
 }

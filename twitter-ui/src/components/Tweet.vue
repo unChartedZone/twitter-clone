@@ -26,10 +26,10 @@
       </div>
       <div
         class="tweet__media"
-        v-if="!!tweet.medium && tweet.medium.length > 0"
+        v-if="!!tweet.attachments && tweet.attachments.length > 0"
       >
         <Image
-          v-for="media in tweet.medium"
+          v-for="media in tweet.attachments"
           :key="media.id"
           :src="media.url"
           :alt="media.description"

@@ -29,5 +29,5 @@ export interface UserSummary {
   id: string;
   name: string;
   username: string;
-  profileImageUrl: string;
+  profileImage: string;
 }

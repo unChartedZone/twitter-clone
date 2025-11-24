@@ -7,7 +7,7 @@ defineProps<{ user: UserSummary }>();
 
 <template>
   <div class="user-card">
-    <AvatarCircle :src="user.profileImageUrl" />
+    <AvatarCircle :src="user.profileImage" />
     <div>
       <h4>{{ user.name }}</h4>
       <span>@</span>

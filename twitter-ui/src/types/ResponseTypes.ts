@@ -41,38 +41,57 @@ export interface ResponseList<T, U = {}> {
   links: Pagination;
 }
 
-export interface LoginResponse extends BaseResponse<User> {
+export interface LoginResponse {
+  user: User;
   meta: {
-    accessToken: string;
+    token: string;
   };
 }
 export interface UserResponse extends BaseResponse<User> {}
 export interface ExploreUsersResponse {
-  data: Data<User>[];
+  users: User[];
 }
 
 export interface FollowingResponse {
-  data: Data<User>[];
+  followers: User[];
 }
 
 export interface TweetResponse {
-  data: Data<Tweet>;
-  included: Data<User>[];
+  tweet: Tweet;
 }
 
 export interface TweetListResponse {
-  data: Data<Tweet>[];
-  included: Data<User>[];
-  links: Pagination;
+  tweets: Tweet[];
+  meta: {
+    links: Pagination;
+  };
+  // included: Data<User>[];
 }
 
-export interface CommentListResponse extends ResponseList<Comment> {}
-export interface CommentResponse extends Response<Comment> {}
-export interface NotificationListResponse extends ResponseList<Notification> {}
-export interface ChatThreadResponse extends Response<Thread> {}
-export interface ChatThreadListResponse extends ResponseList<Thread> {}
-export interface ChatMessageListResponse extends ResponseList<Message> {}
-export interface ChatMessageResponse extends Response<Message> {}
+export interface CommentListResponse {
+  comments: Comment[];
+}
+export interface CommentResponse {
+  comment: Comment;
+}
+export interface NotificationListResponse {
+  notifications: Notification[];
+}
+export interface ChatThreadResponse {
+  thread: Thread;
+}
+export interface ChatThreadListResponse {
+  threads: Thread[];
+}
+export interface ChatMessageListResponse {
+  messages: Message[];
+  meta: {
+    links: Pagination;
+  };
+}
+export interface ChatMessageResponse {
+  message: Message;
+}
 
 export interface ErrorResponse {
   data: {
