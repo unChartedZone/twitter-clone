@@ -11,6 +11,7 @@ import Image from "../common/Image.vue";
 import Modal from "../common/Modal.vue";
 import ProfileEditor from "../ProfileEditor.vue";
 import FollowButton from "./FollowButton.vue";
+import UnfollowButton from "./UnfollowButton.vue";
 
 interface ProfileHeaderProps {
   user: User;
@@ -24,6 +25,11 @@ const showFollowButton = ref<boolean>(true);
 const birthDate = computed(() =>
   dayjs(props.user.birthDate).format("MMM D, YYYY")
 );
+
+const showUnfollowButton = computed(() => {
+  const isNotAuthedUser = authStore.user?.id !== props.user.id;
+  return isNotAuthedUser && props.user.isFollowing;
+});
 
 const joinDate = computed(() => dayjs(props.user.joinDate).format("MMMM YYYY"));
 
@@ -67,6 +73,11 @@ function onFollow() {
         "
         :userId="user.id"
         @onFollow="onFollow"
+      />
+      <UnfollowButton
+        v-if="showUnfollowButton"
+        :user-id="user.id"
+        @on-unfollow=""
       />
     </div>
     <div class="profile__name">
