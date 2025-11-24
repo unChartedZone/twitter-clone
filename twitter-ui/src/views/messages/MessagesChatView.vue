@@ -71,10 +71,10 @@ function handleSocketMessage(messagePayload: {
 }) {
   switch (messagePayload.type) {
     case "message-created": {
-      const newMessage = JSON.parse(
+      const newMessageRes = JSON.parse(
         messagePayload.message
       ) as ChatMessageResponse;
-      messages.value.push(newMessage.data.attributes);
+      messages.value.push(newMessageRes.message);
       break;
     }
     case "message-deleted": {

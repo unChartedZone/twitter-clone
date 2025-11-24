@@ -69,9 +69,11 @@ const loading = ref(false);
 async function signupUser() {
   loading.value = true;
   try {
-    const res = await api.signupUser(formState);
-    const user = res.data.attributes;
-    authStore.setUserAuthState(user, res.meta.accessToken);
+    const {
+      user,
+      meta: { token },
+    } = await api.signupUser(formState);
+    authStore.setUserAuthState(user, token);
     router.push("/home");
   } catch (e) {
     console.log(e);

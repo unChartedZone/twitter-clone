@@ -12,6 +12,6 @@ defineProps<ChatThreadItemProps>();
 
 <template>
   <ListItem>
-    <UserCard v-if="thread.users.length === 1" :user="thread.users[0]" />
+    <UserCard v-if="thread.users.length >= 1" :user="thread.users[1]" />
   </ListItem>
 </template>

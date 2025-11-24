@@ -1,4 +1,4 @@
-export default interface Media {
+export default interface Attachment {
   id: string;
   url: string;
   description: string;

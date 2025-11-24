@@ -61,7 +61,7 @@ function closeReplyEditor(comment: CommentType) {
         </div>
         <div class="tweet__images">
           <Image
-            v-for="media in tweet?.medium"
+            v-for="media in tweet?.attachments"
             :key="media.id"
             :src="media.url"
           />

@@ -142,7 +142,7 @@ watch(
     } else {
       profileMediaState.showMediaEditor = false;
     }
-  }
+  },
 );
 
 async function saveProfile() {
@@ -165,7 +165,7 @@ async function saveProfile() {
     await authStore.updateUser(
       patch,
       profileMediaState.selectedBannerImage,
-      profileMediaState.selectedProfileImage
+      profileMediaState.selectedProfileImage,
     );
   } catch (e) {
     console.log(e);

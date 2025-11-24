@@ -11,7 +11,7 @@ export async function bookmarkTweet(tweetId: string) {
 
 export async function fetchBookmarkedTweets(): Promise<Tweet[]> {
   const res = await authClient.get<TweetListResponse>("/bookmarks");
-  return res.data.data.map((t) => t.attributes);
+  return res.data.tweets;
 }
 
 export async function removeBookmarkedTweet(tweetId: string) {
