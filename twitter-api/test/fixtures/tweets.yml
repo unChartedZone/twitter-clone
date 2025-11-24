@@ -1,9 +1,0 @@
-one:
-  text: one
-  user: one
-  total_likes: 0
-
-two:
-  text: two
-  user: one
-  total_likes: 0

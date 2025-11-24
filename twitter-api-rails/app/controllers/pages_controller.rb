@@ -4,6 +4,6 @@ class PagesController < ApplicationController
   end
 
   def potato
-    render json: { message: "My potatoes!" }
+    render text: "My potatoes!"
   end
 end

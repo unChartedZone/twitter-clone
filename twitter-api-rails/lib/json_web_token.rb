@@ -38,7 +38,7 @@ class JsonWebToken
 
   private
 
-  def user_to_payload(user)
+  def self.user_to_payload(user)
     {
       user_id: user[:id],
       email: user[:email]

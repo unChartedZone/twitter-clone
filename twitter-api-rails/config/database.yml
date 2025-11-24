@@ -21,6 +21,7 @@ production:
     <<: *default
     database: <%= ENV.fetch("DB_PRODUCTION_NAME") { "twitter_api_production" } %>
     url: <%= ENV["DATABASE_URL"] %>
+    password: <%= ENV['TWITTER_API_DATABASE_PASSWORD'] %>
   cache:
     <<: *default
     database: <%= ENV.fetch("DB_PRODUCTION_CACHE_NAME") { "twitter_api_production_cache" } %>
