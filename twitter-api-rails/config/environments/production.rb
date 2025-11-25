@@ -79,6 +79,12 @@ Rails.application.configure do
   # Set base host for urls (needed for media urls in tweets)
   routes.default_url_options[:host] = "https://api.twitter.chrisvaldez.dev"
 
+  # Allow websocket connections from the UI domain
+  config.action_cable.allowed_request_origins = [
+    "https://twitter.chrisvaldez.dev",
+    "https://api.twitter.chrisvaldez.dev",
+  ]
+
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
   #   "example.com",     # Allow requests from example.com
