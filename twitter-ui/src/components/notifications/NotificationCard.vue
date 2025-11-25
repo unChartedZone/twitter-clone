@@ -12,7 +12,7 @@ defineProps<NotificationCardProps>();
 
 <template>
   <div class="notification">
-    <AvatarCircle class="mt-1" :src="notification.initiator.profileImageUrl" />
+    <AvatarCircle class="mt-1" :src="notification.initiator.profileImage" />
     <div class="notification__content">
       <PostHeader
         :name="notification.initiator.name"

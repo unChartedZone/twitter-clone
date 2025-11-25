@@ -62,14 +62,7 @@ export async function fetchFeed(): Promise<Tweet[]> {
 
 export async function fetchUserTweets(): Promise<Tweet[]> {
   const res = (await authClient.get<TweetListResponse>("/tweets")).data;
-  return res.data.map(
-    (i) =>
-      ({
-        id: i.id,
-        text: i.attributes.text,
-        medium: i.attributes.medium,
-      } as Tweet)
-  );
+  return res.tweets;
 }
 
 export async function fetchProfileTweets(
