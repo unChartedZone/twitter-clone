@@ -10,6 +10,7 @@ import Icon from "@/components/icons/Icon.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import Link from "@/components/common/Link.vue";
 import GuestMessage from "@/components/GuestMessage.vue";
+import useAuth from "@/hooks/useAuth";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -19,22 +20,30 @@ const user = reactive({
   password: "",
 });
 
+const { loginUserMutation } = useAuth();
+const { mutate, isPending } = loginUserMutation;
+
 async function handleLoginSubmit() {
   const identifier = user.identifier;
-  try {
-    if (isValidEmail(identifier)) {
-      await authStore.loginUser({ email: identifier, password: user.password });
-    } else {
-      // Assume they typed in their username
-      await authStore.loginUser({
-        username: identifier,
-        password: user.password,
-      });
-    }
-    router.push("/home");
-  } catch (err: any) {
-    showErrorMessage.value = true;
-  }
+  const payload = isValidEmail(identifier)
+    ? { email: identifier, password: user.password }
+    : { username: identifier, password: user.password };
+
+  mutate({ user: payload });
+  // try {
+  //   if (isValidEmail(identifier)) {
+  //     await authStore.loginUser({ email: identifier, password: user.password });
+  //   } else {
+  //     // Assume they typed in their username
+  //     await authStore.loginUser({
+  //       username: identifier,
+  //       password: user.password,
+  //     });
+  //   }
+  //   router.push("/home");
+  // } catch (err: any) {
+  //   showErrorMessage.value = true;
+  // }
 }
 
 function isValidEmail(email: string): boolean {
@@ -66,7 +75,7 @@ function isValidEmail(email: string): boolean {
           placeholder="Password"
           type="password"
         />
-        <Button block type="submit">Log in</Button>
+        <Button block type="submit" :loading="isPending">Log in</Button>
       </form>
       <div class="login__footer">
         <Link :to="{ name: 'forgot-password' }" text>Forgot Password?</Link>

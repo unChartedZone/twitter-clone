@@ -2,10 +2,13 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { login, logout, refresh, patchUser } from "@/api/endpoints";
 import { useProfileStore } from "./profile";
-import type { User, UserPatch } from "@/models/User";
+import type { UserPatch } from "@/models/User";
 import type Tweet from "@/models/Tweet";
 import type { LoginPayload } from "@/types/RequestPayloads";
 import type { LoadingState } from "@/types/LoadingState";
+import type { components } from "api-schema";
+
+export type User = components["schemas"]["User"];
 
 export const useAuthStore = defineStore("auth", () => {
   const userFetchState = ref<LoadingState>();
@@ -14,17 +17,12 @@ export const useAuthStore = defineStore("auth", () => {
   const profileStore = useProfileStore();
 
   const userFetchStateLoading = computed<boolean>(
-    () => userFetchState.value === "idle"
+    () => userFetchState.value === "idle",
   );
 
   const loggedIn = computed<boolean>(() => {
     return !!user.value && !!accessToken.value;
   });
-
-  async function loginUser(payload: LoginPayload) {
-    const res = await login(payload);
-    setUserAuthState(res.user, res.meta.token);
-  }
 
   async function refreshUser() {
     userFetchState.value = "idle";
@@ -49,7 +47,7 @@ export const useAuthStore = defineStore("auth", () => {
   async function updateUser(
     userPatch: UserPatch,
     bannerImage?: File,
-    profileImage?: File
+    profileImage?: File,
   ) {
     if (!user.value) return;
 
@@ -57,7 +55,7 @@ export const useAuthStore = defineStore("auth", () => {
       user.value?.id,
       { ...userPatch },
       bannerImage,
-      profileImage
+      profileImage,
     );
 
     profileStore.setProfileUser({ ...updatedUser });
@@ -122,7 +120,6 @@ export const useAuthStore = defineStore("auth", () => {
     userFetchState,
     userFetchStateLoading,
     loggedIn,
-    loginUser,
     refreshUser,
     logoutUser,
     setUserAuthState,
