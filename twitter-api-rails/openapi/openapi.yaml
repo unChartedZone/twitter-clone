@@ -1,0 +1,1644 @@
+openapi: 3.1.0
+info:
+  title: Twitter API (Rails)
+  version: "0.1.0"
+  description: >
+    Minimal, static OpenAPI document for auth, users, and tweets endpoints.
+    Responses mirror the existing controllers and Blueprinter serializers.
+servers:
+  - url: http://localhost:3000
+    description: Local development
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    PaginationLinks:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          example: 1
+        nextPage:
+          type:
+            - integer
+            - "null"
+          example: 2
+        hasMore:
+          type: boolean
+          example: true
+      required:
+        - currentPage
+        - nextPage
+        - hasMore
+    PaginationMeta:
+      type: object
+      properties:
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+        - links
+    Attachment:
+      type: object
+      properties:
+        id:
+          type: integer
+        altText:
+          type:
+            - string
+            - "null"
+        url:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - altText
+        - url
+        - createdAt
+        - updatedAt
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        profileImage:
+          type:
+            - string
+            - "null"
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - username
+        - email
+        - name
+        - profileImage
+        - createdAt
+        - updatedAt
+    UserFull:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            birthDate:
+              type:
+                - string
+                - "null"
+              format: date
+            bio:
+              type:
+                - string
+                - "null"
+            website:
+              type:
+                - string
+                - "null"
+              format: uri
+            location:
+              type:
+                - string
+                - "null"
+            joinDate:
+              type: string
+              format: date-time
+            totalTweets:
+              type: integer
+            totalFollowers:
+              type: integer
+            totalFollowing:
+              type: integer
+            bannerImage:
+              type:
+                - string
+                - "null"
+              format: uri
+            isFollowing:
+              type: boolean
+          required:
+            - totalTweets
+            - totalFollowers
+            - totalFollowing
+            - isFollowing
+    UserResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - user
+    UserFullResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserFull'
+      required:
+        - user
+    Tweet:
+      type: object
+      properties:
+        id:
+          type: integer
+        text:
+          type: string
+        totalLikes:
+          type: integer
+        totalRetweets:
+          type: integer
+        totalComments:
+          type: integer
+        liked:
+          type: boolean
+        retweeted:
+          type: boolean
+        bookmarked:
+          type: boolean
+        user:
+          $ref: '#/components/schemas/User'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - text
+        - totalLikes
+        - totalRetweets
+        - totalComments
+        - liked
+        - retweeted
+        - bookmarked
+        - user
+        - attachments
+        - createdAt
+        - updatedAt
+    TweetResponse:
+      type: object
+      properties:
+        tweet:
+          $ref: '#/components/schemas/Tweet'
+      required:
+        - tweet
+    TweetListResponse:
+      type: object
+      properties:
+        tweets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tweet'
+      required:
+        - tweets
+    PaginatedTweetsResponse:
+      allOf:
+        - $ref: '#/components/schemas/TweetListResponse'
+        - type: object
+          properties:
+            meta:
+              $ref: '#/components/schemas/PaginationMeta'
+          required:
+            - meta
+    AuthMeta:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - token
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        meta:
+          $ref: '#/components/schemas/AuthMeta'
+      required:
+        - user
+        - meta
+    AuthFullResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserFull'
+        meta:
+          $ref: '#/components/schemas/AuthMeta'
+      required:
+        - user
+        - meta
+    FollowRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        followedUserId:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - followedUserId
+        - createdAt
+        - updatedAt
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - content
+        - user
+        - createdAt
+        - updatedAt
+    CommentListResponse:
+      type: object
+      properties:
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+      required:
+        - comments
+    CommentResponse:
+      type: object
+      properties:
+        comment:
+          $ref: '#/components/schemas/Comment'
+      required:
+        - comment
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        text:
+          type: string
+        initiator:
+          $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - text
+        - initiator
+        - createdAt
+        - updatedAt
+    NotificationListResponse:
+      type: object
+      properties:
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+      required:
+        - notifications
+    ChatThread:
+      type: object
+      properties:
+        id:
+          type: integer
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - users
+        - createdAt
+        - updatedAt
+    ChatThreadsResponse:
+      type: object
+      properties:
+        threads:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatThread'
+      required:
+        - threads
+    ChatThreadResponse:
+      type: object
+      properties:
+        thread:
+          $ref: '#/components/schemas/ChatThread'
+      required:
+        - thread
+    ChatMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        body:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - body
+        - user
+        - createdAt
+        - updatedAt
+    ChatMessageResource:
+      type: object
+      properties:
+        id:
+          type: integer
+        chatThreadId:
+          type: integer
+        userId:
+          type: integer
+        body:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - chatThreadId
+        - userId
+        - body
+        - createdAt
+        - updatedAt
+    ChatMessageListResponse:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+      required:
+        - messages
+        - meta
+    ChatMessageResponse:
+      type: object
+      properties:
+        message:
+          $ref: '#/components/schemas/ChatMessage'
+      required:
+        - message
+    BasicMessage:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+paths:
+  /signup:
+    post:
+      summary: Sign up a new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    password:
+                      type: string
+                    name:
+                      type: string
+                    birthDate:
+                      type: string
+                      format: date
+                  required:
+                    - username
+                    - email
+                    - password
+                    - name
+              required:
+                - user
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        "422":
+          description: Validation errors
+  /login:
+    post:
+      summary: Log in with username or email
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                    username:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                    - password
+              required:
+                - user
+      responses:
+        "200":
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        "401":
+          description: Invalid credentials
+  /refresh:
+    post:
+      summary: Refresh access token using refresh token cookie
+      security: []
+      responses:
+        "200":
+          description: Refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthFullResponse'
+        "401":
+          description: Missing or invalid refresh token
+  /logout:
+    post:
+      summary: Clear refresh session
+      security: []
+      responses:
+        "204":
+          description: Logged out
+  /me:
+    get:
+      summary: Get current authenticated user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "401":
+          description: Missing or invalid access token
+  /users:
+    get:
+      summary: List users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create user (admin/internal)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    password:
+                      type: string
+                    passwordConfirmation:
+                      type: string
+                  required:
+                    - username
+                    - password
+              required:
+                - user
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: Get user by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: Not found
+    patch:
+      summary: Update user profile fields
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    bio:
+                      type: string
+                    location:
+                      type: string
+                    website:
+                      type: string
+                      format: uri
+                    birthDate:
+                      type: string
+                      format: date
+                    bannerImage:
+                      type: string
+                      format: uri
+                    profileImage:
+                      type: string
+                      format: uri
+              required:
+                - user
+      responses:
+        "202":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "401":
+          description: Missing or invalid token
+        "403":
+          description: Forbidden
+        "422":
+          description: Validation errors
+  /users/{username}:
+    get:
+      summary: Get user by username
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFullResponse'
+        "404":
+          description: Not found
+  /users/follow/{id}:
+    post:
+      summary: Follow a user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the user to follow
+      responses:
+        "201":
+          description: Follow created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowRecord'
+        "401":
+          description: Missing or invalid token
+        "422":
+          description: Validation errors
+  /users/unfollow/{id}:
+    post:
+      summary: Unfollow a user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the user to unfollow
+      responses:
+        "200":
+          description: Unfollowed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+        "401":
+          description: Missing or invalid token
+  /users/followers:
+    get:
+      summary: Followers for a username
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Followers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  followers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                required:
+                  - followers
+        "404":
+          description: Not found
+  /users/following:
+    get:
+      summary: Following for a username
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Following
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  followers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                required:
+                  - followers
+        "404":
+          description: Not found
+  /users/explore:
+    get:
+      summary: Explore non-followed users
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                required:
+                  - users
+        "401":
+          description: Missing or invalid token
+  /tweets:
+    get:
+      summary: Tweets authored by current user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Tweets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TweetListResponse'
+        "401":
+          description: Missing or invalid token
+    post:
+      summary: Create a tweet
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tweet:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                    mediumIds:
+                      type: array
+                      items:
+                        type: integer
+                  required:
+                    - text
+              required:
+                - tweet
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TweetResponse'
+        "400":
+          description: Validation error
+        "401":
+          description: Missing or invalid token
+  /tweets/{id}:
+    get:
+      summary: Get tweet by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "200":
+          description: Tweet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TweetResponse'
+        "401":
+          description: Missing or invalid token
+        "404":
+          description: Not found
+  /tweets/{id}/like:
+    post:
+      summary: Like a tweet
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "201":
+          description: Liked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TweetResponse'
+        "401":
+          description: Missing or invalid token
+        "409":
+          description: Already liked
+  /tweets/{id}/unlike:
+    post:
+      summary: Unlike a tweet
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "204":
+          description: Unliked
+        "401":
+          description: Missing or invalid token
+  /tweets/{id}/retweet:
+    post:
+      summary: Retweet a tweet
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "201":
+          description: Retweeted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TweetResponse'
+        "401":
+          description: Missing or invalid token
+        "409":
+          description: Already retweeted
+  /tweets/{id}/unretweet:
+    post:
+      summary: Undo retweet
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "204":
+          description: Unretweeted
+        "401":
+          description: Missing or invalid token
+  /tweets/feed:
+    get:
+      summary: Authenticated user's feed
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Feed tweets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTweetsResponse'
+        "401":
+          description: Missing or invalid token
+  /tweets/profile/{username}:
+    get:
+      summary: Tweets for a profile (auth required)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Tweets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTweetsResponse'
+        "401":
+          description: Missing or invalid token
+  /tweets/profile/{username}/replied:
+    get:
+      summary: Retweets/replies by username
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Tweets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTweetsResponse'
+        "401":
+          description: Missing or invalid token
+  /tweets/profile/{username}/media:
+    get:
+      summary: Tweets with media for username
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Tweets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTweetsResponse'
+        "401":
+          description: Missing or invalid token
+  /tweets/profile/{username}/liked:
+    get:
+      summary: Tweets liked by username
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Tweets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTweetsResponse'
+        "401":
+          description: Missing or invalid token
+  /tweets/explore:
+    get:
+      summary: Explore tweets from users you do not follow
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Tweets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TweetListResponse'
+        "401":
+          description: Missing or invalid token
+  /comments:
+    get:
+      summary: List comments for a tweet
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: tweetId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Comments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentListResponse'
+        "401":
+          description: Missing or invalid token
+    post:
+      summary: Create a comment on a tweet
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                tweetId:
+                  type: integer
+                comment:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                    commentMediaAttributes:
+                      type: object
+                      properties:
+                        altText:
+                          type: string
+                        attachment:
+                          type: string
+                          format: binary
+                  required:
+                    - content
+              required:
+                - tweetId
+                - comment
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+        "401":
+          description: Missing or invalid token
+        "404":
+          description: Tweet not found
+        "422":
+          description: Validation errors
+  /comments/{id}:
+    delete:
+      summary: Delete a comment
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Missing or invalid token
+        "422":
+          description: Failed to delete
+  /bookmarks:
+    get:
+      summary: List bookmarks for current user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Tweets bookmarked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TweetListResponse'
+        "401":
+          description: Missing or invalid token
+  /bookmarks/{tweetId}:
+    post:
+      summary: Bookmark a tweet
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: tweetId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicMessage'
+        "401":
+          description: Missing or invalid token
+        "404":
+          description: Tweet not found
+        "422":
+          description: Validation errors
+    delete:
+      summary: Remove a bookmark
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: tweetId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicMessage'
+        "401":
+          description: Missing or invalid token
+        "404":
+          description: Tweet not found
+  /notifications:
+    get:
+      summary: List notifications for current user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationListResponse'
+        "401":
+          description: Missing or invalid token
+  /attachments:
+    get:
+      summary: List attachments
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Attachments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attachments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Attachment'
+                required:
+                  - attachments
+        "401":
+          description: Missing or invalid token
+    post:
+      summary: Upload an attachment and optionally associate to a tweet
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+                tweetId:
+                  type: integer
+      responses:
+        "201":
+          description: Attachment created and tweet returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TweetResponse'
+        "400":
+          description: Validation error
+        "401":
+          description: Missing or invalid token
+  /threads:
+    get:
+      summary: List chat threads for current user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Threads
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatThreadsResponse'
+        "401":
+          description: Missing or invalid token
+    post:
+      summary: Create a chat thread
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userIds:
+                  type: array
+                  items:
+                    type: integer
+              required:
+                - userIds
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatThreadResponse'
+        "401":
+          description: Missing or invalid token
+        "422":
+          description: Validation errors
+  /messages:
+    get:
+      summary: List messages in a thread
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: threadId
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatMessageListResponse'
+        "401":
+          description: Missing or invalid token
+        "403":
+          description: Not a participant
+    post:
+      summary: Send a message in a thread
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                threadId:
+                  type: integer
+                message:
+                  type: object
+                  properties:
+                    body:
+                      type: string
+                  required:
+                    - body
+              required:
+                - threadId
+                - message
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatMessageResource'
+        "401":
+          description: Missing or invalid token
+        "403":
+          description: Not a participant
+        "422":
+          description: Validation errors
+  /messages/{id}:
+    delete:
+      summary: Delete a message
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: threadId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Missing or invalid token
+        "403":
+          description: Not a participant
+        "400":
+          description: Failed to delete
+  /users/summary:
+    get:
+      summary: List user summaries
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                required:
+                  - users
+        "401":
+          description: Missing or invalid token
+  /password:
+    patch:
+      summary: Change password for current user
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+                confirmPassword:
+                  type: string
+              required:
+                - currentPassword
+                - newPassword
+                - confirmPassword
+      responses:
+        "202":
+          description: Password changed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "403":
+          description: Invalid current password
+        "422":
+          description: Validation errors
+  /password/reset:
+    post:
+      summary: Request password reset email
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+      responses:
+        "200":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicMessage'
+  /password/reset/valid:
+    get:
+      summary: Validate password reset token
+      security: []
+      parameters:
+        - in: query
+          name: token
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Valid
+        "400":
+          description: Invalid token
+  /password/update:
+    post:
+      summary: Update password using reset token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                passwordConfirmation:
+                  type: string
+              required:
+                - token
+                - password
+                - passwordConfirmation
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicMessage'
+        "400":
+          description: Invalid token or mismatch
+  /up:
+    get:
+      summary: Health check
+      security: []
+      responses:
+        "200":
+          description: OK
+  /:
+    get:
+      summary: Root page
+      security: []
+      responses:
+        "200":
+          description: Welcome message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicMessage'
+  /potato:
+    get:
+      summary: Test page
+      security: []
+      responses:
+        "200":
+          description: Plain text potato message
