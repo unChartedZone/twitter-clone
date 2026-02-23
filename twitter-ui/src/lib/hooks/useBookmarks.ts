@@ -11,10 +11,8 @@ export default function useBookmarks() {
     },
   });
 
-  console.log(data);
-
   return {
-    bookmarkedTweets: data.value?.tweets,
+    bookmarkedTweets: data,
     isLoading,
   };
 }
