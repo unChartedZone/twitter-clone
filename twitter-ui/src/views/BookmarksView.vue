@@ -9,6 +9,6 @@ const { bookmarkedTweets, isLoading } = useBookmarks();
 <template>
   <PageHeader title="Bookmarks" />
   <div>
-    <TweetList :tweets="bookmarkedTweets?.tweets" :loading="isLoading" />
+    <TweetList :tweets="bookmarkedTweets" :loading="isLoading" />
   </div>
 </template>

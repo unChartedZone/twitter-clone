@@ -11,5 +11,8 @@ export type SignupResponse =
 export type RefreshResponse =
   paths["/refresh"]["post"]["responses"]["200"]["content"]["application/json"];
 
+export type HomeFeedResponse =
+  paths["/tweets/feed"]["get"]["responses"]["200"]["content"]["application/json"];
+
 export type BookmarksResponse =
   paths["/bookmarks"]["get"]["responses"]["200"]["content"]["application/json"];
