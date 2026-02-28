@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import * as tweetApi from "@/api/endpoints/tweets";
-import * as commentApi from "@/api/endpoints/comments";
 import type Tweet from "@/models/Tweet";
-import type CommentType from "@/models/Comment";
 import UserCard from "@/components/UserCard.vue";
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
@@ -17,28 +15,18 @@ import ReplyEditor from "@/components/reply-editor/ReplyEditor.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import dayjs from "dayjs";
 import { useQuery } from "@/hooks/useQuery";
+import useComments from "@/lib/hooks/useComments";
 
 const props = defineProps<{ tweetId: string; username: string }>();
-const comments = ref<CommentType[]>([]);
 const toggleReplyEditor = ref<boolean>(false);
+const { comments, isLoading } = useComments(props.tweetId);
 
 const { result: tweet, loading } = useQuery<Tweet | undefined>(
   () => tweetApi.fetchSingleTweet(props.tweetId),
-  { initialValue: undefined }
+  { initialValue: undefined },
 );
 
-onMounted(async () => {
-  comments.value = await commentApi.fetchComents(props.tweetId);
-});
-
-function addCommentToThread(comment: CommentType) {
-  comments.value.push(comment);
-}
-
-// Handle event comment was created, we want to close the editor and add the new
-// comment to the comment list.
-function closeReplyEditor(comment: CommentType) {
-  addCommentToThread(comment);
+function closeReplyEditor() {
   toggleReplyEditor.value = false;
 }
 </script>
@@ -78,13 +66,10 @@ function closeReplyEditor(comment: CommentType) {
         size="icon"
         @replyTriggered="toggleReplyEditor = true"
       />
-      <InlineReplyEditor
-        v-if="!!tweet"
-        :tweetId="tweet.id"
-        @onCommentCreated="addCommentToThread"
-      />
+      <InlineReplyEditor v-if="!!tweet" :tweetId="tweet.id" />
       <!-- Comment section -->
       <section>
+        <PageLoader v-if="isLoading" />
         <ul>
           <li v-for="comment in comments" :key="comment.id">
             <Comment :comment="comment" />
@@ -97,7 +82,7 @@ function closeReplyEditor(comment: CommentType) {
     <ReplyEditor
       v-if="!!tweet"
       :tweetId="tweet.id"
-      @onCommentCreated="closeReplyEditor"
+      @closeEditor="closeReplyEditor"
     />
   </Modal>
 </template>

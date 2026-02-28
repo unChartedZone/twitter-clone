@@ -24,6 +24,12 @@ export type BookmarkTweetResponse =
 export type UnbookmarkTweetResponse =
   paths["/bookmarks/{tweetId}"]["delete"]["responses"]["200"]["content"]["application/json"];
 
+// Comments
+export type CommentsResponse =
+  paths["/comments"]["get"]["responses"]["200"]["content"]["application/json"];
+export type CreateCommentResponse =
+  paths["/comments"]["post"]["responses"]["201"]["content"]["application/json"];
+
 // Notifications
 export type NotificationResponse =
   paths["/notifications"]["get"]["responses"]["200"]["content"]["application/json"];
