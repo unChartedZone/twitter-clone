@@ -9,9 +9,9 @@
       />
       <TweetAction
         icon="retweet"
-        :text="`${tweet.totalRetweets}`"
+        :text="`${totalRetweets}`"
         activeIcon="retweet"
-        :active="tweet.retweeted"
+        :active="retweeted"
         color="success"
         @action="retweetTweet"
         @activeAction="unretweetTweet"
@@ -20,8 +20,8 @@
       <TweetAction
         icon="heart-outline"
         activeIcon="heart"
-        :text="`${tweet.totalLikes}`"
-        :active="tweet.liked"
+        :text="`${totalLikes}`"
+        :active="liked"
         color="danger"
         @action="likeTweet"
         @activeAction="unlikeTweet"
@@ -32,7 +32,7 @@
       <TweetAction
         icon="bookmark-outline"
         activeIcon="bookmark"
-        :active="tweet.bookmarked"
+        :active="bookmarked"
         color="primary"
         @action="addBookmark"
         @activeAction="removeBookmark"
@@ -44,11 +44,12 @@
 </template>
 
 <script setup lang="ts">
-import * as bookmarkApi from "@/api/endpoints/bookmarks";
+import { ref, watch } from "vue";
 import * as likeApi from "@/api/endpoints/likes";
 import * as retweetApi from "@/api/endpoints/retweet";
 import type Tweet from "@/models/Tweet";
 import TweetAction from "./TweetAction.vue";
+import useBookmarks from "@/lib/hooks/useBookmarks";
 
 interface TweetActionRowProps {
   tweet: Tweet;
@@ -60,42 +61,62 @@ const emit = defineEmits<{
   (event: "replyTriggered", tweetId: string): void;
 }>();
 
+const { bookmarkTweetMutation, unbookmarkTweetMutation } = useBookmarks();
+
+const bookmarked = ref<boolean>(false);
+const liked = ref<boolean>(false);
+const retweeted = ref<boolean>(false);
+const totalLikes = ref<number>(0);
+const totalRetweets = ref<number>(0);
+
+watch(
+  () => props.tweet,
+  (tweet) => {
+    bookmarked.value = tweet.bookmarked;
+    liked.value = tweet.liked;
+    retweeted.value = tweet.retweeted;
+    totalLikes.value = tweet.totalLikes;
+    totalRetweets.value = tweet.totalRetweets;
+  },
+  { immediate: true },
+);
+
 async function addBookmark() {
   try {
-    await bookmarkApi.bookmarkTweet(props.tweet.id);
-    props.tweet.bookmarked = true;
+    await bookmarkTweetMutation.mutateAsync(props.tweet.id);
+    bookmarked.value = true;
   } catch (e) {}
 }
 
 async function removeBookmark() {
   try {
-    await bookmarkApi.removeBookmarkedTweet(props.tweet.id);
-    props.tweet.bookmarked = false;
+    await unbookmarkTweetMutation.mutateAsync(props.tweet.id);
+    bookmarked.value = false;
   } catch (e) {}
 }
 
 async function likeTweet() {
   await likeApi.likeTweet(props.tweet.id);
-  props.tweet.liked = true;
-  props.tweet.totalLikes += 1;
+  liked.value = true;
+  totalLikes.value += 1;
 }
 
 async function unlikeTweet() {
   await likeApi.unlikeTweet(props.tweet.id);
-  props.tweet.liked = false;
-  props.tweet.totalLikes -= 1;
+  liked.value = false;
+  totalLikes.value -= 1;
 }
 
 async function retweetTweet() {
   await retweetApi.retweet(props.tweet.id);
-  props.tweet.totalRetweets += 1;
-  props.tweet.retweeted = true;
+  totalRetweets.value += 1;
+  retweeted.value = true;
 }
 
 async function unretweetTweet() {
   await retweetApi.unretweet(props.tweet.id);
-  props.tweet.totalRetweets -= 1;
-  props.tweet.retweeted = false;
+  totalRetweets.value -= 1;
+  retweeted.value = false;
 }
 </script>
 

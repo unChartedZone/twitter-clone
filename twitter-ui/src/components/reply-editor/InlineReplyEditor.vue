@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
-import * as commentApi from "@/api/endpoints/comments";
 import AvatarCircle from "../AvatarCircle.vue";
 import Button from "../common/Button.vue";
 import Textfield from "../common/Textfield.vue";
-import type { LoadingState } from "@/types/LoadingState";
-import type Comment from "@/models/Comment";
 import useReplyEditor from "@/hooks/useReplyEditor";
 
 interface ReplyEditorProps {
@@ -14,14 +10,8 @@ interface ReplyEditorProps {
 }
 
 const props = defineProps<ReplyEditorProps>();
-const emit = defineEmits<{
-  (event: "onCommentCreated", createdComment: Comment): void;
-}>();
 const authStore = useAuthStore();
-const { commentText, postComment, isLoading } = useReplyEditor(
-  props.tweetId,
-  emit
-);
+const { commentText, isPending, postComment } = useReplyEditor(props.tweetId);
 </script>
 
 <template>
@@ -34,7 +24,7 @@ const { commentText, postComment, isLoading } = useReplyEditor(
         placeholder="Tweet your reply"
       />
     </div>
-    <Button @click="postComment" :loading="isLoading">Post</Button>
+    <Button @click="postComment" :loading="isPending">Post</Button>
   </section>
 </template>
 

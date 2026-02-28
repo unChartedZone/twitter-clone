@@ -3,18 +3,21 @@ import { authClient, client } from "./client";
 import type Tweet from "@/models/Tweet";
 import type { User, UserPatch } from "@/models/User";
 import type {
-  LoginResponse,
   UserResponse,
   TweetListResponse,
   ExploreUsersResponse,
   BaseResponse,
   FollowingResponse,
+  LoginResponse,
 } from "@/types/ResponseTypes";
 import type { LoginPayload } from "@/types/RequestPayloads";
 import { AxiosError } from "axios";
+import type { paths } from "../../api-schema";
+import type { LoginBody } from "@/lib/types/responses";
 
-export async function login(user: LoginPayload): Promise<LoginResponse> {
-  return (await client.post<LoginResponse>("/login", { user })).data;
+export async function login(user: LoginBody): Promise<LoginResponse> {
+  const result = (await client.post<LoginResponse>("/login", { user })).data;
+  return result;
 }
 
 export async function signupUser(payload: {
@@ -54,7 +57,7 @@ export async function patchUser(
   userId: string,
   userPatch: UserPatch,
   bannerImage?: File,
-  profileImage?: File
+  profileImage?: File,
 ): Promise<User> {
   const formData = new FormData();
 
@@ -78,7 +81,7 @@ export async function patchUser(
 
   const res = await authClient.patch<UserResponse>(
     `/users/${userId}`,
-    formData
+    formData,
   );
   return res.data.data.attributes;
 }
@@ -90,7 +93,7 @@ export async function exploreUsers(): Promise<User[]> {
 
 export async function fetchUserByUsername(username: string): Promise<User> {
   const res = await authClient.get<Promise<{ user: User }>>(
-    `/users/${username}`
+    `/users/${username}`,
   );
 
   return (await res.data).user;
@@ -113,7 +116,7 @@ export async function fetchFollowers(username: string): Promise<User[]> {
 export async function followUser(userId: string) {
   // TODO: update this when I create a serializer for followers
   const res = await authClient.post<{ followed_user: User }>(
-    `/users/follow/${userId}`
+    `/users/follow/${userId}`,
   );
   return res.data;
 }

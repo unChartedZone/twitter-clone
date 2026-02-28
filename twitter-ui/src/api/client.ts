@@ -30,13 +30,12 @@ export async function setupAuthClient() {
       if (error.response?.status == 401) {
         await authStore.refreshUser();
         const originalRequestConfig = error.config!;
-        originalRequestConfig.headers[
-          "Authorization"
-        ] = `Bearer ${authStore.accessToken}`;
+        originalRequestConfig.headers["Authorization"] =
+          `Bearer ${authStore.accessToken}`;
         // @ts-ignore
         return axios.request(error.config);
       }
       return Promise.reject(error);
-    }
+    },
   );
 }

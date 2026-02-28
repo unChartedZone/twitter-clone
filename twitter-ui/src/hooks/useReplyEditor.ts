@@ -1,35 +1,32 @@
-import { ref, computed } from "vue";
-import { type LoadingState } from "@/types/LoadingState";
-import type Comment from "@/models/Comment";
-import * as commentApi from "@/api/endpoints/comments";
+import { ref } from "vue";
+import useComments from "@/lib/hooks/useComments";
 
 function useReplyEditor(
   tweetId: string,
-  emit?: (event: "onCommentCreated", comment: Comment) => void
+  emit?: (event: "closeEditor") => void,
 ) {
-  const loading = ref<LoadingState>();
   const commentText = ref<string>("");
-
-  const isLoading = computed(() => loading.value === "idle");
+  const { createCommentMutation } = useComments();
+  const { isPending } = createCommentMutation;
 
   async function postComment() {
     if (commentText.value === "") return;
 
-    loading.value = "idle";
-
-    const createdComment = await commentApi.createComment(tweetId, {
-      content: commentText.value,
+    await createCommentMutation.mutateAsync({
+      tweetId,
+      commentContent: commentText.value,
     });
-    loading.value = "resolved";
     commentText.value = "";
-    if (!!emit) {
-      emit("onCommentCreated", createdComment);
+
+    // Close editor if reply editor is within a dialog
+    if (emit) {
+      emit("closeEditor");
     }
   }
 
   return {
-    isLoading,
     commentText,
+    isPending,
     postComment,
   };
 }

@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { exploreUserTweets } from "@/api/endpoints/tweets";
 import type TweetType from "@/models/Tweet";
 import PageHeader from "@/components/PageHeader.vue";
-import Tweet from "@/components/Tweet.vue";
+import TweetCard from "@/components/TweetCard.vue";
 import NoTweetsMessage from "@/components/NoTweetsMessage.vue";
 
 const tweets = ref<TweetType[]>([]);
@@ -19,7 +19,7 @@ onMounted(async () => {
     <div>
       <NoTweetsMessage v-if="tweets.length == 0" />
       <ul>
-        <Tweet v-for="tweet in tweets" :tweet="tweet" />
+        <TweetCard v-for="tweet in tweets" :tweet="tweet" />
       </ul>
     </div>
   </div>

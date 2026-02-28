@@ -32,7 +32,7 @@
             </p>
             <DateSelector v-model="formState.birthDate" />
           </div>
-          <Button block size="xl" :loading="loading" type="submit">
+          <Button block size="xl" :loading="isPending" type="submit">
             Signup
           </Button>
         </form>
@@ -42,19 +42,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
+import { reactive } from "vue";
 import dayjs from "dayjs";
-import * as api from "@/api/endpoints";
-import { useAuthStore } from "@/stores/auth";
-import router from "@/router";
 import Button from "./common/Button.vue";
 import { Card, CardBody, CardHeader } from "@/components/common/card";
 import DateSelector from "./DateSelector.vue";
 import Icon from "./icons/Icon.vue";
 import Textfield from "./common/Textfield.vue";
+import useAuth from "@/hooks/useAuth";
 
 const emit = defineEmits(["closeForm"]);
-const authStore = useAuthStore();
+const { signupUserMutation } = useAuth();
+const { mutate, isPending } = signupUserMutation;
 
 const formState = reactive({
   username: "",
@@ -64,22 +63,8 @@ const formState = reactive({
   birthDate: dayjs().format("YYYY-MM-DD"),
 });
 
-const loading = ref(false);
-
 async function signupUser() {
-  loading.value = true;
-  try {
-    const {
-      user,
-      meta: { token },
-    } = await api.signupUser(formState);
-    authStore.setUserAuthState(user, token);
-    router.push("/home");
-  } catch (e) {
-    console.log(e);
-  } finally {
-    loading.value = false;
-  }
+  mutate({ user: formState });
 }
 </script>
 

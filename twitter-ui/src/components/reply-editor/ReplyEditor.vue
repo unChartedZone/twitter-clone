@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
-import type Comment from "@/models/Comment";
 import AvatarCircle from "../AvatarCircle.vue";
 import Button from "../common/Button.vue";
 import {
@@ -14,15 +13,12 @@ import Textarea from "../common/Textarea.vue";
 import useReplyEditor from "@/hooks/useReplyEditor";
 
 const props = defineProps<{ tweetId: string }>();
-const emit = defineEmits<{
-  (event: "onCommentCreated", createdComment: Comment): void;
-  (event: "closeEditor"): void;
-}>();
+const emit = defineEmits<{ (event: "closeEditor"): void }>();
 
 const authStore = useAuthStore();
-const { commentText, isLoading, postComment } = useReplyEditor(
+const { commentText, isPending, postComment } = useReplyEditor(
   props.tweetId,
-  emit
+  emit,
 );
 </script>
 
@@ -63,7 +59,7 @@ const { commentText, isLoading, postComment } = useReplyEditor(
         </div>
       </template>
       <template #right>
-        <Button @click="postComment" :loading="isLoading">Post</Button>
+        <Button @click="postComment" :loading="isPending">Post</Button>
       </template>
     </CardFooter>
   </Card>

@@ -1,7 +1,6 @@
 import type Tweet from "@/models/Tweet";
 import { type User } from "@/models/User";
 import type Comment from "@/models/Comment";
-import type Notification from "@/models/Notification";
 import type Thread from "@/models/Thread";
 import type { Message } from "@/models/Message";
 
@@ -73,9 +72,6 @@ export interface CommentListResponse {
 }
 export interface CommentResponse {
   comment: Comment;
-}
-export interface NotificationListResponse {
-  notifications: Notification[];
 }
 export interface ChatThreadResponse {
   thread: Thread;

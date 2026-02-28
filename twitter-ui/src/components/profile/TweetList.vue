@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type TweetType from "@/models/Tweet";
-import Tweet from "../Tweet.vue";
+import TweetCard from "../TweetCard.vue";
 import LoadingIcon from "../common/LoadingIcon.vue";
+import type { Tweet } from "@/lib/types/models";
 
 interface TweetListProps {
-  tweets: TweetType[];
+  tweets: Tweet[] | undefined;
   loading: boolean;
 }
 
@@ -13,11 +13,11 @@ defineProps<TweetListProps>();
 
 <template>
   <ul class="tweet-list">
-    <Tweet v-for="tweet in tweets" :tweet="tweet" />
+    <TweetCard v-for="tweet in tweets" :tweet="tweet" />
+    <div v-if="loading" class="loading-icon">
+      <LoadingIcon />
+    </div>
   </ul>
-  <div v-if="loading" class="loading-icon">
-    <LoadingIcon />
-  </div>
 </template>
 
 <style scoped lang="scss">

@@ -1,25 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { fetchFeed } from "@/api/endpoints/tweets";
-import type Tweet from "@/models/Tweet";
-import TweetVue from "@/components/Tweet.vue";
 import NoTweetsMessage from "@/components/NoTweetsMessage.vue";
 import InlineTweetEditor from "@/components/tweet-editor/InlineTweetEditor.vue";
+import TweetList from "@/components/profile/TweetList.vue";
+import useHomeFeed from "@/lib/hooks/useHomeFeed";
 
-const tweets = ref<Tweet[]>();
-
-onMounted(async () => {
-  tweets.value = await fetchFeed();
-});
+const { tweets, isLoading } = useHomeFeed();
 </script>
 
 <template>
   <div class="home-page">
     <InlineTweetEditor class="inline-tweet-editor" />
     <NoTweetsMessage v-if="tweets?.length == 0" />
-    <ul class="tweet-list">
-      <TweetVue v-for="tweet in tweets" :tweet="tweet" />
-    </ul>
+    <TweetList class="home-feed" :tweets="tweets" :loading="isLoading" />
   </div>
 </template>
 
@@ -34,7 +26,7 @@ onMounted(async () => {
   }
 }
 
-.tweet-list {
+.home-feed {
   border-top: 1px solid $gray;
 }
 </style>

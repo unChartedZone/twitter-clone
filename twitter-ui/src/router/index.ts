@@ -1,10 +1,10 @@
 import type { Component } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
-import { setupAuthClient } from "@/api/client";
 import { useAuthStore } from "@/stores/auth";
 import Default from "@/layouts/default.vue";
 import SearchField from "@/components/SearchField.vue";
 import WhoToFollow from "@/components/WhoToFollow.vue";
+import useAuth from "@/hooks/useAuth";
 
 // Add typings for Route Meta properties
 declare module "vue-router" {
@@ -218,11 +218,11 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const authStore = useAuthStore();
+  const { refreshUserMutation } = useAuth();
 
   // attempt to refresh user session
-  if (!authStore.loggedIn && authStore.userFetchState !== "rejected") {
-    await authStore.refreshUser();
-    await setupAuthClient();
+  if (!authStore.loggedIn && !refreshUserMutation.isError.value) {
+    await refreshUserMutation.mutateAsync();
   }
 
   // If navigating to a route that requires authentication and not currently
