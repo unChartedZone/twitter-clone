@@ -16,3 +16,7 @@ export type HomeFeedResponse =
 
 export type BookmarksResponse =
   paths["/bookmarks"]["get"]["responses"]["200"]["content"]["application/json"];
+
+// Notifications
+export type NotificationResponse =
+  paths["/notifications"]["get"]["responses"]["200"]["content"]["application/json"];

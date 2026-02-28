@@ -74,9 +74,6 @@ export interface CommentListResponse {
 export interface CommentResponse {
   comment: Comment;
 }
-export interface NotificationListResponse {
-  notifications: Notification[];
-}
 export interface ChatThreadResponse {
   thread: Thread;
 }
