@@ -32,8 +32,13 @@ export default function useComments(tweetId?: string) {
       );
       return res.data.comment;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments"] });
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["comments", variables.tweetId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["tweet-details", variables.tweetId],
+      });
     },
   });
 

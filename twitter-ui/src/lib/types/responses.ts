@@ -16,6 +16,10 @@ export type RefreshResponse =
 export type HomeFeedResponse =
   paths["/tweets/feed"]["get"]["responses"]["200"]["content"]["application/json"];
 
+// Tweet Details
+export type TweetDetailsResponse =
+  paths["/tweets/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
+
 // Bookmarks
 export type BookmarksResponse =
   paths["/bookmarks"]["get"]["responses"]["200"]["content"]["application/json"];

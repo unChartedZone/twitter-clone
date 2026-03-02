@@ -47,7 +47,7 @@
 import { ref, watch } from "vue";
 import * as likeApi from "@/api/endpoints/likes";
 import * as retweetApi from "@/api/endpoints/retweet";
-import type Tweet from "@/models/Tweet";
+import type { Tweet } from "@/lib/types/models";
 import TweetAction from "./TweetAction.vue";
 import useBookmarks from "@/lib/hooks/useBookmarks";
 

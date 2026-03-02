@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import * as tweetApi from "@/api/endpoints/tweets";
-import type Tweet from "@/models/Tweet";
 import UserCard from "@/components/UserCard.vue";
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
@@ -14,17 +12,13 @@ import InlineReplyEditor from "@/components/reply-editor/InlineReplyEditor.vue";
 import ReplyEditor from "@/components/reply-editor/ReplyEditor.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import dayjs from "dayjs";
-import { useQuery } from "@/hooks/useQuery";
 import useComments from "@/lib/hooks/useComments";
+import useTweetDetails from "@/lib/hooks/useTweetDetails";
 
 const props = defineProps<{ tweetId: string; username: string }>();
 const toggleReplyEditor = ref<boolean>(false);
-const { comments, isLoading } = useComments(props.tweetId);
-
-const { result: tweet, loading } = useQuery<Tweet | undefined>(
-  () => tweetApi.fetchSingleTweet(props.tweetId),
-  { initialValue: undefined },
-);
+const { tweet, isLoading } = useTweetDetails(props.tweetId);
+const { comments, isLoading: areCommentsLoading } = useComments(props.tweetId);
 
 function closeReplyEditor() {
   toggleReplyEditor.value = false;
@@ -34,7 +28,7 @@ function closeReplyEditor() {
 <template>
   <main>
     <PageHeader title="Tweet" />
-    <PageLoader v-if="loading && !tweet" />
+    <PageLoader v-if="isLoading" />
     <article v-else class="tweet">
       <header class="tweet__header">
         <UserCard v-if="!!tweet?.user" :user="tweet?.user" />
@@ -69,7 +63,7 @@ function closeReplyEditor() {
       <InlineReplyEditor v-if="!!tweet" :tweetId="tweet.id" />
       <!-- Comment section -->
       <section>
-        <PageLoader v-if="isLoading" />
+        <PageLoader v-if="areCommentsLoading" />
         <ul>
           <li v-for="comment in comments" :key="comment.id">
             <Comment :comment="comment" />
