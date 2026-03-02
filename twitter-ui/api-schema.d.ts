@@ -2341,7 +2341,8 @@ export interface components {
             links: components["schemas"]["PaginationLinks"];
         };
         Attachment: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             altText: string | null;
             /** Format: uri */
             url: string;
@@ -2351,7 +2352,8 @@ export interface components {
             updatedAt: string;
         };
         User: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             username: string;
             /** Format: email */
             email: string;
@@ -2386,7 +2388,8 @@ export interface components {
             user: components["schemas"]["UserFull"];
         };
         Tweet: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             text: string;
             totalLikes: number;
             totalRetweets: number;
@@ -2422,7 +2425,8 @@ export interface components {
             meta: components["schemas"]["AuthMeta"];
         };
         FollowRecord: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             userId: number;
             followedUserId: number;
             /** Format: date-time */
@@ -2431,7 +2435,8 @@ export interface components {
             updatedAt: string;
         };
         Comment: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             content: string;
             user: components["schemas"]["User"];
             /** Format: date-time */
@@ -2446,7 +2451,8 @@ export interface components {
             comment: components["schemas"]["Comment"];
         };
         Notification: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             text: string;
             initiator: components["schemas"]["User"];
             /** Format: date-time */
@@ -2458,7 +2464,8 @@ export interface components {
             notifications: components["schemas"]["Notification"][];
         };
         ChatThread: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             users: components["schemas"]["User"][];
             /** Format: date-time */
             createdAt: string;
@@ -2472,7 +2479,8 @@ export interface components {
             thread: components["schemas"]["ChatThread"];
         };
         ChatMessage: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             body: string;
             user: components["schemas"]["User"];
             /** Format: date-time */
@@ -2481,7 +2489,8 @@ export interface components {
             updatedAt: string;
         };
         ChatMessageResource: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             chatThreadId: number;
             userId: number;
             body: string;
