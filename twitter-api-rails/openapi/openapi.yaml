@@ -44,7 +44,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         altText:
           type:
             - string
@@ -68,7 +69,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         username:
           type: string
         email:
@@ -157,7 +159,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         text:
           type: string
         totalLikes:
@@ -253,7 +256,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         userId:
           type: integer
         followedUserId:
@@ -274,7 +278,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         content:
           type: string
         user:
@@ -311,7 +316,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         text:
           type: string
         initiator:
@@ -341,7 +347,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         users:
           type: array
           items:
@@ -377,7 +384,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         body:
           type: string
         user:
@@ -398,7 +406,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         chatThreadId:
           type: integer
         userId:
