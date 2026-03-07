@@ -12,6 +12,12 @@ export type SignupResponse =
 export type RefreshResponse =
   paths["/refresh"]["post"]["responses"]["200"]["content"]["application/json"];
 
+// Users
+export type UserResponse =
+  paths["/users/{username}"]["get"]["responses"]["200"]["content"]["application/json"];
+export type ExploreUsersResponse =
+  paths["/users/explore"]["get"]["responses"]["200"]["content"]["application/json"];
+
 // Home
 export type HomeFeedResponse =
   paths["/tweets/feed"]["get"]["responses"]["200"]["content"]["application/json"];

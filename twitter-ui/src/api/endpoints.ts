@@ -86,11 +86,6 @@ export async function patchUser(
   return res.data.data.attributes;
 }
 
-export async function exploreUsers(): Promise<User[]> {
-  const res = await authClient.get<ExploreUsersResponse>("/users/explore");
-  return res.data.users;
-}
-
 export async function fetchUserByUsername(username: string): Promise<User> {
   const res = await authClient.get<Promise<{ user: User }>>(
     `/users/${username}`,
