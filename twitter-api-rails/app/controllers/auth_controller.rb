@@ -45,8 +45,13 @@ class AuthController < ApplicationController
       return render json: { message: "Not authorized", access_token: "" }, status: :unauthorized
     end
 
-    user_id = decoded_refresh_token["user_id"]
-    @user = User.find(user_id)
+    begin
+      user_id = decoded_refresh_token["user_id"]
+      @user = User.find(user_id)
+    rescue ActiveRecord::RecordNotFound
+      set_refresh_token_cookie("")
+      return render json: { message: "Not authorized", access_token: "" }, status: :unauthorized
+    end
 
     access_token = JsonWebToken.generate_access_token(@user)
     refresh_token = JsonWebToken.generate_refresh_token(@user)

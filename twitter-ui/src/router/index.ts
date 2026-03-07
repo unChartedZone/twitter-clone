@@ -1,4 +1,4 @@
-import type { Component } from "vue";
+import { type Component } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import Default from "@/layouts/default.vue";
@@ -216,13 +216,17 @@ const router = createRouter({
   ],
 });
 
+let triedRefresh = false;
 router.beforeEach(async (to) => {
   const authStore = useAuthStore();
   const { refreshUserMutation } = useAuth();
 
   // attempt to refresh user session
-  if (!authStore.loggedIn && !refreshUserMutation.isError.value) {
-    await refreshUserMutation.mutateAsync();
+  if (!authStore.loggedIn && !triedRefresh) {
+    triedRefresh = true;
+    try {
+      await refreshUserMutation.mutateAsync();
+    } catch {}
   }
 
   // If navigating to a route that requires authentication and not currently
