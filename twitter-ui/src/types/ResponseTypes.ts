@@ -73,12 +73,6 @@ export interface CommentListResponse {
 export interface CommentResponse {
   comment: Comment;
 }
-export interface ChatThreadResponse {
-  thread: Thread;
-}
-export interface ChatThreadListResponse {
-  threads: Thread[];
-}
 export interface ChatMessageListResponse {
   messages: Message[];
   meta: {

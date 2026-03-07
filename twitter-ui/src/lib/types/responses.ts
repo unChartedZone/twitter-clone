@@ -15,6 +15,8 @@ export type RefreshResponse =
 // Users
 export type UserResponse =
   paths["/users/{username}"]["get"]["responses"]["200"]["content"]["application/json"];
+export type UsersResponse =
+  paths["/users/summary"]["get"]["responses"]["200"]["content"]["application/json"];
 export type ExploreUsersResponse =
   paths["/users/explore"]["get"]["responses"]["200"]["content"]["application/json"];
 
@@ -43,3 +45,9 @@ export type CreateCommentResponse =
 // Notifications
 export type NotificationResponse =
   paths["/notifications"]["get"]["responses"]["200"]["content"]["application/json"];
+
+// Chat
+export type ChatThreadsResponse =
+  paths["/threads"]["get"]["responses"]["200"]["content"]["application/json"];
+export type CreateChatThreadResponse =
+  paths["/threads"]["post"]["responses"]["201"]["content"]["application/json"];

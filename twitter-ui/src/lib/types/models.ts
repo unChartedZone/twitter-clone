@@ -12,3 +12,6 @@ export type Comment = components["schemas"]["Comment"];
 
 // Notification
 export type Notification = components["schemas"]["Notification"];
+
+// ChatThread
+export type ChatThread = components["schemas"]["ChatThread"];
