@@ -49,7 +49,7 @@ import { Card, CardBody, CardHeader } from "@/components/common/card";
 import DateSelector from "./DateSelector.vue";
 import Icon from "./icons/Icon.vue";
 import Textfield from "./common/Textfield.vue";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "@/lib/hooks/useAuth";
 
 const emit = defineEmits(["closeForm"]);
 const { signupUserMutation } = useAuth();

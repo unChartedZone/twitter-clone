@@ -10,7 +10,7 @@ import Icon from "@/components/icons/Icon.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import Link from "@/components/common/Link.vue";
 import GuestMessage from "@/components/GuestMessage.vue";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "@/lib/hooks/useAuth";
 
 const router = useRouter();
 const authStore = useAuthStore();

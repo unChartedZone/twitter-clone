@@ -2,7 +2,7 @@
 import { RouterView } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import AppLoadingScreen from "./components/AppLoadingScreen.vue";
-import useAuth from "./hooks/useAuth";
+import useAuth from "./lib/hooks/useAuth";
 
 const authStore = useAuthStore();
 const { refreshUserMutation } = useAuth();

@@ -4,7 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 import Default from "@/layouts/default.vue";
 import SearchField from "@/components/SearchField.vue";
 import WhoToFollow from "@/components/WhoToFollow.vue";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "@/lib/hooks/useAuth";
 
 // Add typings for Route Meta properties
 declare module "vue-router" {
