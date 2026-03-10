@@ -51,3 +51,5 @@ export type ChatThreadsResponse =
   paths["/threads"]["get"]["responses"]["200"]["content"]["application/json"];
 export type CreateChatThreadResponse =
   paths["/threads"]["post"]["responses"]["201"]["content"]["application/json"];
+export type ChatMessagesResponse =
+  paths["/messages"]["get"]["responses"]["200"]["content"]["application/json"];

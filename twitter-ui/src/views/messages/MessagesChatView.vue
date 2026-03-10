@@ -1,37 +1,37 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch, toRef, nextTick } from "vue";
 import { useScroll } from "@vueuse/core";
 import { connectToThread, disconnect } from "@/api/websocket";
-import * as messagesApi from "@/api/endpoints/messages";
 import PageHeader from "@/components/PageHeader.vue";
 import PageLoader from "@/components/loaders/PageLoader.vue";
 import MessageList from "@/components/messages/MessageList.vue";
 import ChatInput from "@/components/messages/ChatInput.vue";
 import { useAuthStore } from "@/stores/auth";
-import type { Message } from "@/models/Message";
-import type { ChatMessageResponse } from "@/types/ResponseTypes";
 import { useChatStore } from "@/stores/chat";
-import type { LoadingState } from "@/types/LoadingState";
+import useChatMessages from "@/lib/hooks/useChatMessages";
 
 const props = defineProps<{ threadId: string }>();
+const threadIdRef = toRef(props, "threadId");
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();
-const messages = ref<Message[]>([]);
-const pagination = reactive({
-  page: 1,
-  hasMore: false,
-});
-const messagesLoading = ref<LoadingState>("idle");
-
 const listRef = ref<HTMLElement | null>(null);
 const listEnd = ref<HTMLElement | null>(null);
+const didInitialScroll = ref(false);
 const { arrivedState } = useScroll(listRef);
+
+const {
+  messages,
+  isPending,
+  hasNextPage,
+  isFetchingNextPage,
+  fetchNextPage,
+  appendSocketMessage,
+  removeSocketMessage,
+} = useChatMessages(threadIdRef);
 
 onMounted(async () => {
   if (!authStore.accessToken) return;
-
-  await fetchMessages(props.threadId);
   chatStore.setSelectedThread(props.threadId);
   connectToThread(props.threadId, authStore.accessToken, handleSocketMessage);
   listEnd.value?.scrollIntoView({ behavior: "smooth" });
@@ -41,28 +41,51 @@ onBeforeUnmount(() => {
   disconnect();
 });
 
-watch(
-  () => props.threadId,
-  (threadId, _oldThreadId) => {
-    disconnect();
-    messages.value = [];
-    pagination.page = 1;
-    pagination.hasMore = false;
+watch(threadIdRef, (threadId, oldThreadId) => {
+  if (!authStore.accessToken || threadId === oldThreadId) return;
 
-    chatStore.setSelectedThread(threadId);
-    connectToThread(threadId, authStore.accessToken!, handleSocketMessage);
-    fetchMessages(threadId);
-    listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }
-);
+  disconnect();
+
+  didInitialScroll.value = false;
+  chatStore.setSelectedThread(threadId);
+  connectToThread(threadId, authStore.accessToken!, handleSocketMessage);
+  listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
+});
 
 watch(
   () => arrivedState.top,
-  (top, _) => {
-    if (top && pagination.hasMore) {
-      fetchMessages(props.threadId);
+  async (top) => {
+    if (!top || !hasNextPage.value || isFetchingNextPage.value) return;
+    const el = listRef.value;
+    if (!el) return;
+
+    // preserve viewport when older messages are prepended
+    const prevHeight = el.scrollHeight;
+    const prevTop = el.scrollTop;
+
+    await fetchNextPage();
+    await nextTick();
+  },
+);
+
+watch(
+  () => messages.value.length,
+  async (len, prevLen) => {
+    if (!len) return;
+
+    // first load (or thread switch): jump to bottom
+    if (!didInitialScroll.value) {
+      didInitialScroll.value = true;
+      await nextTick();
+      listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
+      return;
     }
-  }
+
+    if (len > prevLen && arrivedState.bottom) {
+      await nextTick();
+      listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  },
 );
 
 function handleSocketMessage(messagePayload: {
@@ -71,39 +94,18 @@ function handleSocketMessage(messagePayload: {
 }) {
   switch (messagePayload.type) {
     case "message-created": {
-      const newMessageRes = JSON.parse(
-        messagePayload.message
-      ) as ChatMessageResponse;
-      messages.value.push(newMessageRes.message);
+      const parsed = JSON.parse(messagePayload.message);
+      appendSocketMessage(parsed.message);
       break;
     }
     case "message-deleted": {
       const messageId = messagePayload.message;
-      const index = messages.value.findIndex((m) => m.id === messageId);
-      if (index !== -1) {
-        messages.value.splice(index, 1);
-      }
+      removeSocketMessage(messagePayload.message);
       break;
     }
     default: {
       throw new Error("Unsupported message event type");
     }
-  }
-}
-
-async function fetchMessages(threadId: string) {
-  messagesLoading.value = "idle";
-  try {
-    const { messages: ms, hasMore } = await messagesApi.fetchMessages(
-      threadId,
-      pagination.page
-    );
-    messages.value = [...ms, ...messages.value];
-    pagination.page++;
-    pagination.hasMore = hasMore;
-    messagesLoading.value = "resolved";
-  } catch (err) {
-    messagesLoading.value = "rejected";
   }
 }
 </script>
@@ -113,9 +115,12 @@ async function fetchMessages(threadId: string) {
   <div class="messages-view">
     <div class="chat-container">
       <div class="message-container" ref="listRef">
-        <PageLoader v-if="messagesLoading === 'idle'" />
+        <PageLoader v-if="isPending" />
         <MessageList :threadId="threadId" :messages="messages" />
-        <div ref="listEnd" style="height: 1rem; width: 100%" />
+        <div
+          ref="listEnd"
+          style="height: 1rem; width: 100%; border: 1px solid red"
+        />
       </div>
       <ChatInput :threadId="props.threadId" />
     </div>
@@ -135,14 +140,16 @@ async function fetchMessages(threadId: string) {
 }
 
 .chat-container {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   min-height: 0; // Important for Firefox to handle overflow correctly
   overflow: hidden;
 }
 
 .message-container {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   overflow-y: auto;
 }

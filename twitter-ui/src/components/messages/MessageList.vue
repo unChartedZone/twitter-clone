@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import type { Message } from "@/models/Message";
 import { useAuthStore } from "@/stores/auth";
 import * as messagesApi from "@/api/endpoints/messages";
 import MessageBubble from "@/components/messages/MessageBubble.vue";
 import Modal from "../common/Modal.vue";
 import Button from "../common/Button.vue";
 import { Card, CardHeader, CardBody, CardFooter } from "../common/card";
+import type { ChatMessage } from "@/lib/types/models";
 
-const props = defineProps<{ threadId: string; messages: Message[] }>();
+const props = defineProps<{ threadId: string; messages: ChatMessage[] }>();
 const emit = defineEmits<{
   (e: "deleteMessage", index: number): void;
 }>();
@@ -77,7 +77,9 @@ async function deleteMessage() {
   padding: 0 0.75rem;
   list-style: none;
   width: 100%;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 }
 
 .delete-message {
