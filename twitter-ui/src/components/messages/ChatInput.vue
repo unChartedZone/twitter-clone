@@ -4,27 +4,32 @@ import * as messagesApi from "@/api/endpoints/messages";
 import Textfield from "../common/Textfield.vue";
 import Button from "../common/Button.vue";
 
+const emit = defineEmits<{ (e: "scrollToChatEnd"): void }>();
 const props = defineProps<{ threadId: string }>();
 
 const newChatText = ref("");
 
-async function sendMessage() {
+async function sendMessage(event: Event) {
+  event.preventDefault();
   if (!newChatText.value) return;
 
   await messagesApi.createMessage(props.threadId, newChatText.value);
   newChatText.value = "";
+  emit("scrollToChatEnd");
 }
 </script>
 
 <template>
-  <div class="chat-field">
-    <Textfield
-      v-model="newChatText"
-      variant="rounded"
-      placeholder="Start a new message"
-    />
-    <Button @click="sendMessage">Send</Button>
-  </div>
+  <form @submit="sendMessage">
+    <div class="chat-field">
+      <Textfield
+        v-model="newChatText"
+        variant="rounded"
+        placeholder="Start a new message"
+      />
+      <Button type="submit">Send</Button>
+    </div>
+  </form>
 </template>
 
 <style scoped lang="scss">

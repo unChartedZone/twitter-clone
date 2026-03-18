@@ -34,7 +34,7 @@ onMounted(async () => {
   if (!authStore.accessToken) return;
   chatStore.setSelectedThread(props.threadId);
   connectToThread(props.threadId, authStore.accessToken, handleSocketMessage);
-  listEnd.value?.scrollIntoView({ behavior: "smooth" });
+  scrollToChatEnd();
 });
 
 onBeforeUnmount(() => {
@@ -49,7 +49,7 @@ watch(threadIdRef, (threadId, oldThreadId) => {
   didInitialScroll.value = false;
   chatStore.setSelectedThread(threadId);
   connectToThread(threadId, authStore.accessToken!, handleSocketMessage);
-  listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
+  scrollToChatEnd();
 });
 
 watch(
@@ -77,13 +77,13 @@ watch(
     if (!didInitialScroll.value) {
       didInitialScroll.value = true;
       await nextTick();
-      listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
+      scrollToChatEnd();
       return;
     }
 
     if (len > prevLen && arrivedState.bottom) {
       await nextTick();
-      listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
+      scrollToChatEnd();
     }
   },
 );
@@ -108,6 +108,10 @@ function handleSocketMessage(messagePayload: {
     }
   }
 }
+
+function scrollToChatEnd() {
+  listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
+}
 </script>
 
 <template>
@@ -117,12 +121,12 @@ function handleSocketMessage(messagePayload: {
       <div class="message-container" ref="listRef">
         <PageLoader v-if="isPending" />
         <MessageList :threadId="threadId" :messages="messages" />
-        <div
-          ref="listEnd"
-          style="height: 1rem; width: 100%; border: 1px solid red"
-        />
+        <div ref="listEnd" style="height: 1rem; width: 100%" />
       </div>
-      <ChatInput :threadId="props.threadId" />
+      <ChatInput
+        :threadId="props.threadId"
+        @scrollToChatEnd="scrollToChatEnd"
+      />
     </div>
   </div>
 </template>
