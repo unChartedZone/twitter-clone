@@ -119,7 +119,7 @@ function scrollToChatEnd() {
   <div class="messages-view">
     <div class="chat-container">
       <div class="message-container" ref="listRef">
-        <PageLoader v-if="isPending" />
+        <PageLoader v-if="isPending" :size="50" />
         <MessageList :threadId="threadId" :messages="messages" />
         <div ref="listEnd" style="height: 1rem; width: 100%" />
       </div>

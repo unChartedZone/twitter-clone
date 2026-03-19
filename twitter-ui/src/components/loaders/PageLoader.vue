@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import LoadingIcon from "../common/LoadingIcon.vue";
+
+withDefaults(defineProps<{ size?: number }>(), { size: 30 });
 </script>
 
 <template>
   <div class="page-loader">
-    <LoadingIcon />
+    <LoadingIcon :size="size" />
   </div>
 </template>
 
