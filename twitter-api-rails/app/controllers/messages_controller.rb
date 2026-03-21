@@ -1,14 +1,14 @@
 class MessagesController < ApplicationController
   include Paginable
-  before_action :is_authenticated, only: [:index, :create, :destroy]
-  before_action :set_chat_thread, only: [:index, :create, :destroy]
-  before_action :set_message, only: [:destroy]
-  before_action :check_participant, only: [:index, :create, :destroy]
+  before_action :is_authenticated, only: [ :index, :create, :destroy ]
+  before_action :set_chat_thread, only: [ :index, :create, :destroy ]
+  before_action :set_message, only: [ :destroy ]
+  before_action :check_participant, only: [ :index, :create, :destroy ]
 
   def index
-    messages = @chat_thread.chat_messages.includes(:user).order(created_at: :desc).page(current_page).per(per_page)
+    messages = @chat_thread.chat_messages.includes(:user).order(created_at: :desc).page(current_page).per(15)
     # render json: ChatMessageSerializer.new(messages, options(messages, 'messages_path')), status: :ok
-    render json: ChatMessageBlueprint.render(messages, root: :messages, meta: options(messages, 'messages_path')), status: :ok
+    render json: ChatMessageBlueprint.render(messages, root: :messages, meta: options(messages, "messages_path")), status: :ok
   end
 
   def create
@@ -34,7 +34,7 @@ class MessagesController < ApplicationController
       })
       head :no_content
     else
-      render json: { message: 'Error deleting message' }, status: :bad_request
+      render json: { message: "Error deleting message" }, status: :bad_request
     end
   end
 
