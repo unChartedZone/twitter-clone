@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import { useProfileTweets } from "@/hooks/useProfileTweets";
-import { useProfileStore } from "@/stores/profile";
 import TweetList from "@/components/profile/TweetList.vue";
+import { useRoute } from "vue-router";
+import useRetweets from "@/lib/hooks/useRetweets";
 
-const profileStore = useProfileStore();
-useProfileTweets("replied");
+const route = useRoute();
+const { tweets, isLoading } = useRetweets(route.params.username[0] ?? "", 1);
 </script>
 
 <template>
   <div>
-    <TweetList
-      :tweets="profileStore.tweetLists.replied.tweets"
-      :loading="profileStore.tweetLists.loading === 'idle'"
-    />
+    <TweetList :tweets="tweets" :loading="isLoading" />
   </div>
 </template>

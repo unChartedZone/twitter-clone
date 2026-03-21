@@ -45,11 +45,11 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import * as retweetApi from "@/api/endpoints/retweet";
 import type { Tweet } from "@/lib/types/models";
 import TweetAction from "./TweetAction.vue";
 import useBookmarks from "@/lib/hooks/useBookmarks";
 import useLikes from "@/lib/hooks/useLikes";
+import useRetweets from "@/lib/hooks/useRetweets";
 
 interface TweetActionRowProps {
   tweet: Tweet;
@@ -63,6 +63,7 @@ const emit = defineEmits<{
 
 const { bookmarkTweetMutation, unbookmarkTweetMutation } = useBookmarks();
 const { likeTweetMutation, unlikeTweetMutation } = useLikes();
+const { retweetMutation, unretweetMutation } = useRetweets();
 
 const bookmarked = ref<boolean>(false);
 const liked = ref<boolean>(false);
@@ -109,13 +110,13 @@ async function unlikeTweet() {
 }
 
 async function retweetTweet() {
-  await retweetApi.retweet(props.tweet.id);
+  await retweetMutation.mutateAsync(props.tweet.id);
   totalRetweets.value += 1;
   retweeted.value = true;
 }
 
 async function unretweetTweet() {
-  await retweetApi.unretweet(props.tweet.id);
+  await unretweetMutation.mutateAsync(props.tweet.id);
   totalRetweets.value -= 1;
   retweeted.value = false;
 }
