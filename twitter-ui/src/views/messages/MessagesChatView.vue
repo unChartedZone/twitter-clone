@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, toRef, nextTick } from "vue";
-import { useScroll } from "@vueuse/core";
+import { ref, onMounted, watch, toRef, nextTick, onBeforeUnmount } from "vue";
 import { connectToThread, disconnect } from "@/api/websocket";
 import PageHeader from "@/components/PageHeader.vue";
 import PageLoader from "@/components/loaders/PageLoader.vue";
@@ -15,10 +14,7 @@ const threadIdRef = toRef(props, "threadId");
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();
-const listRef = ref<HTMLElement | null>(null);
-const listEnd = ref<HTMLElement | null>(null);
-const didInitialScroll = ref(false);
-const { arrivedState } = useScroll(listRef);
+const container = ref<HTMLElement | null>(null);
 
 const {
   messages,
@@ -34,7 +30,6 @@ onMounted(async () => {
   if (!authStore.accessToken) return;
   chatStore.setSelectedThread(props.threadId);
   connectToThread(props.threadId, authStore.accessToken, handleSocketMessage);
-  scrollToChatEnd();
 });
 
 onBeforeUnmount(() => {
@@ -46,47 +41,9 @@ watch(threadIdRef, (threadId, oldThreadId) => {
 
   disconnect();
 
-  didInitialScroll.value = false;
   chatStore.setSelectedThread(threadId);
   connectToThread(threadId, authStore.accessToken!, handleSocketMessage);
-  scrollToChatEnd();
 });
-
-watch(
-  () => arrivedState.top,
-  async (top) => {
-    if (!top || !hasNextPage.value || isFetchingNextPage.value) return;
-    const el = listRef.value;
-    if (!el) return;
-
-    // preserve viewport when older messages are prepended
-    const prevHeight = el.scrollHeight;
-    const prevTop = el.scrollTop;
-
-    await fetchNextPage();
-    await nextTick();
-  },
-);
-
-watch(
-  () => messages.value.length,
-  async (len, prevLen) => {
-    if (!len) return;
-
-    // first load (or thread switch): jump to bottom
-    if (!didInitialScroll.value) {
-      didInitialScroll.value = true;
-      await nextTick();
-      scrollToChatEnd();
-      return;
-    }
-
-    if (len > prevLen && arrivedState.bottom) {
-      await nextTick();
-      scrollToChatEnd();
-    }
-  },
-);
 
 function handleSocketMessage(messagePayload: {
   type: string;
@@ -109,8 +66,27 @@ function handleSocketMessage(messagePayload: {
   }
 }
 
+async function onScroll() {
+  const { scrollTop, scrollHeight, offsetTop, offsetHeight } =
+    container.value ?? {
+      scrollTop: 0,
+      scrollHeight: 0,
+      offsetTop: 0,
+      offsetHeight: 0,
+    };
+
+  const containerHeight = scrollHeight - offsetHeight - offsetTop;
+
+  if (Math.abs(scrollTop) > containerHeight) {
+    if (!hasNextPage.value || isFetchingNextPage.value) return;
+
+    await fetchNextPage();
+    await nextTick();
+  }
+}
+
 function scrollToChatEnd() {
-  listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
+  container.value?.scrollTo({ top: 0, behavior: "smooth" });
 }
 </script>
 
@@ -118,10 +94,9 @@ function scrollToChatEnd() {
   <PageHeader :title="chatStore.participant" hideBackButton />
   <div class="messages-view">
     <div class="chat-container">
-      <div class="message-container" ref="listRef">
+      <div class="message-container" ref="container" @scroll="onScroll">
         <PageLoader v-if="isPending" :size="50" />
         <MessageList :threadId="threadId" :messages="messages" />
-        <div ref="listEnd" style="height: 1rem; width: 100%" />
       </div>
       <ChatInput
         :threadId="props.threadId"
@@ -153,7 +128,7 @@ function scrollToChatEnd() {
 
 .message-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   flex: 1;
   overflow-y: auto;
 }
