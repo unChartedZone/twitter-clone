@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     get "followers", on: :collection, to: "users#followers"
     get "explore", on: :collection, to: "users#explore_users"
     get "summary", on: :collection, to: "user_summary#index"
-    get ":username", on: :collection, to: "users#show_by_username"
+    get ":username", on: :collection, to: "users#show_by_username", constraints: { username: /[^\/]+/ }
     post "follow/:id", on: :collection, to: "users#follow_user"
     post "unfollow/:id", on: :collection, to: "users#unfollow_user"
     patch "update-image", on: :collection, to: "users#update_image"
