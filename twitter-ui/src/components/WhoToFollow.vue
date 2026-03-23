@@ -2,13 +2,12 @@
 import { useRouter } from "vue-router";
 import AvatarCircle from "./AvatarCircle.vue";
 import FollowButton from "./profile/FollowButton.vue";
-import { useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useQuery } from "@tanstack/vue-query";
 import { authClient } from "@/api/client";
 import type { ExploreUsersResponse } from "@/lib/types/responses";
 import type { User } from "@/lib/types/models";
 
 const router = useRouter();
-const queryClient = useQueryClient();
 
 const { data: users } = useQuery({
   queryKey: ["explore-users"],
@@ -17,10 +16,6 @@ const { data: users } = useQuery({
     return res.data.users;
   },
 });
-
-async function onFollow() {
-  queryClient.invalidateQueries({ queryKey: ["explore-users"] });
-}
 
 function navigateToUserProfile(user: User) {
   router.push(`/${user.username}`);
@@ -47,7 +42,7 @@ function navigateToUserProfile(user: User) {
             </div>
           </div>
           <div>
-            <FollowButton :userId="user.id" @onFollow="onFollow" />
+            <FollowButton :userId="user.id" />
           </div>
         </li>
       </ul>

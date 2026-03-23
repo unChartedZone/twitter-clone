@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { followUser } from "@/api/endpoints";
 import type { User } from "@/models/User";
 import Button from "../common/Button.vue";
 import type { LoadingState } from "@/types/LoadingState";
+import useFollowers from "@/lib/hooks/useFollowers";
 
 interface FollowButtonProps {
   userId: string;
@@ -14,23 +14,16 @@ const props = defineProps<FollowButtonProps>();
 const emit = defineEmits<{
   (e: "onFollow", followedUser: User): Promise<void>;
 }>();
+const { followUserMutation } = useFollowers();
 
 async function follow() {
-  loading.value = "idle";
-  try {
-    const res = await followUser(props.userId);
-    const followedUser = res.followed_user;
-    emit("onFollow", followedUser);
-    loading.value = "resolved";
-  } catch (e) {
-    loading.value = "rejected";
-  }
+  await followUserMutation.mutateAsync(props.userId);
 }
 </script>
 
 <template>
   <Button
-    :loading="loading === 'idle'"
+    :loading="followUserMutation.isPending.value"
     variant="monochrome"
     @click.stop.prevent="follow"
   >
