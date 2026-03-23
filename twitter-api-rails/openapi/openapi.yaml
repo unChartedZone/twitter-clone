@@ -37,7 +37,7 @@ components:
       type: object
       properties:
         links:
-          $ref: '#/components/schemas/PaginationLinks'
+          $ref: "#/components/schemas/PaginationLinks"
       required:
         - links
     Attachment:
@@ -83,6 +83,10 @@ components:
             - string
             - "null"
           format: uri
+        bio:
+          type:
+            - string
+            - "null"
         createdAt:
           type: string
           format: date-time
@@ -99,7 +103,7 @@ components:
         - updatedAt
     UserFull:
       allOf:
-        - $ref: '#/components/schemas/User'
+        - $ref: "#/components/schemas/User"
         - type: object
           properties:
             birthDate:
@@ -107,10 +111,6 @@ components:
                 - string
                 - "null"
               format: date
-            bio:
-              type:
-                - string
-                - "null"
             website:
               type:
                 - string
@@ -145,14 +145,14 @@ components:
       type: object
       properties:
         user:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
       required:
         - user
     UserFullResponse:
       type: object
       properties:
         user:
-          $ref: '#/components/schemas/UserFull'
+          $ref: "#/components/schemas/UserFull"
       required:
         - user
     Tweet:
@@ -176,11 +176,11 @@ components:
         bookmarked:
           type: boolean
         user:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
         attachments:
           type: array
           items:
-            $ref: '#/components/schemas/Attachment'
+            $ref: "#/components/schemas/Attachment"
         createdAt:
           type: string
           format: date-time
@@ -204,7 +204,7 @@ components:
       type: object
       properties:
         tweet:
-          $ref: '#/components/schemas/Tweet'
+          $ref: "#/components/schemas/Tweet"
       required:
         - tweet
     TweetListResponse:
@@ -213,16 +213,16 @@ components:
         tweets:
           type: array
           items:
-            $ref: '#/components/schemas/Tweet'
+            $ref: "#/components/schemas/Tweet"
       required:
         - tweets
     PaginatedTweetsResponse:
       allOf:
-        - $ref: '#/components/schemas/TweetListResponse'
+        - $ref: "#/components/schemas/TweetListResponse"
         - type: object
           properties:
             meta:
-              $ref: '#/components/schemas/PaginationMeta'
+              $ref: "#/components/schemas/PaginationMeta"
           required:
             - meta
     AuthMeta:
@@ -236,9 +236,9 @@ components:
       type: object
       properties:
         user:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
         meta:
-          $ref: '#/components/schemas/AuthMeta'
+          $ref: "#/components/schemas/AuthMeta"
       required:
         - user
         - meta
@@ -246,9 +246,9 @@ components:
       type: object
       properties:
         user:
-          $ref: '#/components/schemas/UserFull'
+          $ref: "#/components/schemas/UserFull"
         meta:
-          $ref: '#/components/schemas/AuthMeta'
+          $ref: "#/components/schemas/AuthMeta"
       required:
         - user
         - meta
@@ -283,7 +283,7 @@ components:
         content:
           type: string
         user:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
         createdAt:
           type: string
           format: date-time
@@ -302,14 +302,14 @@ components:
         comments:
           type: array
           items:
-            $ref: '#/components/schemas/Comment'
+            $ref: "#/components/schemas/Comment"
       required:
         - comments
     CommentResponse:
       type: object
       properties:
         comment:
-          $ref: '#/components/schemas/Comment'
+          $ref: "#/components/schemas/Comment"
       required:
         - comment
     Notification:
@@ -321,7 +321,7 @@ components:
         text:
           type: string
         initiator:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
         createdAt:
           type: string
           format: date-time
@@ -340,7 +340,7 @@ components:
         notifications:
           type: array
           items:
-            $ref: '#/components/schemas/Notification'
+            $ref: "#/components/schemas/Notification"
       required:
         - notifications
     ChatThread:
@@ -352,7 +352,7 @@ components:
         users:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
         createdAt:
           type: string
           format: date-time
@@ -370,14 +370,14 @@ components:
         threads:
           type: array
           items:
-            $ref: '#/components/schemas/ChatThread'
+            $ref: "#/components/schemas/ChatThread"
       required:
         - threads
     ChatThreadResponse:
       type: object
       properties:
         thread:
-          $ref: '#/components/schemas/ChatThread'
+          $ref: "#/components/schemas/ChatThread"
       required:
         - thread
     ChatMessage:
@@ -389,7 +389,7 @@ components:
         body:
           type: string
         user:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
         createdAt:
           type: string
           format: date-time
@@ -433,9 +433,9 @@ components:
         messages:
           type: array
           items:
-            $ref: '#/components/schemas/ChatMessage'
+            $ref: "#/components/schemas/ChatMessage"
         meta:
-          $ref: '#/components/schemas/PaginationMeta'
+          $ref: "#/components/schemas/PaginationMeta"
       required:
         - messages
         - meta
@@ -443,7 +443,7 @@ components:
       type: object
       properties:
         message:
-          $ref: '#/components/schemas/ChatMessage'
+          $ref: "#/components/schemas/ChatMessage"
       required:
         - message
     BasicMessage:
@@ -493,7 +493,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: "#/components/schemas/AuthResponse"
         "422":
           description: Validation errors
   /login:
@@ -527,7 +527,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: "#/components/schemas/AuthResponse"
         "401":
           description: Invalid credentials
   /refresh:
@@ -540,7 +540,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthFullResponse'
+                $ref: "#/components/schemas/AuthFullResponse"
         "401":
           description: Missing or invalid refresh token
   /logout:
@@ -561,7 +561,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: "#/components/schemas/UserResponse"
         "401":
           description: Missing or invalid access token
   /users:
@@ -577,7 +577,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: "#/components/schemas/User"
     post:
       summary: Create user (admin/internal)
       security:
@@ -609,7 +609,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
   /users/{id}:
     get:
       summary: Get user by id
@@ -625,7 +625,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
         "404":
           description: Not found
     patch:
@@ -674,7 +674,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: "#/components/schemas/UserResponse"
         "401":
           description: Missing or invalid token
         "403":
@@ -698,7 +698,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserFullResponse'
+                $ref: "#/components/schemas/UserFullResponse"
         "404":
           description: Not found
   /users/follow/{id}:
@@ -710,7 +710,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           required: true
           description: ID of the user to follow
       responses:
@@ -719,7 +719,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FollowRecord'
+                $ref: "#/components/schemas/FollowRecord"
         "401":
           description: Missing or invalid token
         "422":
@@ -733,7 +733,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           required: true
           description: ID of the user to unfollow
       responses:
@@ -772,7 +772,7 @@ paths:
                   followers:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: "#/components/schemas/UserFull"
                 required:
                   - followers
         "404":
@@ -799,7 +799,7 @@ paths:
                   followers:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: "#/components/schemas/UserFull"
                 required:
                   - followers
         "404":
@@ -829,7 +829,7 @@ paths:
                   users:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: "#/components/schemas/User"
                 required:
                   - users
         "401":
@@ -854,7 +854,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TweetListResponse'
+                $ref: "#/components/schemas/TweetListResponse"
         "401":
           description: Missing or invalid token
     post:
@@ -887,7 +887,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TweetResponse'
+                $ref: "#/components/schemas/TweetResponse"
         "400":
           description: Validation error
         "401":
@@ -909,7 +909,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TweetResponse'
+                $ref: "#/components/schemas/TweetResponse"
         "401":
           description: Missing or invalid token
         "404":
@@ -931,7 +931,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TweetResponse'
+                $ref: "#/components/schemas/TweetResponse"
         "401":
           description: Missing or invalid token
         "409":
@@ -969,7 +969,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TweetResponse'
+                $ref: "#/components/schemas/TweetResponse"
         "401":
           description: Missing or invalid token
         "409":
@@ -1010,7 +1010,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTweetsResponse'
+                $ref: "#/components/schemas/PaginatedTweetsResponse"
         "401":
           description: Missing or invalid token
   /tweets/profile/{username}:
@@ -1038,7 +1038,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTweetsResponse'
+                $ref: "#/components/schemas/PaginatedTweetsResponse"
         "401":
           description: Missing or invalid token
   /tweets/profile/{username}/replied:
@@ -1066,7 +1066,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTweetsResponse'
+                $ref: "#/components/schemas/PaginatedTweetsResponse"
         "401":
           description: Missing or invalid token
   /tweets/profile/{username}/media:
@@ -1094,7 +1094,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTweetsResponse'
+                $ref: "#/components/schemas/PaginatedTweetsResponse"
         "401":
           description: Missing or invalid token
   /tweets/profile/{username}/liked:
@@ -1122,7 +1122,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTweetsResponse'
+                $ref: "#/components/schemas/PaginatedTweetsResponse"
         "401":
           description: Missing or invalid token
   /tweets/explore:
@@ -1145,7 +1145,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TweetListResponse'
+                $ref: "#/components/schemas/TweetListResponse"
         "401":
           description: Missing or invalid token
   /comments:
@@ -1165,7 +1165,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommentListResponse'
+                $ref: "#/components/schemas/CommentListResponse"
         "401":
           description: Missing or invalid token
     post:
@@ -1205,7 +1205,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommentResponse'
+                $ref: "#/components/schemas/CommentResponse"
         "401":
           description: Missing or invalid token
         "404":
@@ -1241,7 +1241,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TweetListResponse'
+                $ref: "#/components/schemas/TweetListResponse"
         "401":
           description: Missing or invalid token
   /bookmarks/{tweetId}:
@@ -1261,7 +1261,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BasicMessage'
+                $ref: "#/components/schemas/BasicMessage"
         "401":
           description: Missing or invalid token
         "404":
@@ -1284,7 +1284,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BasicMessage'
+                $ref: "#/components/schemas/BasicMessage"
         "401":
           description: Missing or invalid token
         "404":
@@ -1309,7 +1309,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotificationListResponse'
+                $ref: "#/components/schemas/NotificationListResponse"
         "401":
           description: Missing or invalid token
   /attachments:
@@ -1328,7 +1328,7 @@ paths:
                   attachments:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Attachment'
+                      $ref: "#/components/schemas/Attachment"
                 required:
                   - attachments
         "401":
@@ -1357,7 +1357,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TweetResponse'
+                $ref: "#/components/schemas/TweetResponse"
         "400":
           description: Validation error
         "401":
@@ -1373,7 +1373,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChatThreadsResponse'
+                $ref: "#/components/schemas/ChatThreadsResponse"
         "401":
           description: Missing or invalid token
     post:
@@ -1399,7 +1399,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChatThreadResponse'
+                $ref: "#/components/schemas/ChatThreadResponse"
         "401":
           description: Missing or invalid token
         "422":
@@ -1429,7 +1429,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChatMessageListResponse'
+                $ref: "#/components/schemas/ChatMessageListResponse"
         "401":
           description: Missing or invalid token
         "403":
@@ -1463,7 +1463,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChatMessageResource'
+                $ref: "#/components/schemas/ChatMessageResource"
         "401":
           description: Missing or invalid token
         "403":
@@ -1520,7 +1520,7 @@ paths:
                   users:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: "#/components/schemas/User"
                 required:
                   - users
         "401":
@@ -1553,7 +1553,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: "#/components/schemas/UserResponse"
         "403":
           description: Invalid current password
         "422":
@@ -1580,7 +1580,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BasicMessage'
+                $ref: "#/components/schemas/BasicMessage"
   /password/reset/valid:
     get:
       summary: Validate password reset token
@@ -1623,7 +1623,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BasicMessage'
+                $ref: "#/components/schemas/BasicMessage"
         "400":
           description: Invalid token or mismatch
   /up:
@@ -1643,7 +1643,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BasicMessage'
+                $ref: "#/components/schemas/BasicMessage"
   /potato:
     get:
       summary: Test page

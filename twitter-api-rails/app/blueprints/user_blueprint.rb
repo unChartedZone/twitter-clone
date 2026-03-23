@@ -2,11 +2,11 @@ class UserBlueprint < ApplicationBlueprint
   identifier :id
 
   # Core user attributes
-  fields :username, :email, :name
+  fields :username, :email, :name, :bio
   field(:profile_image) { |user| user.profile_image_url }
 
   view :full do
-    fields :birth_date, :bio, :website, :location
+    fields :birth_date, :website, :location
 
     field :join_date do |user|
       user.created_at

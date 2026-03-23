@@ -468,7 +468,7 @@ export interface paths {
                 header?: never;
                 path: {
                     /** @description ID of the user to follow */
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -521,7 +521,7 @@ export interface paths {
                 header?: never;
                 path: {
                     /** @description ID of the user to unfollow */
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -579,7 +579,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            followers: components["schemas"]["User"][];
+                            followers: components["schemas"]["UserFull"][];
                         };
                     };
                 };
@@ -626,7 +626,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            followers: components["schemas"]["User"][];
+                            followers: components["schemas"]["UserFull"][];
                         };
                     };
                 };
@@ -2360,6 +2360,7 @@ export interface components {
             name: string;
             /** Format: uri */
             profileImage: string | null;
+            bio?: string | null;
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
@@ -2368,7 +2369,6 @@ export interface components {
         UserFull: components["schemas"]["User"] & {
             /** Format: date */
             birthDate?: string | null;
-            bio?: string | null;
             /** Format: uri */
             website?: string | null;
             location?: string | null;
