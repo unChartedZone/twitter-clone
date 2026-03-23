@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/vue-query";
 import { client, setupAuthClient } from "@/api/client";
+import { setupAuthTypedClient } from "../api/client";
 import { useRouter } from "vue-router";
 import { useAuthStore, type User } from "@/stores/auth";
 import type {
@@ -22,6 +23,7 @@ export default function useAuth() {
     onSuccess: async ({ user, meta }) => {
       authStore.setUserAuthState(user, meta.token);
       await setupAuthClient();
+      setupAuthTypedClient(meta.token);
       router.push("/home");
     },
   });
@@ -35,6 +37,7 @@ export default function useAuth() {
     onSuccess: async ({ user, meta }) => {
       authStore.setUserAuthState(user, meta.token);
       await setupAuthClient();
+      setupAuthTypedClient(meta.token);
       router.push("/home");
     },
   });
@@ -45,6 +48,7 @@ export default function useAuth() {
     onSuccess: async ({ user, meta }) => {
       authStore.setUserAuthState(user, meta.token);
       await setupAuthClient();
+      setupAuthTypedClient(meta.token);
     },
     onError: () => {},
   });
