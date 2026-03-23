@@ -1446,7 +1446,7 @@ paths:
               type: object
               properties:
                 threadId:
-                  type: integer
+                  type: string
                 message:
                   type: object
                   properties:
@@ -1480,12 +1480,12 @@ paths:
           name: id
           required: true
           schema:
-            type: integer
+            type: string
         - in: query
           name: threadId
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         "204":
           description: Deleted

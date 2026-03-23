@@ -1873,7 +1873,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        threadId: number;
+                        threadId: string;
                         message: {
                             body: string;
                         };
@@ -1933,11 +1933,11 @@ export interface paths {
         delete: {
             parameters: {
                 query: {
-                    threadId: number;
+                    threadId: string;
                 };
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
