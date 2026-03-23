@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import * as messagesApi from "@/api/endpoints/messages";
 import Textfield from "../common/Textfield.vue";
 import Button from "../common/Button.vue";
+import useChatMessages from "@/lib/hooks/useChatMessages";
 
 const emit = defineEmits<{ (e: "scrollToChatEnd"): void }>();
 const props = defineProps<{ threadId: string }>();
 
 const newChatText = ref("");
+const { createMessageMutation } = useChatMessages();
 
 async function sendMessage(event: Event) {
   event.preventDefault();
   if (!newChatText.value) return;
 
-  await messagesApi.createMessage(props.threadId, newChatText.value);
+  await createMessageMutation.mutateAsync({
+    chatThreadId: props.threadId,
+    body: newChatText.value,
+  });
   newChatText.value = "";
   emit("scrollToChatEnd");
 }
@@ -27,7 +31,9 @@ async function sendMessage(event: Event) {
         variant="rounded"
         placeholder="Start a new message"
       />
-      <Button type="submit">Send</Button>
+      <Button :loading="createMessageMutation.isPending.value" type="submit">
+        Send
+      </Button>
     </div>
   </form>
 </template>

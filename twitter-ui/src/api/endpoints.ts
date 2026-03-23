@@ -1,18 +1,12 @@
 import axios from "axios";
 import { authClient, client } from "./client";
-import type Tweet from "@/models/Tweet";
 import type { User, UserPatch } from "@/models/User";
 import type {
   UserResponse,
-  TweetListResponse,
-  ExploreUsersResponse,
-  BaseResponse,
   FollowingResponse,
   LoginResponse,
 } from "@/types/ResponseTypes";
-import type { LoginPayload } from "@/types/RequestPayloads";
 import { AxiosError } from "axios";
-import type { paths } from "../../api-schema";
 import type { LoginBody } from "@/lib/types/responses";
 
 export async function login(user: LoginBody): Promise<LoginResponse> {
@@ -92,34 +86,4 @@ export async function fetchUserByUsername(username: string): Promise<User> {
   );
 
   return (await res.data).user;
-}
-
-export async function fetchFollowing(username: string): Promise<User[]> {
-  const res = await authClient.get<FollowingResponse>("/users/following", {
-    params: { username },
-  });
-  return res.data.followers;
-}
-
-export async function fetchFollowers(username: string): Promise<User[]> {
-  const res = await authClient.get<FollowingResponse>("/users/followers", {
-    params: { username },
-  });
-  return res.data.followers;
-}
-
-export async function followUser(userId: string) {
-  // TODO: update this when I create a serializer for followers
-  const res = await authClient.post<{ followed_user: User }>(
-    `/users/follow/${userId}`,
-  );
-  return res.data;
-}
-
-/**
- * Unfollow a user
- * @param userId User ID of user being unfollowed
- */
-export async function postUnfollowUser(userId: string): Promise<void> {
-  await authClient.post(`/users/unfollow/${userId}`);
 }

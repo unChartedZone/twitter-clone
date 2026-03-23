@@ -1,13 +1,14 @@
 import { computed, type Ref } from "vue";
 import {
-  useQuery,
   useInfiniteQuery,
   useQueryClient,
   type InfiniteData,
+  useMutation,
 } from "@tanstack/vue-query";
 import { authClient } from "@/api/client";
 import type { ChatMessagesResponse } from "../types/responses";
 import type { ChatMessage } from "../types/models";
+import { client } from "../api/client";
 
 type ChatMessagesPage = {
   messages: ChatMessage[];
@@ -15,21 +16,21 @@ type ChatMessagesPage = {
   hasMore: boolean;
 };
 
-const fetchChatMessages = async (threadId: string, page: number) => {
+const fetchChatMessages = async (threadId?: string, page?: number) => {
   const res = await authClient.get<ChatMessagesResponse>("messages", {
     params: { threadId, page },
   });
   return res.data;
 };
 
-export default function useChatMessages(threadId: Ref<string>) {
+export default function useChatMessages(threadId?: Ref<string>) {
   const queryClient = useQueryClient();
 
   const query = useInfiniteQuery({
     queryKey: ["chat-messages", threadId],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
-      const data = await fetchChatMessages(threadId.value, pageParam);
+      const data = await fetchChatMessages(threadId?.value, pageParam);
       return {
         messages: [...data.messages].sort(
           (a, b) =>
@@ -41,6 +42,7 @@ export default function useChatMessages(threadId: Ref<string>) {
     },
     getNextPageParam: (lastPage) =>
       lastPage.hasMore ? (lastPage.nextPage ?? undefined) : undefined,
+    enabled: !!threadId?.value,
   });
 
   const messages = computed(() =>
@@ -49,6 +51,37 @@ export default function useChatMessages(threadId: Ref<string>) {
       .reverse()
       .flatMap((p) => p.messages),
   );
+
+  const createMessageMutation = useMutation({
+    mutationFn: async ({
+      body,
+      chatThreadId,
+    }: {
+      body: string;
+      chatThreadId: string;
+    }) => {
+      await client.POST("/messages", {
+        body: { threadId: chatThreadId, message: { body } },
+      });
+    },
+  });
+
+  const deleteMessageMutation = useMutation({
+    mutationFn: async ({
+      chatMessageId,
+      chatThreadId,
+    }: {
+      chatMessageId: string;
+      chatThreadId: string;
+    }) => {
+      await client.DELETE("/messages/{id}", {
+        params: {
+          path: { id: chatMessageId },
+          query: { threadId: chatThreadId },
+        },
+      });
+    },
+  });
 
   function appendSocketMessage(message: ChatMessage) {
     queryClient.setQueryData<InfiniteData<ChatMessagesPage>>(
@@ -89,5 +122,7 @@ export default function useChatMessages(threadId: Ref<string>) {
     isLoading: query.isLoading,
     appendSocketMessage,
     removeSocketMessage,
+    createMessageMutation,
+    deleteMessageMutation,
   };
 }
