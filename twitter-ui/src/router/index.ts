@@ -4,7 +4,6 @@ import { useAuthStore } from "@/stores/auth";
 import Default from "@/layouts/default.vue";
 import SearchField from "@/components/SearchField.vue";
 import WhoToFollow from "@/components/WhoToFollow.vue";
-import useAuth from "@/lib/hooks/useAuth";
 
 // Add typings for Route Meta properties
 declare module "vue-router" {
@@ -216,18 +215,12 @@ const router = createRouter({
   ],
 });
 
-let triedRefresh = false;
 router.beforeEach(async (to) => {
   const authStore = useAuthStore();
-  const { refreshUserMutation } = useAuth();
 
-  // attempt to refresh user session
-  if (!authStore.loggedIn && !triedRefresh) {
-    triedRefresh = true;
-    try {
-      await refreshUserMutation.mutateAsync();
-    } catch {}
-  }
+  // Wait for App.vue to complete the initial auth refresh before making
+  // any redirect decisions.
+  await authStore.authReadyPromise;
 
   // If navigating to a route that requires authentication and not currently
   // logged in, then redirect to login page.

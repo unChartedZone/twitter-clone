@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
 import { login, logout, refresh, patchUser } from "@/api/endpoints";
 import { useProfileStore } from "./profile";
@@ -14,6 +14,15 @@ export const useAuthStore = defineStore("auth", () => {
   const userFetchState = ref<LoadingState>();
   const accessToken = ref<string>();
   const user = ref<User>();
+  const authInitialized = ref(false);
+  const authReadyPromise = new Promise<void>((resolve) => {
+    const unwatch = watch(authInitialized, (initialized) => {
+      if (initialized) {
+        unwatch();
+        resolve();
+      }
+    });
+  });
   const profileStore = useProfileStore();
 
   const userFetchStateLoading = computed<boolean>(
@@ -23,20 +32,6 @@ export const useAuthStore = defineStore("auth", () => {
   const loggedIn = computed<boolean>(() => {
     return !!user.value && !!accessToken.value;
   });
-
-  async function refreshUser() {
-    userFetchState.value = "idle";
-    try {
-      const res = await refresh();
-      if (res) {
-        accessToken.value = res.meta.token;
-        user.value = res.user;
-        userFetchState.value = "resolved";
-      }
-    } catch (e) {
-      userFetchState.value = "rejected";
-    }
-  }
 
   async function logoutUser() {
     await logout();
@@ -94,6 +89,10 @@ export const useAuthStore = defineStore("auth", () => {
     accessToken.value = token;
   }
 
+  function markAuthInitialized() {
+    authInitialized.value = true;
+  }
+
   /**
    * Locally increment following count of authenticated user
    */
@@ -120,9 +119,11 @@ export const useAuthStore = defineStore("auth", () => {
     userFetchState,
     userFetchStateLoading,
     loggedIn,
-    refreshUser,
+    authInitialized,
+    authReadyPromise,
     logoutUser,
     setUserAuthState,
+    markAuthInitialized,
     updateUser,
     incrementFollowingCount,
   };
