@@ -259,9 +259,11 @@ components:
           type: string
           format: uuid
         userId:
-          type: integer
+          type: string
+          format: uuid
         followedUserId:
-          type: integer
+          type: string
+          format: uuid
         createdAt:
           type: string
           format: date-time
@@ -409,9 +411,11 @@ components:
           type: string
           format: uuid
         chatThreadId:
-          type: integer
+          type: string
+          format: uuid
         userId:
-          type: integer
+          type: string
+          format: uuid
         body:
           type: string
         createdAt:
@@ -636,7 +640,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
+            format: uuid
           required: true
       requestBody:
         required: true
@@ -876,7 +881,8 @@ paths:
                     mediumIds:
                       type: array
                       items:
-                        type: integer
+                        type: string
+                        format: uuid
                   required:
                     - text
               required:
@@ -901,7 +907,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
+            format: uuid
           required: true
       responses:
         "200":
@@ -923,7 +930,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
+            format: uuid
           required: true
       responses:
         "201":
@@ -945,7 +953,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
+            format: uuid
           required: true
       responses:
         "204":
@@ -961,7 +970,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
+            format: uuid
           required: true
       responses:
         "201":
@@ -983,7 +993,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
+            format: uuid
           required: true
       responses:
         "204":
@@ -1158,7 +1169,8 @@ paths:
           name: tweetId
           required: true
           schema:
-            type: integer
+            type: string
+            format: uuid
       responses:
         "200":
           description: Comments
@@ -1180,7 +1192,8 @@ paths:
               type: object
               properties:
                 tweetId:
-                  type: integer
+                  type: string
+                  format: uuid
                 comment:
                   type: object
                   properties:
@@ -1222,7 +1235,7 @@ paths:
           name: id
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         "204":
           description: Deleted
@@ -1244,17 +1257,17 @@ paths:
                 $ref: "#/components/schemas/TweetListResponse"
         "401":
           description: Missing or invalid token
-  /bookmarks/{tweetId}:
     post:
       summary: Bookmark a tweet
       security:
         - bearerAuth: []
       parameters:
-        - in: path
+        - in: query
           name: tweetId
           required: true
           schema:
-            type: integer
+            type: string
+            format: uuid
       responses:
         "201":
           description: Created
@@ -1268,6 +1281,7 @@ paths:
           description: Tweet not found
         "422":
           description: Validation errors
+  /bookmarks/{tweetId}:
     delete:
       summary: Remove a bookmark
       security:
@@ -1277,7 +1291,8 @@ paths:
           name: tweetId
           required: true
           schema:
-            type: integer
+            type: string
+            format: uuid
       responses:
         "200":
           description: Removed
@@ -1350,7 +1365,8 @@ paths:
                 description:
                   type: string
                 tweetId:
-                  type: integer
+                  type: string
+                  format: uuid
       responses:
         "201":
           description: Attachment created and tweet returned
@@ -1390,7 +1406,8 @@ paths:
                 userIds:
                   type: array
                   items:
-                    type: integer
+                    type: string
+                    format: uuid
               required:
                 - userIds
       responses:
@@ -1414,7 +1431,8 @@ paths:
           name: threadId
           required: true
           schema:
-            type: integer
+            type: string
+            format: uuid
         - in: query
           name: page
           schema:
