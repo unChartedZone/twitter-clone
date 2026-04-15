@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
 import Button from "./common/Button.vue";
+import useAuth from "@/lib/hooks/useAuth";
 
-const router = useRouter();
-const authStore = useAuthStore();
+const { loginUserMutation } = useAuth();
 
 async function loginAsGuest() {
-  await authStore.loginUser({
-    email: "guest@example.com",
-    password: "Guest123",
+  await loginUserMutation.mutateAsync({
+    user: { email: "guest@example.com", password: "Guest123" },
   });
-  router.push("/home");
 }
 </script>
 
