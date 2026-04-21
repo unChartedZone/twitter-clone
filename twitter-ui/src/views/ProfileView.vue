@@ -1,49 +1,24 @@
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
-import { useRoute, RouterView, RouterLink } from "vue-router";
-import { useProfileStore } from "@/stores/profile";
 import PageHeader from "@/components/PageHeader.vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import PageLoader from "@/components/loaders/PageLoader.vue";
 import TabHeader from "@/components/common/tab/TabHeader.vue";
 import TabRow from "@/components/common/tab/TabRow.vue";
+import useProfile from "@/lib/hooks/useProfile";
 
-const route = useRoute();
-const profileStore = useProfileStore();
-
-onMounted(() => {
-  const username = route.params.username[0];
-  if (username !== profileStore.profileUser?.username) {
-    profileStore.$reset();
-  }
-
-  if (!!profileStore.profileUser) return;
-
-  profileStore.loadProfileUser(username);
-});
-
-watch(
-  () => route.params.username[0],
-  (u, _u) => {
-    profileStore.$reset();
-    profileStore.loadProfileUser(u);
-    profileStore.loadTweets(u, 1, "default");
-  }
-);
+const props = defineProps<{ username: string }>();
+const { user, isLoading } = useProfile(() => props.username);
 </script>
 
 <template>
   <PageHeader
-    :title="`${profileStore.profileUser?.name}`"
-    :subtitle="`${profileStore.profileUser?.totalTweets} tweets`"
-    :loading="profileStore.isLoadingUser"
+    :title="`${user?.name}`"
+    :subtitle="`${user?.totalTweets} tweets`"
+    :loading="isLoading"
   />
   <main class="profile">
-    <PageLoader v-if="profileStore.isLoadingUser" />
-    <ProfileHeader
-      v-if="profileStore.profileUser"
-      :user="profileStore.profileUser"
-    />
+    <PageLoader v-if="isLoading" />
+    <ProfileHeader v-if="user" :user="user" />
     <section>
       <TabRow>
         <TabHeader :to="{ name: 'profile' }">Tweets</TabHeader>
