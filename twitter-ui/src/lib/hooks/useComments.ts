@@ -1,9 +1,9 @@
-import { authClient } from "@/api/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type {
   CommentsResponse,
   CreateCommentResponse,
 } from "../types/responses";
+import { client } from "@/lib/api/client";
 
 export default function useComments(tweetId?: string) {
   const queryClient = useQueryClient();
@@ -11,10 +11,12 @@ export default function useComments(tweetId?: string) {
   const { data: comments, isLoading } = useQuery({
     queryKey: ["comments", tweetId],
     queryFn: async () => {
-      const res = await authClient.get<CommentsResponse>(
-        `/comments?tweet_id=${tweetId}`,
-      );
-      return res.data.comments;
+      if (!tweetId) return;
+
+      const res = await client.GET("/comments", {
+        params: { query: { tweetId } },
+      });
+      return res.data?.comments;
     },
     enabled: !!tweetId,
   });
@@ -24,13 +26,13 @@ export default function useComments(tweetId?: string) {
       tweetId: string;
       commentContent: string;
     }) => {
-      const formData = new FormData();
-      formData.append("comment[content]", payload.commentContent);
-      const res = await authClient.post<CreateCommentResponse>(
-        `/comments?tweet_id=${payload.tweetId}`,
-        formData,
-      );
-      return res.data.comment;
+      const res = await client.POST("/comments", {
+        body: {
+          comment: { content: payload.commentContent },
+          tweetId: payload.tweetId,
+        },
+      });
+      return res.data?.comment;
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({
