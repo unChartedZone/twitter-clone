@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/vue-query";
-import { authClient } from "@/api/client";
-import type { NotificationResponse } from "../types/responses";
+import { client } from "@/lib/api/client";
 
 export default function useNotifications() {
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notifications"],
     queryFn: async () => {
-      const res = await authClient.get<NotificationResponse>("/notifications");
-      return res.data.notifications;
+      const res = await client.GET("/notifications");
+      return res.data?.notifications;
     },
   });
 
