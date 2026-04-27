@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/vue-query";
-import { authClient } from "@/api/client";
-import type { HomeFeedResponse } from "../types/responses";
+import { client } from "@/lib/api/client";
 
 export default function useHomeFeed() {
   const { data, isLoading } = useQuery({
     queryKey: ["home-feed"],
     queryFn: async () => {
-      const res = await authClient.get<HomeFeedResponse>("/tweets/feed");
-      return res.data.tweets;
+      const res = await client.GET("/tweets/feed");
+      return res.data?.tweets;
     },
   });
 

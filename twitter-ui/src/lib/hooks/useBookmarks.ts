@@ -1,10 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { authClient } from "@/api/client";
-import type {
-  BookmarksResponse,
-  BookmarkTweetResponse,
-  UnbookmarkTweetResponse,
-} from "../types/responses";
+import { client } from "../api/client";
 
 export default function useBookmarks() {
   const queryClient = useQueryClient();
@@ -12,25 +7,25 @@ export default function useBookmarks() {
   const { data: bookmarkedTweets, isLoading } = useQuery({
     queryKey: ["bookmarks"],
     queryFn: async () => {
-      const res = await authClient.get<BookmarksResponse>("/bookmarks");
-      return res.data.tweets;
+      const res = await client.GET("/bookmarks");
+      return res.data?.tweets ?? [];
     },
   });
 
   const bookmarkTweetMutation = useMutation({
     mutationFn: async (tweetId: string) => {
-      const res = await authClient.post<BookmarkTweetResponse>(
-        `/bookmarks?tweet_id=${tweetId}`,
-      );
+      const res = await client.POST("/bookmarks", {
+        params: { query: { tweetId } },
+      });
       return res.data;
     },
   });
 
   const unbookmarkTweetMutation = useMutation({
     mutationFn: async (tweetId: string) => {
-      const res = await authClient.delete<UnbookmarkTweetResponse>(
-        `/bookmarks/${tweetId}`,
-      );
+      const res = await client.DELETE("/bookmarks/{tweetId}", {
+        params: { path: { tweetId } },
+      });
       return res.data;
     },
     onSuccess: () => {

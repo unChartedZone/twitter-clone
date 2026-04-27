@@ -5,10 +5,8 @@ import {
   type InfiniteData,
   useMutation,
 } from "@tanstack/vue-query";
-import { authClient } from "@/api/client";
-import type { ChatMessagesResponse } from "../types/responses";
+import { client } from "@/lib/api/client";
 import type { ChatMessage } from "../types/models";
-import { client } from "../api/client";
 
 type ChatMessagesPage = {
   messages: ChatMessage[];
@@ -17,8 +15,9 @@ type ChatMessagesPage = {
 };
 
 const fetchChatMessages = async (threadId?: string, page?: number) => {
-  const res = await authClient.get<ChatMessagesResponse>("messages", {
-    params: { threadId, page },
+  if (!threadId) return;
+  const res = await client.GET("/messages", {
+    params: { query: { threadId, page } },
   });
   return res.data;
 };
@@ -32,12 +31,12 @@ export default function useChatMessages(threadId?: Ref<string>) {
     queryFn: async ({ pageParam }) => {
       const data = await fetchChatMessages(threadId?.value, pageParam);
       return {
-        messages: [...data.messages].sort(
+        messages: [...(data?.messages ?? [])].sort(
           (a, b) =>
             new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
         ),
-        nextPage: data.meta.links.nextPage,
-        hasMore: data.meta.links.hasMore,
+        nextPage: data?.meta.links.nextPage,
+        hasMore: data?.meta.links.hasMore,
       };
     },
     getNextPageParam: (lastPage) =>
