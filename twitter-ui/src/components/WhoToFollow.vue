@@ -3,8 +3,7 @@ import { useRouter } from "vue-router";
 import AvatarCircle from "./AvatarCircle.vue";
 import FollowButton from "./profile/FollowButton.vue";
 import { useQuery } from "@tanstack/vue-query";
-import { authClient } from "@/api/client";
-import type { ExploreUsersResponse } from "@/lib/types/responses";
+import { client } from "@/lib/api/client";
 import type { User } from "@/lib/types/models";
 
 const router = useRouter();
@@ -12,8 +11,8 @@ const router = useRouter();
 const { data: users } = useQuery({
   queryKey: ["explore-users"],
   queryFn: async () => {
-    const res = await authClient.get<ExploreUsersResponse>("/users/explore");
-    return res.data.users;
+    const res = await client.GET("/users/explore");
+    return res.data?.users;
   },
 });
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
@@ -7,11 +7,7 @@ import { Card, CardHeader, CardBody } from "@/components/common/card";
 import ListItem from "@/components/common/ListItem.vue";
 import UserCard from "../UserCard.vue";
 import Textfield from "../common/Textfield.vue";
-import { authClient } from "@/api/client";
-import type {
-  CreateChatThreadResponse,
-  UsersResponse,
-} from "@/lib/types/responses";
+import { client } from "@/lib/api/client";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/vue-query";
 
 const emit = defineEmits<{
@@ -26,8 +22,8 @@ const searchText = ref("");
 const { data: users, isLoading } = useQuery({
   queryKey: ["users"],
   queryFn: async () => {
-    const res = await authClient.get<UsersResponse>("/users/summary");
-    return res.data.users;
+    const res = await client.GET("/users/summary");
+    return res.data?.users;
   },
 });
 
@@ -42,14 +38,12 @@ const filteredUsers = computed(() => {
 
 const createChatThreadMutation = useMutation({
   mutationFn: async ({ userIds }: { userIds: string[] }) => {
-    const res = await authClient.post<CreateChatThreadResponse>("/threads", {
-      userIds,
-    });
-    return res.data.thread;
+    const res = await client.POST("/threads", { body: { userIds } });
+    return res.data?.thread;
   },
   onSuccess: (thread) => {
     queryClient.invalidateQueries({ queryKey: ["chat-threads"] });
-    emit("onCreate", thread.id);
+    emit("onCreate", thread?.id ?? "");
     emit("onClose");
   },
 });
