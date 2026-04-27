@@ -15,17 +15,19 @@ const { commentText, isPending, postComment } = useReplyEditor(props.tweetId);
 </script>
 
 <template>
-  <section class="reply-editor">
-    <AvatarCircle :src="authStore.user?.profileImage" />
-    <div class="reply-editor__input">
-      <Textfield
-        v-model="commentText"
-        variant="ghost"
-        placeholder="Tweet your reply"
-      />
-    </div>
-    <Button @click="postComment" :loading="isPending">Post</Button>
-  </section>
+  <form @submit.prevent="postComment">
+    <section class="reply-editor">
+      <AvatarCircle :src="authStore.user?.profileImage" />
+      <div class="reply-editor__input">
+        <Textfield
+          v-model="commentText"
+          variant="ghost"
+          placeholder="Tweet your reply"
+        />
+      </div>
+      <Button type="submit" :loading="isPending">Post</Button>
+    </section>
+  </form>
 </template>
 
 <style scoped lang="scss">
