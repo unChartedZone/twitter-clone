@@ -150,9 +150,10 @@ const router = createRouter({
       meta: { requiresAuth: true, layout: Default },
     },
     {
-      path: "/:username(.*)*",
+      path: "/:username",
       name: "UserProfile",
       component: () => import("../views/ProfileView.vue"),
+      props: true,
       meta: {
         requiresAuth: true,
         layout: Default,
@@ -162,29 +163,34 @@ const router = createRouter({
         {
           name: "profile",
           path: "",
+          props: true,
           component: () => import("../views/profile/ProfileTweetsView.vue"),
         },
         {
           name: "replies",
           path: "replies",
+          props: true,
           component: () => import("../views/profile/RepliesView.vue"),
         },
         {
           name: "media",
           path: "media",
+          props: true,
           component: () => import("../views/profile/MediaTweetsView.vue"),
         },
         {
           name: "likes",
           path: "likes",
+          props: true,
           component: () => import("../views/profile/LikedTweetsView.vue"),
         },
       ],
     },
     {
-      path: "/:username(.*)*/following",
+      path: "/:username/following",
       name: "Following",
       component: () => import("../views/profile/Following.vue"),
+      props: true,
       meta: {
         requiresAuth: true,
         layout: Default,
@@ -192,9 +198,10 @@ const router = createRouter({
       },
     },
     {
-      path: "/:username(.*)*/followers",
+      path: "/:username/followers",
       name: "Followers",
       component: () => import("../views/profile/Followers.vue"),
+      props: true,
       meta: {
         requiresAuth: true,
         layout: Default,

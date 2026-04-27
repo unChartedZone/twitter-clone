@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { User } from "@/models/User";
 import TabHeader from "@/components/common/tab/TabHeader.vue";
 import TabRow from "@/components/common/tab/TabRow.vue";
+import type { User } from "@/lib/types/models";
 
 interface FollowerTabProps {
   currentUser?: User;

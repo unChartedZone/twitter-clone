@@ -3,8 +3,9 @@ import { useProfileStore } from "@/stores/profile";
 import TweetList from "@/components/profile/TweetList.vue";
 import { useProfileTweets } from "@/hooks/useProfileTweets";
 
+const props = defineProps<{ username: string }>();
 const profileStore = useProfileStore();
-useProfileTweets("default");
+useProfileTweets("default", props.username);
 </script>
 
 <template>
