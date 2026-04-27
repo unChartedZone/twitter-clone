@@ -1,16 +1,15 @@
 import { useQuery, keepPreviousData, useMutation } from "@tanstack/vue-query";
-import { authClient } from "@/api/client";
-import type { LikedTweetsResponse } from "../types/responses";
+import { client } from "@/lib/api/client";
 
 export default function useLikes(page?: number, username?: string) {
   const { data: tweets, isPending } = useQuery({
     queryKey: ["liked-tweets", username],
     queryFn: async () => {
-      const url = `/tweets/profile/${username}/liked`;
-      const res = await authClient.get<LikedTweetsResponse>(url, {
-        params: { page },
+      if (!username) return;
+      const res = await client.GET("/tweets/profile/{username}/liked", {
+        params: { path: { username }, query: { page } },
       });
-      return res.data.tweets;
+      return res.data?.tweets;
     },
     enabled: !!username && !!page,
     placeholderData: keepPreviousData,
@@ -18,15 +17,19 @@ export default function useLikes(page?: number, username?: string) {
 
   const likeTweetMutation = useMutation({
     mutationFn: async (tweetId: string) => {
-      const res = await authClient.post(`/tweets/${tweetId}/like`);
-      return res.data.tweet;
+      const res = await client.POST("/tweets/{id}/like", {
+        params: { path: { id: tweetId } },
+      });
+      return res.data?.tweet;
     },
   });
 
   const unlikeTweetMutation = useMutation({
     mutationFn: async (tweetId: string) => {
       try {
-        await authClient.post(`/tweets/${tweetId}/unlike`);
+        await client.POST("/tweets/{id}/unlike", {
+          params: { path: { id: tweetId } },
+        });
         return Promise.resolve();
       } catch (e) {
         return Promise.reject("Failed to unlike tweet");
