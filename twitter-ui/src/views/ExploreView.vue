@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { exploreUserTweets } from "@/api/endpoints/tweets";
-import type TweetType from "@/models/Tweet";
 import PageHeader from "@/components/PageHeader.vue";
-import TweetCard from "@/components/TweetCard.vue";
 import NoTweetsMessage from "@/components/NoTweetsMessage.vue";
+import { useQuery } from "@tanstack/vue-query";
+import TweetList from "@/components/profile/TweetList.vue";
+import { client } from "@/lib/api/client";
 
-const tweets = ref<TweetType[]>([]);
-
-onMounted(async () => {
-  tweets.value = await exploreUserTweets();
+const { data: tweets, isLoading } = useQuery({
+  queryKey: ["explore-tweets"],
+  queryFn: async () => {
+    const res = await client.GET("/tweets/explore");
+    return res.data?.tweets;
+  },
 });
 </script>
 
@@ -17,10 +18,8 @@ onMounted(async () => {
   <div>
     <PageHeader title="Explore" />
     <div>
-      <NoTweetsMessage v-if="tweets.length == 0" />
-      <ul>
-        <TweetCard v-for="tweet in tweets" :tweet="tweet" />
-      </ul>
+      <NoTweetsMessage v-if="tweets?.length == 0" />
+      <TweetList :tweets="tweets" :loading="isLoading" />
     </div>
   </div>
 </template>
