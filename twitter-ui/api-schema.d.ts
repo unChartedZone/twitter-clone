@@ -1072,7 +1072,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/tweets/profile/{username}": {
+    "/tweets/profile/{username}/default": {
         parameters: {
             query?: never;
             header?: never;

@@ -1024,7 +1024,7 @@ paths:
                 $ref: "#/components/schemas/PaginatedTweetsResponse"
         "401":
           description: Missing or invalid token
-  /tweets/profile/{username}:
+  /tweets/profile/{username}/default:
     get:
       summary: Tweets for a profile (auth required)
       security:
