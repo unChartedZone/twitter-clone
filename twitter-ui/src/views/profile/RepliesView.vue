@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import TweetList from "@/components/profile/TweetList.vue";
-import { useRoute } from "vue-router";
-import useRetweets from "@/lib/hooks/useRetweets";
+import useTweetList from "./useTweetList";
 
-const route = useRoute();
-const { tweets, isLoading } = useRetweets(route.params.username[0] ?? "", 1);
+const props = defineProps<{ username: string }>();
+const { tweets, isLoading } = useTweetList(() => props.username, "replied");
 </script>
 
 <template>

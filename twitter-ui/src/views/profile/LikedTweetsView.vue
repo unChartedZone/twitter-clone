@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { useProfileStore } from "@/stores/profile";
-import { useProfileTweets } from "@/hooks/useProfileTweets";
 import TweetList from "@/components/profile/TweetList.vue";
-import useLikes from "@/lib/hooks/useLikes";
-import { useRoute } from "vue-router";
+import useTweetList from "./useTweetList";
 
-const route = useRoute();
-const { tweets, isPending } = useLikes(1, route.params.username[0] ?? "");
+const props = defineProps<{ username: string }>();
+const { tweets, isLoading } = useTweetList(() => props.username, "liked");
 </script>
 
 <template>
   <div>
-    <TweetList :tweets="tweets" :loading="isPending" />
+    <TweetList :tweets="tweets" :loading="isLoading" />
   </div>
 </template>

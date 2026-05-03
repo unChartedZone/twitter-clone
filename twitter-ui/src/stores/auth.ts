@@ -1,10 +1,7 @@
 import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
-import { login, logout, refresh, patchUser } from "@/api/endpoints";
-import { useProfileStore } from "./profile";
+import { patchUser } from "@/api/endpoints";
 import type { UserPatch } from "@/models/User";
-import type Tweet from "@/models/Tweet";
-import type { LoginPayload } from "@/types/RequestPayloads";
 import type { LoadingState } from "@/types/LoadingState";
 import type { components } from "api-schema";
 
@@ -23,7 +20,6 @@ export const useAuthStore = defineStore("auth", () => {
       }
     });
   });
-  const profileStore = useProfileStore();
 
   const userFetchStateLoading = computed<boolean>(
     () => userFetchState.value === "idle",
@@ -34,9 +30,7 @@ export const useAuthStore = defineStore("auth", () => {
   });
 
   async function logoutUser() {
-    await logout();
     $reset();
-    profileStore.$reset();
   }
 
   async function updateUser(

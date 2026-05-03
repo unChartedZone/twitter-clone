@@ -1,20 +1,7 @@
 import { client } from "@/lib/api/client";
-import { useMutation, useQuery } from "@tanstack/vue-query";
-import type { RetweetedTweetsResponse } from "../types/responses";
+import { useMutation } from "@tanstack/vue-query";
 
 export default function useRetweets(username?: string, page?: number) {
-  const { data: tweets, isLoading } = useQuery({
-    queryKey: ["retweeted-tweets", username],
-    queryFn: async () => {
-      if (!username) return;
-      const res = await client.GET("/tweets/profile/{username}/replied", {
-        params: { path: { username }, query: { page } },
-      });
-      return res.data?.tweets;
-    },
-    enabled: !!username && !!page,
-  });
-
   const retweetMutation = useMutation({
     mutationFn: async (tweetId: string) => {
       await client.POST("/tweets/{id}/retweet", {
@@ -32,8 +19,6 @@ export default function useRetweets(username?: string, page?: number) {
   });
 
   return {
-    tweets,
-    isLoading,
     retweetMutation,
     unretweetMutation,
   };

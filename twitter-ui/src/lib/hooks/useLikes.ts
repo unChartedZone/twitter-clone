@@ -1,19 +1,10 @@
-import { useQuery, keepPreviousData, useMutation } from "@tanstack/vue-query";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { client } from "@/lib/api/client";
+import { useAuthStore } from "@/stores/auth";
 
 export default function useLikes(page?: number, username?: string) {
-  const { data: tweets, isPending } = useQuery({
-    queryKey: ["liked-tweets", username],
-    queryFn: async () => {
-      if (!username) return;
-      const res = await client.GET("/tweets/profile/{username}/liked", {
-        params: { path: { username }, query: { page } },
-      });
-      return res.data?.tweets;
-    },
-    enabled: !!username && !!page,
-    placeholderData: keepPreviousData,
-  });
+  const authStore = useAuthStore();
+  const queryClient = useQueryClient();
 
   const likeTweetMutation = useMutation({
     mutationFn: async (tweetId: string) => {
@@ -21,6 +12,11 @@ export default function useLikes(page?: number, username?: string) {
         params: { path: { id: tweetId } },
       });
       return res.data?.tweet;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["liked-tweets", authStore.user?.username],
+      });
     },
   });
 
@@ -35,11 +31,14 @@ export default function useLikes(page?: number, username?: string) {
         return Promise.reject("Failed to unlike tweet");
       }
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["liked-tweets", authStore.user?.username],
+      });
+    },
   });
 
   return {
-    tweets,
-    isPending,
     likeTweetMutation,
     unlikeTweetMutation,
   };

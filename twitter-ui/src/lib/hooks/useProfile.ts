@@ -1,6 +1,6 @@
 import { client } from "@/lib/api/client";
 import { useQuery } from "@tanstack/vue-query";
-import { toValue, type MaybeRefOrGetter, type Ref } from "vue";
+import { toValue, type MaybeRefOrGetter } from "vue";
 
 export default function useProfile(username: MaybeRefOrGetter<string>) {
   const { data: user, isLoading } = useQuery({
