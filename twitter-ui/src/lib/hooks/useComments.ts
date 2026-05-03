@@ -1,8 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import type {
-  CommentsResponse,
-  CreateCommentResponse,
-} from "../types/responses";
 import { client } from "@/lib/api/client";
 
 export default function useComments(tweetId?: string) {
