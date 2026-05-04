@@ -9,7 +9,7 @@ import PageHeader from "@/components/PageHeader.vue";
 import ChatThreadList from "@/components/messages/ChatThreadList.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import { useChatStore } from "@/stores/chat";
-import useResponsiveView from "@/hooks/useResponsiveView";
+import useResponsiveView from "@/lib/hooks/useResponsiveView";
 import useChatThreads from "@/lib/hooks/useChatThreads";
 
 const router = useRouter();

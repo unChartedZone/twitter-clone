@@ -3,7 +3,7 @@ import { RouterView } from "vue-router";
 import PageHeader from "@/components/PageHeader.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import SettingsLink from "@/components/settings/SettingsLink.vue";
-import useResponsiveView from "@/hooks/useResponsiveView";
+import useResponsiveView from "@/lib/hooks/useResponsiveView";
 
 const { isParentRoute } = useResponsiveView("account-settings");
 </script>

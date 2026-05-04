@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useScreenSize } from "@/hooks/useScreenSize";
+import { useScreenSize } from "@/lib/hooks/useScreenSize";
 import PageHeader from "@/components/PageHeader.vue";
 import SettingsLink from "@/components/settings/SettingsLink.vue";
 

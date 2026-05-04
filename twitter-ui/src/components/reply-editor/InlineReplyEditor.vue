@@ -3,7 +3,7 @@ import { useAuthStore } from "@/stores/auth";
 import AvatarCircle from "../AvatarCircle.vue";
 import Button from "../common/Button.vue";
 import Textfield from "../common/Textfield.vue";
-import useReplyEditor from "@/hooks/useReplyEditor";
+import useReplyEditor from "@/lib/hooks/useReplyEditor";
 
 interface ReplyEditorProps {
   tweetId: string;

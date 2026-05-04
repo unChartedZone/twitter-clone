@@ -10,7 +10,7 @@ import {
 } from "@/components/common/card";
 import Icon from "../icons/Icon.vue";
 import Textarea from "../common/Textarea.vue";
-import useReplyEditor from "@/hooks/useReplyEditor";
+import useReplyEditor from "@/lib/hooks/useReplyEditor";
 
 const props = defineProps<{ tweetId: string }>();
 const emit = defineEmits<{ (event: "closeEditor"): void }>();

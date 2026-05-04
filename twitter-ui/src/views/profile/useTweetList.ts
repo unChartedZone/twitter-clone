@@ -1,6 +1,6 @@
 import { computed, toValue, watch, type MaybeRefOrGetter } from "vue";
 import { client } from "@/lib/api/client";
-import { useIsBottom } from "@/hooks/useIsBottom";
+import { useIsBottom } from "@/lib/hooks/useIsBottom";
 import { useInfiniteQuery } from "@tanstack/vue-query";
 
 type TweetListSegment = "default" | "liked" | "replied" | "media";
