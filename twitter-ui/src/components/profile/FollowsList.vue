@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import type { User } from "@/models/User";
 import AvatarCircle from "../AvatarCircle.vue";
+import type { UserFull } from "@/lib/types/models";
 
 interface FollowsListProps {
-  followees: User[];
+  followees?: UserFull[];
 }
 
 defineProps<FollowsListProps>();

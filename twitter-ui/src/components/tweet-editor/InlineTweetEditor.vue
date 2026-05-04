@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
-import { useTweetEditor } from "@/hooks/useTweetEditor";
+import { useTweetEditor } from "./useTweetEditor";
 import AvatarCircle from "../AvatarCircle.vue";
 import Textarea from "@/components/common/Textarea.vue";
 import TweetEditorActions from "./TweetEditorActions.vue";

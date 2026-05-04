@@ -1,69 +1,49 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeUnmount, watch } from "vue";
-import { useScroll } from "@vueuse/core";
-import { connectToThread, disconnect } from "@/api/websocket";
-import * as messagesApi from "@/api/endpoints/messages";
+import { ref, onMounted, watch, toRef, nextTick, onBeforeUnmount } from "vue";
+import { connectToThread, disconnect } from "@/lib/api/websocket";
 import PageHeader from "@/components/PageHeader.vue";
 import PageLoader from "@/components/loaders/PageLoader.vue";
 import MessageList from "@/components/messages/MessageList.vue";
 import ChatInput from "@/components/messages/ChatInput.vue";
 import { useAuthStore } from "@/stores/auth";
-import type { Message } from "@/models/Message";
-import type { ChatMessageResponse } from "@/types/ResponseTypes";
 import { useChatStore } from "@/stores/chat";
-import type { LoadingState } from "@/types/LoadingState";
+import useChatMessages from "@/lib/hooks/useChatMessages";
 
 const props = defineProps<{ threadId: string }>();
+const threadIdRef = toRef(props, "threadId");
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();
-const messages = ref<Message[]>([]);
-const pagination = reactive({
-  page: 1,
-  hasMore: false,
-});
-const messagesLoading = ref<LoadingState>("idle");
+const container = ref<HTMLElement | null>(null);
 
-const listRef = ref<HTMLElement | null>(null);
-const listEnd = ref<HTMLElement | null>(null);
-const { arrivedState } = useScroll(listRef);
+const {
+  messages,
+  isPending,
+  hasNextPage,
+  isFetchingNextPage,
+  fetchNextPage,
+  appendSocketMessage,
+  removeSocketMessage,
+} = useChatMessages(threadIdRef);
 
 onMounted(async () => {
   if (!authStore.accessToken) return;
-
-  await fetchMessages(props.threadId);
   chatStore.setSelectedThread(props.threadId);
   connectToThread(props.threadId, authStore.accessToken, handleSocketMessage);
-  listEnd.value?.scrollIntoView({ behavior: "smooth" });
 });
 
 onBeforeUnmount(() => {
   disconnect();
 });
 
-watch(
-  () => props.threadId,
-  (threadId, _oldThreadId) => {
-    disconnect();
-    messages.value = [];
-    pagination.page = 1;
-    pagination.hasMore = false;
+watch(threadIdRef, (threadId, oldThreadId) => {
+  if (!authStore.accessToken || threadId === oldThreadId) return;
 
-    chatStore.setSelectedThread(threadId);
-    connectToThread(threadId, authStore.accessToken!, handleSocketMessage);
-    fetchMessages(threadId);
-    listEnd.value?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }
-);
+  disconnect();
 
-watch(
-  () => arrivedState.top,
-  (top, _) => {
-    if (top && pagination.hasMore) {
-      fetchMessages(props.threadId);
-    }
-  }
-);
+  chatStore.setSelectedThread(threadId);
+  connectToThread(threadId, authStore.accessToken!, handleSocketMessage);
+});
 
 function handleSocketMessage(messagePayload: {
   type: string;
@@ -71,18 +51,13 @@ function handleSocketMessage(messagePayload: {
 }) {
   switch (messagePayload.type) {
     case "message-created": {
-      const newMessageRes = JSON.parse(
-        messagePayload.message
-      ) as ChatMessageResponse;
-      messages.value.push(newMessageRes.message);
+      const parsed = JSON.parse(messagePayload.message);
+      appendSocketMessage(parsed.message);
       break;
     }
     case "message-deleted": {
       const messageId = messagePayload.message;
-      const index = messages.value.findIndex((m) => m.id === messageId);
-      if (index !== -1) {
-        messages.value.splice(index, 1);
-      }
+      removeSocketMessage(messagePayload.message);
       break;
     }
     default: {
@@ -91,20 +66,27 @@ function handleSocketMessage(messagePayload: {
   }
 }
 
-async function fetchMessages(threadId: string) {
-  messagesLoading.value = "idle";
-  try {
-    const { messages: ms, hasMore } = await messagesApi.fetchMessages(
-      threadId,
-      pagination.page
-    );
-    messages.value = [...ms, ...messages.value];
-    pagination.page++;
-    pagination.hasMore = hasMore;
-    messagesLoading.value = "resolved";
-  } catch (err) {
-    messagesLoading.value = "rejected";
+async function onScroll() {
+  const { scrollTop, scrollHeight, offsetTop, offsetHeight } =
+    container.value ?? {
+      scrollTop: 0,
+      scrollHeight: 0,
+      offsetTop: 0,
+      offsetHeight: 0,
+    };
+
+  const containerHeight = scrollHeight - offsetHeight - offsetTop;
+
+  if (Math.abs(scrollTop) > containerHeight) {
+    if (!hasNextPage.value || isFetchingNextPage.value) return;
+
+    await fetchNextPage();
+    await nextTick();
   }
+}
+
+function scrollToChatEnd() {
+  container.value?.scrollTo({ top: 0, behavior: "smooth" });
 }
 </script>
 
@@ -112,12 +94,14 @@ async function fetchMessages(threadId: string) {
   <PageHeader :title="chatStore.participant" hideBackButton />
   <div class="messages-view">
     <div class="chat-container">
-      <div class="message-container" ref="listRef">
-        <PageLoader v-if="messagesLoading === 'idle'" />
+      <div class="message-container" ref="container" @scroll="onScroll">
+        <PageLoader v-if="isPending" :size="50" />
         <MessageList :threadId="threadId" :messages="messages" />
-        <div ref="listEnd" style="height: 1rem; width: 100%" />
       </div>
-      <ChatInput :threadId="props.threadId" />
+      <ChatInput
+        :threadId="props.threadId"
+        @scrollToChatEnd="scrollToChatEnd"
+      />
     </div>
   </div>
 </template>
@@ -135,14 +119,16 @@ async function fetchMessages(threadId: string) {
 }
 
 .chat-container {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   min-height: 0; // Important for Firefox to handle overflow correctly
   overflow: hidden;
 }
 
 .message-container {
+  display: flex;
+  flex-direction: column-reverse;
   flex: 1;
   overflow-y: auto;
 }

@@ -1,41 +1,33 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
-import * as commentApi from "@/api/endpoints/comments";
 import AvatarCircle from "../AvatarCircle.vue";
 import Button from "../common/Button.vue";
 import Textfield from "../common/Textfield.vue";
-import type { LoadingState } from "@/types/LoadingState";
-import type Comment from "@/models/Comment";
-import useReplyEditor from "@/hooks/useReplyEditor";
+import useReplyEditor from "@/lib/hooks/useReplyEditor";
 
 interface ReplyEditorProps {
   tweetId: string;
 }
 
 const props = defineProps<ReplyEditorProps>();
-const emit = defineEmits<{
-  (event: "onCommentCreated", createdComment: Comment): void;
-}>();
 const authStore = useAuthStore();
-const { commentText, postComment, isLoading } = useReplyEditor(
-  props.tweetId,
-  emit
-);
+const { commentText, isPending, postComment } = useReplyEditor(props.tweetId);
 </script>
 
 <template>
-  <section class="reply-editor">
-    <AvatarCircle :src="authStore.user?.profileImage" />
-    <div class="reply-editor__input">
-      <Textfield
-        v-model="commentText"
-        variant="ghost"
-        placeholder="Tweet your reply"
-      />
-    </div>
-    <Button @click="postComment" :loading="isLoading">Post</Button>
-  </section>
+  <form @submit.prevent="postComment">
+    <section class="reply-editor">
+      <AvatarCircle :src="authStore.user?.profileImage" />
+      <div class="reply-editor__input">
+        <Textfield
+          v-model="commentText"
+          variant="ghost"
+          placeholder="Tweet your reply"
+        />
+      </div>
+      <Button type="submit" :loading="isPending">Post</Button>
+    </section>
+  </form>
 </template>
 
 <style scoped lang="scss">

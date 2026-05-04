@@ -1,21 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import AvatarCircle from "../AvatarCircle.vue";
 import Icon from "../icons/Icon.vue";
 import List from "../common/List.vue";
 import ListItem from "../common/ListItem.vue";
 import Menu from "../common/Menu.vue";
+import useAuth from "@/lib/hooks/useAuth";
 
+const { logoutMutation } = useAuth();
 const authStore = useAuthStore();
-const router = useRouter();
 const toggleProfilePill = ref<boolean>(false);
-
-async function logout() {
-  await authStore.logoutUser();
-  router.push("/");
-}
 </script>
 
 <template>
@@ -36,7 +31,7 @@ async function logout() {
       <div>
         <List>
           <ListItem>Add an existing account</ListItem>
-          <ListItem @click="logout">
+          <ListItem @click="logoutMutation.mutateAsync">
             Log out for @{{ authStore.user?.username }}
           </ListItem>
         </List>

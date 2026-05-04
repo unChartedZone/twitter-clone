@@ -1,5 +1,5 @@
 import Icon from "@/components/icons/Icon.vue";
-import { iconVariants } from "@/types/IconVariants";
+import { iconVariants } from "@/lib/types/icon-variants";
 import type { Meta, StoryObj } from "@storybook/vue3";
 
 const meta = {

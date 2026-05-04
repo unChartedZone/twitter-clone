@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Component } from "vue";
-import { type IconVariant } from "@/types/IconVariants";
+import { type IconVariant } from "@/lib/types/icon-variants";
 import Balloon from "./Balloon.vue";
 import Bell from "./Bell.vue";
 import BellOutline from "./BellOutline.vue";

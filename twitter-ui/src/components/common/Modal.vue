@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useScrollLock } from "@/hooks/useScrollLock/useScrollLock";
+import { useScrollLock } from "@/lib/hooks/useScrollLock/useScrollLock";
 interface ModalProps {
   modelValue?: boolean;
 }

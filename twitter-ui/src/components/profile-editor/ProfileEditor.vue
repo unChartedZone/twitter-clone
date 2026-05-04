@@ -19,7 +19,9 @@
       </template>
       Edit Profile
       <template #right>
-        <Button variant="outline" @click="saveProfile">Save</Button>
+        <Button variant="outline" @click="saveProfile" :loading="saving">
+          Save
+        </Button>
       </template>
     </CardHeader>
     <div class="profile-editor__media">
@@ -80,17 +82,19 @@
 <script setup lang="ts">
 import { reactive, computed, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
-import Button from "./common/Button.vue";
+import Button from "../common/Button.vue";
 import { Card, CardHeader } from "@/components/common/card";
-import Icon from "./icons/Icon.vue";
+import Icon from "../icons/Icon.vue";
 import FileInput from "@/components/common/FileInput.vue";
-import MediaEditor from "./profile-editor/MediaEditor.vue";
-import DateSelector from "./DateSelector.vue";
+import MediaEditor from "./MediaEditor.vue";
+import DateSelector from "../DateSelector.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import Textarea from "@/components/common/Textarea.vue";
 import type { UserPatch } from "@/models/User";
+import useProfileEditor from "./useProfileEditor";
 
 const authStore = useAuthStore();
+const { handleUserUpdate, saving } = useProfileEditor();
 
 const emit = defineEmits(["onClose"]);
 
@@ -102,17 +106,17 @@ const profileMediaState = reactive<{
   mediaType?: "banner" | "profile";
   showMediaEditor: boolean;
 }>({
-  bannerImage: authStore.user?.bannerImage,
-  profileImage: authStore.user?.profileImage,
+  bannerImage: authStore.user?.bannerImage || undefined,
+  profileImage: authStore.user?.profileImage || undefined,
   showMediaEditor: false,
 });
 
 const profileFormState = reactive<UserPatch>({
   name: authStore.user?.name,
-  bio: authStore.user?.bio,
-  location: authStore.user?.location,
-  website: authStore.user?.website,
-  birthDate: authStore.user?.birthDate,
+  bio: authStore.user?.bio ?? "",
+  location: authStore.user?.location ?? "",
+  website: authStore.user?.website ?? "",
+  birthDate: authStore.user?.birthDate ?? "",
 });
 
 const profileImageSrc = computed(() => {
@@ -161,15 +165,11 @@ async function saveProfile() {
       };
     }, {});
 
-  try {
-    await authStore.updateUser(
-      patch,
-      profileMediaState.selectedBannerImage,
-      profileMediaState.selectedProfileImage,
-    );
-  } catch (e) {
-    console.log(e);
-  }
+  await handleUserUpdate(
+    patch,
+    profileMediaState.selectedProfileImage,
+    profileMediaState.selectedBannerImage,
+  );
   closeProfileEditor();
 }
 

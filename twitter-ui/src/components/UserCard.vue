@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { UserSummary } from "@/models/User";
+import type { User } from "@/lib/types/models";
 import AvatarCircle from "./AvatarCircle.vue";
 
-defineProps<{ user: UserSummary }>();
+defineProps<{ user: User }>();
 </script>
 
 <template>

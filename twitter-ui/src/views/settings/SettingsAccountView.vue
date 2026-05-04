@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SettingsLink from "@/components/settings/SettingsLink.vue";
 import PageHeader from "@/components/PageHeader.vue";
-import { useScreenSize } from "@/hooks/useScreenSize";
+import { useScreenSize } from "@/lib/hooks/useScreenSize";
 
 const { isSmallScreen } = useScreenSize();
 </script>

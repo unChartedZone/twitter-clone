@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import * as api from "@/api/endpoints";
 import Alert from "@/components/common/Alert.vue";
 import Button from "@/components/common/Button.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import Textfield from "@/components/common/Textfield.vue";
-import type { LoadingState } from "@/types/LoadingState";
+import useChangePassword from "./useChangePassword";
 
-const loading = ref<LoadingState>();
 const currentPassword = ref<string>("");
 const newPassword = ref<string>("");
 const confirmPassword = ref<string>("");
@@ -15,6 +13,7 @@ const errorMessage = reactive({
   text: "",
   show: false,
 });
+const { saving, changePasswordMutation } = useChangePassword();
 
 async function changePassword() {
   if (
@@ -24,24 +23,24 @@ async function changePassword() {
   )
     return;
 
-  loading.value = "idle";
-  try {
-    await api.changePassword({
+  await changePasswordMutation.mutateAsync(
+    {
       currentPassword: currentPassword.value,
       newPassword: newPassword.value,
       confirmPassword: confirmPassword.value,
-    });
-    loading.value = "resolved";
-    currentPassword.value = "";
-    newPassword.value = "";
-    confirmPassword.value = "";
-  } catch (e) {
-    if (e instanceof Error) {
-      errorMessage.text = e.message;
-    }
-    errorMessage.show = true;
-    loading.value = "rejected";
-  }
+    },
+    {
+      onSuccess: () => {
+        currentPassword.value = "";
+        newPassword.value = "";
+        confirmPassword.value = "";
+      },
+      onError: () => {
+        errorMessage.show = true;
+        errorMessage.text = "Failed to update password";
+      },
+    },
+  );
 }
 </script>
 
@@ -72,7 +71,7 @@ async function changePassword() {
     except the on you're using at this time.
   </section>
   <section class="save-section">
-    <Button @click="changePassword" :loading="loading === 'idle'">Save</Button>
+    <Button @click="changePassword" :loading="saving">Save</Button>
   </section>
   <Alert v-model="errorMessage.show">{{ errorMessage.text }}</Alert>
 </template>

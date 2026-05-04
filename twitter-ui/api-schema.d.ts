@@ -349,7 +349,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -379,7 +379,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["UserResponse"];
+                        "application/json": components["schemas"]["UserFullResponse"];
                     };
                 };
                 /** @description Missing or invalid token */
@@ -468,7 +468,7 @@ export interface paths {
                 header?: never;
                 path: {
                     /** @description ID of the user to follow */
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -521,7 +521,7 @@ export interface paths {
                 header?: never;
                 path: {
                     /** @description ID of the user to unfollow */
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -579,7 +579,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            followers: components["schemas"]["User"][];
+                            followers: components["schemas"]["UserFull"][];
                         };
                     };
                 };
@@ -626,7 +626,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            followers: components["schemas"]["User"][];
+                            followers: components["schemas"]["UserFull"][];
                         };
                     };
                 };
@@ -747,7 +747,7 @@ export interface paths {
                     "application/json": {
                         tweet: {
                             text: string;
-                            mediumIds?: number[];
+                            mediumIds?: string[];
                         };
                     };
                 };
@@ -797,7 +797,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -851,7 +851,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -903,7 +903,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -946,7 +946,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -998,7 +998,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -1072,7 +1072,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/tweets/profile/{username}": {
+    "/tweets/profile/{username}/default": {
         parameters: {
             query?: never;
             header?: never;
@@ -1321,7 +1321,7 @@ export interface paths {
         get: {
             parameters: {
                 query: {
-                    tweetId: number;
+                    tweetId: string;
                 };
                 header?: never;
                 path?: never;
@@ -1359,7 +1359,8 @@ export interface paths {
             requestBody: {
                 content: {
                     "multipart/form-data": {
-                        tweetId: number;
+                        /** Format: uuid */
+                        tweetId: string;
                         comment: {
                             content: string;
                             commentMediaAttributes?: {
@@ -1426,7 +1427,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -1496,30 +1497,14 @@ export interface paths {
             };
         };
         put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/bookmarks/{tweetId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
         /** Bookmark a tweet */
         post: {
             parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    tweetId: number;
+                query: {
+                    tweetId: string;
                 };
+                header?: never;
+                path?: never;
                 cookie?: never;
             };
             requestBody?: never;
@@ -1556,13 +1541,29 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/bookmarks/{tweetId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Remove a bookmark */
         delete: {
             parameters: {
                 query?: never;
                 header?: never;
                 path: {
-                    tweetId: number;
+                    tweetId: string;
                 };
                 cookie?: never;
             };
@@ -1696,7 +1697,8 @@ export interface paths {
                         /** Format: binary */
                         image?: string;
                         description?: string;
-                        tweetId?: number;
+                        /** Format: uuid */
+                        tweetId?: string;
                     };
                 };
             };
@@ -1779,7 +1781,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        userIds: number[];
+                        userIds: string[];
                     };
                 };
             };
@@ -1826,7 +1828,7 @@ export interface paths {
         get: {
             parameters: {
                 query: {
-                    threadId: number;
+                    threadId: string;
                     page?: number;
                     perPage?: number;
                 };
@@ -1873,7 +1875,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        threadId: number;
+                        threadId: string;
                         message: {
                             body: string;
                         };
@@ -1933,11 +1935,11 @@ export interface paths {
         delete: {
             parameters: {
                 query: {
-                    threadId: number;
+                    threadId: string;
                 };
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -2341,7 +2343,8 @@ export interface components {
             links: components["schemas"]["PaginationLinks"];
         };
         Attachment: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             altText: string | null;
             /** Format: uri */
             url: string;
@@ -2351,13 +2354,15 @@ export interface components {
             updatedAt: string;
         };
         User: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             username: string;
             /** Format: email */
             email: string;
             name: string;
             /** Format: uri */
             profileImage: string | null;
+            bio?: string | null;
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
@@ -2366,7 +2371,6 @@ export interface components {
         UserFull: components["schemas"]["User"] & {
             /** Format: date */
             birthDate?: string | null;
-            bio?: string | null;
             /** Format: uri */
             website?: string | null;
             location?: string | null;
@@ -2386,7 +2390,8 @@ export interface components {
             user: components["schemas"]["UserFull"];
         };
         Tweet: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             text: string;
             totalLikes: number;
             totalRetweets: number;
@@ -2422,16 +2427,20 @@ export interface components {
             meta: components["schemas"]["AuthMeta"];
         };
         FollowRecord: {
-            id: number;
-            userId: number;
-            followedUserId: number;
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            userId: string;
+            /** Format: uuid */
+            followedUserId: string;
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
         };
         Comment: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             content: string;
             user: components["schemas"]["User"];
             /** Format: date-time */
@@ -2446,7 +2455,8 @@ export interface components {
             comment: components["schemas"]["Comment"];
         };
         Notification: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             text: string;
             initiator: components["schemas"]["User"];
             /** Format: date-time */
@@ -2458,7 +2468,8 @@ export interface components {
             notifications: components["schemas"]["Notification"][];
         };
         ChatThread: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             users: components["schemas"]["User"][];
             /** Format: date-time */
             createdAt: string;
@@ -2472,7 +2483,8 @@ export interface components {
             thread: components["schemas"]["ChatThread"];
         };
         ChatMessage: {
-            id: number;
+            /** Format: uuid */
+            id: string;
             body: string;
             user: components["schemas"]["User"];
             /** Format: date-time */
@@ -2481,9 +2493,12 @@ export interface components {
             updatedAt: string;
         };
         ChatMessageResource: {
-            id: number;
-            chatThreadId: number;
-            userId: number;
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            chatThreadId: string;
+            /** Format: uuid */
+            userId: string;
             body: string;
             /** Format: date-time */
             createdAt: string;

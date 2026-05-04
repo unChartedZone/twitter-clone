@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IconVariant } from "@/types/IconVariants";
+import type { IconVariant } from "@/lib/types/icon-variants";
 import Icon from "../icons/Icon.vue";
 
 defineProps<{ icon?: IconVariant }>();

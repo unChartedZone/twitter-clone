@@ -9,17 +9,14 @@ import PageHeader from "@/components/PageHeader.vue";
 import ChatThreadList from "@/components/messages/ChatThreadList.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import { useChatStore } from "@/stores/chat";
-import useResponsiveView from "@/hooks/useResponsiveView";
+import useResponsiveView from "@/lib/hooks/useResponsiveView";
+import useChatThreads from "@/lib/hooks/useChatThreads";
 
 const router = useRouter();
 const chatStore = useChatStore();
 const { isParentRoute } = useResponsiveView("select-chat-view");
 
-onMounted(() => {
-  if (chatStore.threads.length === 0) {
-    chatStore.fetchThreads();
-  }
-});
+const { threads, isLoading } = useChatThreads();
 
 function navigateToThread(threadId: string) {
   router.push(`/messages/${threadId}`);
@@ -57,7 +54,7 @@ function navigateToThread(threadId: string) {
         />
       </div>
       <ChatThreadList
-        :threads="chatStore.threads"
+        :threads="threads ?? []"
         @onClick="(threadId) => navigateToThread(threadId)"
       />
     </section>

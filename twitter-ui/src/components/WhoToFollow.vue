@@ -1,25 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import type { User } from "@/models/User";
-import { exploreUsers, followUser } from "@/api/endpoints";
-import { useAuthStore } from "@/stores/auth";
 import AvatarCircle from "./AvatarCircle.vue";
 import FollowButton from "./profile/FollowButton.vue";
+import { useQuery } from "@tanstack/vue-query";
+import { client } from "@/lib/api/client";
+import type { User } from "@/lib/types/models";
 
-const authStore = useAuthStore();
 const router = useRouter();
-const users = ref<User[]>([]);
 
-onMounted(async () => {
-  users.value = await exploreUsers();
+const { data: users } = useQuery({
+  queryKey: ["explore-users"],
+  queryFn: async () => {
+    const res = await client.GET("/users/explore");
+    return res.data?.users;
+  },
 });
-
-async function onFollow(followedUser: User) {
-  const index = users.value.findIndex((x) => x.id == followedUser.id);
-  users.value.splice(index, 1);
-  authStore.incrementFollowingCount();
-}
 
 function navigateToUserProfile(user: User) {
   router.push(`/${user.username}`);
@@ -30,7 +25,10 @@ function navigateToUserProfile(user: User) {
   <section>
     <div class="follows">
       <h2 class="mb-4">Who to follow</h2>
-      <ul v-if="users.length > 0">
+      <div v-if="!users">
+        <p>No users! Check back later</p>
+      </div>
+      <ul>
         <li class="user" v-for="user in users" :key="user.id">
           <div class="user__content">
             <AvatarCircle
@@ -43,13 +41,10 @@ function navigateToUserProfile(user: User) {
             </div>
           </div>
           <div>
-            <FollowButton :userId="user.id" @onFollow="onFollow" />
+            <FollowButton :userId="user.id" />
           </div>
         </li>
       </ul>
-      <div v-else>
-        <p>No users! Check back later</p>
-      </div>
     </div>
   </section>
 </template>

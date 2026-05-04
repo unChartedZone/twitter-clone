@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type Thread from "@/models/Thread";
 import ListItem from "../common/ListItem.vue";
 import UserCard from "../UserCard.vue";
+import type { ChatThread } from "@/lib/types/models";
 
 interface ChatThreadItemProps {
-  thread: Thread;
+  thread: ChatThread;
 }
 
 defineProps<ChatThreadItemProps>();

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type Thread from "@/models/Thread";
 import ChatThreadItem from "./ChatThreadItem.vue";
 import { RouterLink } from "vue-router";
+import type { ChatThread } from "@/lib/types/models";
 
 interface ChatThreadListProps {
-  threads: Thread[];
+  threads: ChatThread[];
 }
 
 defineProps<ChatThreadListProps>();

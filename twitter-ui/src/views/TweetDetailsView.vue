@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import * as tweetApi from "@/api/endpoints/tweets";
-import * as commentApi from "@/api/endpoints/comments";
-import type Tweet from "@/models/Tweet";
-import type CommentType from "@/models/Comment";
+import { ref } from "vue";
 import UserCard from "@/components/UserCard.vue";
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
@@ -16,29 +12,15 @@ import InlineReplyEditor from "@/components/reply-editor/InlineReplyEditor.vue";
 import ReplyEditor from "@/components/reply-editor/ReplyEditor.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import dayjs from "dayjs";
-import { useQuery } from "@/hooks/useQuery";
+import useComments from "@/lib/hooks/useComments";
+import useTweetDetails from "@/lib/hooks/useTweetDetails";
 
 const props = defineProps<{ tweetId: string; username: string }>();
-const comments = ref<CommentType[]>([]);
 const toggleReplyEditor = ref<boolean>(false);
+const { tweet, isLoading } = useTweetDetails(props.tweetId);
+const { comments, isLoading: areCommentsLoading } = useComments(props.tweetId);
 
-const { result: tweet, loading } = useQuery<Tweet | undefined>(
-  () => tweetApi.fetchSingleTweet(props.tweetId),
-  { initialValue: undefined }
-);
-
-onMounted(async () => {
-  comments.value = await commentApi.fetchComents(props.tweetId);
-});
-
-function addCommentToThread(comment: CommentType) {
-  comments.value.push(comment);
-}
-
-// Handle event comment was created, we want to close the editor and add the new
-// comment to the comment list.
-function closeReplyEditor(comment: CommentType) {
-  addCommentToThread(comment);
+function closeReplyEditor() {
   toggleReplyEditor.value = false;
 }
 </script>
@@ -46,7 +28,7 @@ function closeReplyEditor(comment: CommentType) {
 <template>
   <main>
     <PageHeader title="Tweet" />
-    <PageLoader v-if="loading && !tweet" />
+    <PageLoader v-if="isLoading" />
     <article v-else class="tweet">
       <header class="tweet__header">
         <UserCard v-if="!!tweet?.user" :user="tweet?.user" />
@@ -78,13 +60,10 @@ function closeReplyEditor(comment: CommentType) {
         size="icon"
         @replyTriggered="toggleReplyEditor = true"
       />
-      <InlineReplyEditor
-        v-if="!!tweet"
-        :tweetId="tweet.id"
-        @onCommentCreated="addCommentToThread"
-      />
+      <InlineReplyEditor v-if="!!tweet" :tweetId="tweet.id" />
       <!-- Comment section -->
       <section>
+        <PageLoader v-if="areCommentsLoading" />
         <ul>
           <li v-for="comment in comments" :key="comment.id">
             <Comment :comment="comment" />
@@ -97,7 +76,7 @@ function closeReplyEditor(comment: CommentType) {
     <ReplyEditor
       v-if="!!tweet"
       :tweetId="tweet.id"
-      @onCommentCreated="closeReplyEditor"
+      @closeEditor="closeReplyEditor"
     />
   </Modal>
 </template>

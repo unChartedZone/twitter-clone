@@ -1,10 +1,10 @@
-import type { Component } from "vue";
+import { type Component } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
-import { setupAuthClient } from "@/api/client";
 import { useAuthStore } from "@/stores/auth";
 import Default from "@/layouts/default.vue";
 import SearchField from "@/components/SearchField.vue";
 import WhoToFollow from "@/components/WhoToFollow.vue";
+import { validPasswordToken } from "@/lib/hooks/useSettings";
 
 // Add typings for Route Meta properties
 declare module "vue-router" {
@@ -39,8 +39,21 @@ const router = createRouter({
     {
       name: "password-reset",
       path: "/password-reset",
+      props: (route) => ({
+        token: route.query.token,
+      }),
       component: () => import("../views/PasswordResetView.vue"),
       meta: { requiresAuth: false },
+      beforeEnter: async (to) => {
+        const token = to.query.token?.toString();
+        if (!token) return { name: "login" };
+
+        try {
+          await validPasswordToken(token);
+        } catch {
+          return { name: "login" };
+        }
+      },
     },
     {
       path: "/home",
@@ -151,9 +164,10 @@ const router = createRouter({
       meta: { requiresAuth: true, layout: Default },
     },
     {
-      path: "/:username(.*)*",
+      path: "/:username",
       name: "UserProfile",
       component: () => import("../views/ProfileView.vue"),
+      props: true,
       meta: {
         requiresAuth: true,
         layout: Default,
@@ -163,29 +177,34 @@ const router = createRouter({
         {
           name: "profile",
           path: "",
+          props: true,
           component: () => import("../views/profile/ProfileTweetsView.vue"),
         },
         {
           name: "replies",
           path: "replies",
+          props: true,
           component: () => import("../views/profile/RepliesView.vue"),
         },
         {
           name: "media",
           path: "media",
+          props: true,
           component: () => import("../views/profile/MediaTweetsView.vue"),
         },
         {
           name: "likes",
           path: "likes",
+          props: true,
           component: () => import("../views/profile/LikedTweetsView.vue"),
         },
       ],
     },
     {
-      path: "/:username(.*)*/following",
+      path: "/:username/following",
       name: "Following",
       component: () => import("../views/profile/Following.vue"),
+      props: true,
       meta: {
         requiresAuth: true,
         layout: Default,
@@ -193,9 +212,10 @@ const router = createRouter({
       },
     },
     {
-      path: "/:username(.*)*/followers",
+      path: "/:username/followers",
       name: "Followers",
       component: () => import("../views/profile/Followers.vue"),
+      props: true,
       meta: {
         requiresAuth: true,
         layout: Default,
@@ -219,11 +239,9 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const authStore = useAuthStore();
 
-  // attempt to refresh user session
-  if (!authStore.loggedIn && authStore.userFetchState !== "rejected") {
-    await authStore.refreshUser();
-    await setupAuthClient();
-  }
+  // Wait for App.vue to complete the initial auth refresh before making
+  // any redirect decisions.
+  await authStore.authReadyPromise;
 
   // If navigating to a route that requires authentication and not currently
   // logged in, then redirect to login page.

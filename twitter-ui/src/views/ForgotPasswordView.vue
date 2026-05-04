@@ -1,21 +1,25 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import passwordApi from "@/api/endpoints/passwords";
 import Alert from "@/components/common/Alert.vue";
 import Button from "@/components/common/Button.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import Textfield from "@/components/common/Textfield.vue";
+import useSettings from "@/lib/hooks/useSettings";
 
 const email = ref<string>("");
 const alert = reactive({ text: "", show: false });
+const { passwordResetMutation } = useSettings();
 
 async function submitPasswordResetRequest() {
   if (!email.value) return;
 
-  const { message } = await passwordApi.submitPasswordReset(email.value);
-  alert.text = message;
-  alert.show = true;
-  email.value = "";
+  await passwordResetMutation.mutateAsync(email.value, {
+    onSuccess: (message) => {
+      alert.text = message ?? "";
+      alert.show = true;
+      email.value = "";
+    },
+  });
 }
 </script>
 

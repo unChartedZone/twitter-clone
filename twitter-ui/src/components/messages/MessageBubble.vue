@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import type { ChatMessage } from "@/lib/types/models";
 import { useClipboard } from "@vueuse/core";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import type { Message } from "@/models/Message";
+import { computed, ref } from "vue";
 import Alert from "../common/Alert.vue";
 import Button from "../common/Button.vue";
-import Icon from "../icons/Icon.vue";
 import List from "../common/List.vue";
 import ListItem from "../common/ListItem.vue";
 import Menu from "../common/Menu.vue";
+import Icon from "../icons/Icon.vue";
 
 interface MessageBubbleProps {
-  message: Message;
+  message: ChatMessage;
   isOwner?: boolean;
 }
 
@@ -26,7 +26,7 @@ const toggleMenu = ref(false);
 const { copy, copied } = useClipboard({ source: props.message.body });
 
 const messageTimestamp = computed(() =>
-  dayjs(props.message.createdAt).format("MMMM D, YYYY, hh:mm A")
+  dayjs(props.message.createdAt).format("MMMM D, YYYY, hh:mm A"),
 );
 
 const copyMessage = () => {

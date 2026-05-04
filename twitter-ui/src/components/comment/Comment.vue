@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type Comment from "@/models/Comment";
+import { type Comment } from "@/lib/types/models";
 import AvatarCircle from "../AvatarCircle.vue";
 import PostHeader from "../PostHeader.vue";
 import TweetAction from "../tweet/TweetAction.vue";

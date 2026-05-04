@@ -3,18 +3,18 @@ import { ref, computed } from "vue";
 import dayjs from "dayjs";
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
-import type { User } from "@/models/User";
+import type { UserFull } from "@/lib/types/models";
 import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
 import Link from "@/components/common/Link.vue";
 import Image from "../common/Image.vue";
 import Modal from "../common/Modal.vue";
-import ProfileEditor from "../ProfileEditor.vue";
+import ProfileEditor from "../profile-editor/ProfileEditor.vue";
 import FollowButton from "./FollowButton.vue";
 import UnfollowButton from "./UnfollowButton.vue";
 
 interface ProfileHeaderProps {
-  user: User;
+  user: UserFull;
 }
 
 const props = defineProps<ProfileHeaderProps>();
@@ -23,7 +23,7 @@ const showProfileEditor = ref<boolean>(false);
 const showFollowButton = ref<boolean>(true);
 
 const birthDate = computed(() =>
-  dayjs(props.user.birthDate).format("MMM D, YYYY")
+  dayjs(props.user.birthDate).format("MMM D, YYYY"),
 );
 
 const showUnfollowButton = computed(() => {

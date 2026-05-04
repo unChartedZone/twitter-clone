@@ -1,7 +1,6 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import type Thread from "@/models/Thread";
-import * as messagesApi from "@/api/endpoints/messages";
 
 export const useChatStore = defineStore("chat", () => {
   const newChatModal = ref(false);
@@ -18,11 +17,6 @@ export const useChatStore = defineStore("chat", () => {
 
     return "";
   });
-
-  async function fetchThreads() {
-    const ts = await messagesApi.fetchChatThreads();
-    threads.value = [...ts];
-  }
 
   function addThread(thread: Thread) {
     threads.value.push(thread);
@@ -45,6 +39,5 @@ export const useChatStore = defineStore("chat", () => {
     addThread,
     setSelectedThread,
     toggleNewChatModal,
-    fetchThreads,
   };
 });

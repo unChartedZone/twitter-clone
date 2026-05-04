@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import type { Message } from "@/models/Message";
 import { useAuthStore } from "@/stores/auth";
-import * as messagesApi from "@/api/endpoints/messages";
 import MessageBubble from "@/components/messages/MessageBubble.vue";
 import Modal from "../common/Modal.vue";
 import Button from "../common/Button.vue";
 import { Card, CardHeader, CardBody, CardFooter } from "../common/card";
+import type { ChatMessage } from "@/lib/types/models";
+import useChatMessages from "@/lib/hooks/useChatMessages";
 
-const props = defineProps<{ threadId: string; messages: Message[] }>();
+const props = defineProps<{ threadId: string; messages: ChatMessage[] }>();
 const emit = defineEmits<{
   (e: "deleteMessage", index: number): void;
 }>();
 
 const authStore = useAuthStore();
+const { deleteMessageMutation } = useChatMessages();
 
 const deleteMessageState = reactive({
   toggleModal: false,
@@ -31,7 +32,10 @@ function closeDeleteModal() {
 }
 
 async function deleteMessage() {
-  await messagesApi.deleteMessage(deleteMessageState.messageId, props.threadId);
+  await deleteMessageMutation.mutateAsync({
+    chatMessageId: deleteMessageState.messageId,
+    chatThreadId: props.threadId,
+  });
   closeDeleteModal();
 }
 </script>
@@ -58,6 +62,7 @@ async function deleteMessage() {
             size="xl"
             block
             @click="deleteMessage"
+            :loading="deleteMessageMutation.isPending.value"
           >
             Delete
           </Button>
@@ -77,7 +82,9 @@ async function deleteMessage() {
   padding: 0 0.75rem;
   list-style: none;
   width: 100%;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 }
 
 .delete-message {

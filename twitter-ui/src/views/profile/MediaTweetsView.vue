@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { useProfileStore } from "@/stores/profile";
 import TweetList from "@/components/profile/TweetList.vue";
-import { useProfileTweets } from "@/hooks/useProfileTweets";
+import useTweetList from "./useTweetList";
 
-const profileStore = useProfileStore();
-useProfileTweets("media");
+const props = defineProps<{ username: string }>();
+const { tweets, isLoading } = useTweetList(() => props.username, "media");
 </script>
 
 <template>
   <div>
-    <TweetList
-      :tweets="profileStore.tweetLists.media.tweets"
-      :loading="profileStore.tweetLists.loading === 'idle'"
-    />
+    <TweetList :tweets="tweets" :loading="isLoading" />
   </div>
 </template>

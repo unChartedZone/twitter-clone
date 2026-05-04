@@ -50,7 +50,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import dayjs from "dayjs";
-import type Tweet from "@/models/Tweet";
+// import type Tweet from "@/models/Tweet";
+import type { Tweet } from "@/lib/types/models";
 import PostHeader from "./PostHeader.vue";
 import TweetActionRow from "@/components/tweet/TweetActionRow.vue";
 import AvatarCircle from "./AvatarCircle.vue";

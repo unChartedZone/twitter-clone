@@ -19,7 +19,6 @@ class UsersController < ApplicationController
   def show_by_username
     @user = User.find_by(username: params[:username])
     if @user
-      # render json: UserSerializer.new(@user, { params: { current_user: current_user } }).serializable_hash.to_json
       render json: UserBlueprint.render(@user, root: :user, view: :full, current_user: current_user)
     else
       render json: { message: "User not found" }, status: 404
@@ -40,8 +39,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(update_user_params)
-      # render json: UserSerializer.new(@user).serializable_hash.to_json, status: :accepted
-      render json: UserBlueprint.render(@user), status: :accepted
+      render json: UserBlueprint.render(@user, root: :user, view: :full), status: :accepted
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -60,7 +58,7 @@ class UsersController < ApplicationController
     @user = User.find_by(username: params[:username])
     if @user
       followers = @user.followers
-      render json: UserBlueprint.render(followers, root: :followers, current_user: @user), status: :ok
+      render json: UserBlueprint.render(followers, root: :followers, view: :full, current_user: @user), status: :ok
     else
       render json: { message: "User not found" }, status: 404
     end
@@ -70,7 +68,7 @@ class UsersController < ApplicationController
     @user = User.find_by(username: params[:username])
     if @user
       following = @user.following
-      render json: UserBlueprint.render(following, root: :followers), status: :ok
+      render json: UserBlueprint.render(following, root: :followers, view: :full), status: :ok
     else
       render json: { message: "User not found" }, status: 404
     end

@@ -2,7 +2,7 @@
 import Image from "./common/Image.vue";
 
 interface ProfilePicCircle {
-  src?: string;
+  src?: string | null;
   alt?: string;
 }
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type Notification from "@/models/Notification";
 import AvatarCircle from "@/components/AvatarCircle.vue";
 import PostHeader from "../PostHeader.vue";
+import { type Notification } from "@/lib/types/models";
 
 interface NotificationCardProps {
   notification: Notification;

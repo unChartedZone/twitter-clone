@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     get "followers", on: :collection, to: "users#followers"
     get "explore", on: :collection, to: "users#explore_users"
     get "summary", on: :collection, to: "user_summary#index"
-    get ":username", on: :collection, to: "users#show_by_username"
+    get ":username", on: :collection, to: "users#show_by_username", constraints: { username: /[^\/]+/ }
     post "follow/:id", on: :collection, to: "users#follow_user"
     post "unfollow/:id", on: :collection, to: "users#unfollow_user"
     patch "update-image", on: :collection, to: "users#update_image"
@@ -36,10 +36,12 @@ Rails.application.routes.draw do
     post "unlike", on: :member
     post "retweet", on: :member
     post "unretweet", on: :member, to: "tweets#undo_retweet"
-    get "/profile/:username", on: :collection, to: "tweets#protected_profile_tweets", as: "profile"
-    get "/profile/:username/replied", on: :collection, to: "tweets#replied_tweets", as: "replied"
-    get "/profile/:username/media", on: :collection, to: "tweets#media_tweets", as: "media"
-    get "/profile/:username/liked", on: :collection, to: "tweets#liked_tweets", as: "liked"
+    scope constraints: { username: /[^\/]+/ }, format: false do
+      get "/profile/:username/default", on: :collection, to: "tweets#protected_profile_tweets", as: "profile"
+      get "/profile/:username/replied", on: :collection, to: "tweets#replied_tweets", as: "replied"
+      get "/profile/:username/media", on: :collection, to: "tweets#media_tweets", as: "media"
+      get "/profile/:username/liked", on: :collection, to: "tweets#liked_tweets", as: "liked"
+    end
   end
 
   # Bookmark Endpoints
@@ -49,21 +51,21 @@ Rails.application.routes.draw do
   resources :comments, only: [ :index, :create, :destroy ]
 
   # Notification Endpoints
-  resources :notifications, only: [:index]
+  resources :notifications, only: [ :index ]
 
   # Tweet Attachments
   resources :attachments, only: %i[index create]
 
   # Chat Threads Endpoints
-  resources :chat_threads, only: [:index, :create], path: :threads
+  resources :chat_threads, only: [ :index, :create ], path: :threads
   # Chat Messages Endpoints
-  resources :messages, only: [:index, :create, :destroy], path: :messages
+  resources :messages, only: [ :index, :create, :destroy ], path: :messages
 
   # Settings Endpoints
   patch "password", to: "settings#change_password"
 
   # Password Endpoints
-  post '/password/reset', to: 'password#create'
-  get '/password/reset/valid', to: 'password#valid_token'
-  post '/password/update', to: 'password#update'
+  post "/password/reset", to: "password#create"
+  get "/password/reset/valid", to: "password#valid_token"
+  post "/password/update", to: "password#update"
 end
