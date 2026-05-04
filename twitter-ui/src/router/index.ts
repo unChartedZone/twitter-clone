@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 import Default from "@/layouts/default.vue";
 import SearchField from "@/components/SearchField.vue";
 import WhoToFollow from "@/components/WhoToFollow.vue";
+import { validPasswordToken } from "@/lib/hooks/useSettings";
 
 // Add typings for Route Meta properties
 declare module "vue-router" {
@@ -38,8 +39,21 @@ const router = createRouter({
     {
       name: "password-reset",
       path: "/password-reset",
+      props: (route) => ({
+        token: route.query.token,
+      }),
       component: () => import("../views/PasswordResetView.vue"),
       meta: { requiresAuth: false },
+      beforeEnter: async (to) => {
+        const token = to.query.token?.toString();
+        if (!token) return { name: "login" };
+
+        try {
+          await validPasswordToken(token);
+        } catch {
+          return { name: "login" };
+        }
+      },
     },
     {
       path: "/home",

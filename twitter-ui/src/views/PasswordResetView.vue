@@ -1,37 +1,21 @@
 <script setup lang="ts">
-import { ref, onMounted, reactive } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import passwordApi from "@/api/endpoints/passwords";
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
 import Button from "@/components/common/Button.vue";
 import Textfield from "@/components/common/Textfield.vue";
+import useSettings from "@/lib/hooks/useSettings";
 
-const route = useRoute();
+const props = defineProps<{ token: string }>();
 const router = useRouter();
-const token = ref<string>("");
 const password = reactive({ newPassword: "", confirmPassword: "" });
-
-onMounted(async () => {
-  const t = route.query.token?.toString();
-
-  if (!t) {
-    router.push({ name: "login" });
-    return;
-  }
-
-  token.value = t;
-  try {
-    await passwordApi.validPasswordToken(token.value);
-  } catch (e) {
-    router.push({ name: "login" });
-  }
-});
+const { updatePasswordMutation } = useSettings();
 
 async function submitPasswordUpdate() {
   if (!password.newPassword || !password.newPassword) return;
 
   try {
-    await passwordApi.updatePassword({
-      token: token.value,
+    updatePasswordMutation.mutateAsync({
+      token: props.token,
       password: password.newPassword,
       passwordConfirmation: password.confirmPassword,
     });
@@ -44,9 +28,9 @@ async function submitPasswordUpdate() {
 
 <template>
   <main class="container mx-auto">
-    <div class="form">
-      <h1>Password Reset</h1>
-      <form @submit.prevent="submitPasswordUpdate">
+    <form @submit.prevent="submitPasswordUpdate">
+      <div class="form">
+        <h1>Password Reset</h1>
         <Textfield
           v-model="password.newPassword"
           label="New Password"
@@ -57,15 +41,21 @@ async function submitPasswordUpdate() {
           label="Confirm New Password"
           type="password"
         />
-        <Button type="submit">Sumbit</Button>
-      </form>
-    </div>
+        <Button :loading="updatePasswordMutation.isPending.value" type="submit">
+          Submit
+        </Button>
+      </div>
+    </form>
   </main>
 </template>
 
 <style scoped lang="scss">
 .form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   max-width: 50rem;
+  margin-top: 4rem;
   margin-left: auto;
   margin-right: auto;
 }

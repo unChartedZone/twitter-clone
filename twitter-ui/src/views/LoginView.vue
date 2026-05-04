@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
-import { useAuthStore } from "@/stores/auth";
-import type { ErrorResponse } from "@/types/ResponseTypes";
 import Alert from "@/components/common/Alert.vue";
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
@@ -13,7 +10,6 @@ import GuestMessage from "@/components/GuestMessage.vue";
 import useAuth from "@/lib/hooks/useAuth";
 
 const router = useRouter();
-const authStore = useAuthStore();
 const showErrorMessage = ref<boolean>(false);
 const user = reactive({
   identifier: "",
@@ -21,7 +17,6 @@ const user = reactive({
 });
 
 const { loginUserMutation } = useAuth();
-const { mutate, isPending } = loginUserMutation;
 
 async function handleLoginSubmit() {
   const identifier = user.identifier;
@@ -29,21 +24,17 @@ async function handleLoginSubmit() {
     ? { email: identifier, password: user.password }
     : { username: identifier, password: user.password };
 
-  mutate({ user: payload });
-  // try {
-  //   if (isValidEmail(identifier)) {
-  //     await authStore.loginUser({ email: identifier, password: user.password });
-  //   } else {
-  //     // Assume they typed in their username
-  //     await authStore.loginUser({
-  //       username: identifier,
-  //       password: user.password,
-  //     });
-  //   }
-  //   router.push("/home");
-  // } catch (err: any) {
-  //   showErrorMessage.value = true;
-  // }
+  await loginUserMutation.mutateAsync(
+    { user: payload },
+    {
+      onSuccess: () => {
+        router.push("/home");
+      },
+      onError: () => {
+        showErrorMessage.value = true;
+      },
+    },
+  );
 }
 
 function isValidEmail(email: string): boolean {
@@ -75,7 +66,13 @@ function isValidEmail(email: string): boolean {
           placeholder="Password"
           type="password"
         />
-        <Button block type="submit" :loading="isPending">Log in</Button>
+        <Button
+          block
+          type="submit"
+          :loading="loginUserMutation.isPending.value"
+        >
+          Log in
+        </Button>
       </form>
       <div class="login__footer">
         <Link :to="{ name: 'forgot-password' }" text>Forgot Password?</Link>
