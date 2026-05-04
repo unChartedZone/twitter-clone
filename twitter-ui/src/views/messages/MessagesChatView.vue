@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, toRef, nextTick, onBeforeUnmount } from "vue";
-import { connectToThread, disconnect } from "@/api/websocket";
+import { connectToThread, disconnect } from "@/lib/api/websocket";
 import PageHeader from "@/components/PageHeader.vue";
 import PageLoader from "@/components/loaders/PageLoader.vue";
 import MessageList from "@/components/messages/MessageList.vue";
