@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from "../common/Button.vue";
 import Icon from "../icons/Icon.vue";
-import { type IconVariant } from "@/types/IconVariants";
+import { type IconVariant } from "@/lib/types/icon-variants";
 
 interface TweetActionProps {
   icon: IconVariant;

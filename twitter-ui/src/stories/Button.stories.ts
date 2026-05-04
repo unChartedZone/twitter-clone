@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/vue3";
 // import Button from './Button.vue';
 import Button from "@/components/common/Button.vue";
 import Icon from "@/components/icons/Icon.vue";
-import { iconVariants } from "@/types/IconVariants";
+import { iconVariants } from "@/lib/types/icon-variants";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories
 const meta = {

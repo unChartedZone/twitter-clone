@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import Icon from "../icons/Icon.vue";
-import { type IconVariant } from "@/types/IconVariants";
+import { type IconVariant } from "@/lib/types/icon-variants";
 import NavLink from "./NavLink.vue";
 import List from "../common/List.vue";
 import ListItem from "../common/ListItem.vue";

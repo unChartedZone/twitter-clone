@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import Icon from "../icons/Icon.vue";
-import type { IconVariant } from "@/types/IconVariants";
+import type { IconVariant } from "@/lib/types/icon-variants";
 
 interface SettingsLinkProps {
   to: string;
