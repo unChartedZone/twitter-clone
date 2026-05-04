@@ -9,7 +9,7 @@ import Icon from "../icons/Icon.vue";
 import Link from "@/components/common/Link.vue";
 import Image from "../common/Image.vue";
 import Modal from "../common/Modal.vue";
-import ProfileEditor from "../ProfileEditor.vue";
+import ProfileEditor from "../profile-editor/ProfileEditor.vue";
 import FollowButton from "./FollowButton.vue";
 import UnfollowButton from "./UnfollowButton.vue";
 

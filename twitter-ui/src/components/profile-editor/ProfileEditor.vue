@@ -82,12 +82,12 @@
 <script setup lang="ts">
 import { reactive, computed, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
-import Button from "./common/Button.vue";
+import Button from "../common/Button.vue";
 import { Card, CardHeader } from "@/components/common/card";
-import Icon from "./icons/Icon.vue";
+import Icon from "../icons/Icon.vue";
 import FileInput from "@/components/common/FileInput.vue";
-import MediaEditor from "./profile-editor/MediaEditor.vue";
-import DateSelector from "./DateSelector.vue";
+import MediaEditor from "./MediaEditor.vue";
+import DateSelector from "../DateSelector.vue";
 import Textfield from "@/components/common/Textfield.vue";
 import Textarea from "@/components/common/Textarea.vue";
 import type { UserPatch } from "@/models/User";
