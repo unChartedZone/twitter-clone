@@ -1,10 +1,8 @@
 import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
-import type { LoadingState } from "@/types/LoadingState";
 import type { UserFull } from "@/lib/types/models";
 
 export const useAuthStore = defineStore("auth", () => {
-  const userFetchState = ref<LoadingState>();
   const accessToken = ref<string>();
   const user = ref<UserFull>();
   const authInitialized = ref(false);
@@ -16,10 +14,6 @@ export const useAuthStore = defineStore("auth", () => {
       }
     });
   });
-
-  const userFetchStateLoading = computed<boolean>(
-    () => userFetchState.value === "idle",
-  );
 
   const loggedIn = computed<boolean>(() => {
     return !!user.value && !!accessToken.value;
@@ -49,8 +43,6 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     accessToken,
     user,
-    userFetchState,
-    userFetchStateLoading,
     loggedIn,
     authInitialized,
     authReadyPromise,
