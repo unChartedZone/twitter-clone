@@ -1,16 +1,14 @@
 import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
-import { patchUser } from "@/api/endpoints";
-import type { UserPatch } from "@/models/User";
 import type { LoadingState } from "@/types/LoadingState";
-import type { components } from "api-schema";
-
-export type User = components["schemas"]["User"];
+import { useQueryClient } from "@tanstack/vue-query";
+import type { UserFull } from "@/lib/types/models";
 
 export const useAuthStore = defineStore("auth", () => {
+  const queryClient = useQueryClient();
   const userFetchState = ref<LoadingState>();
   const accessToken = ref<string>();
-  const user = ref<User>();
+  const user = ref<UserFull>();
   const authInitialized = ref(false);
   const authReadyPromise = new Promise<void>((resolve) => {
     const unwatch = watch(authInitialized, (initialized) => {
@@ -33,70 +31,13 @@ export const useAuthStore = defineStore("auth", () => {
     $reset();
   }
 
-  async function updateUser(
-    userPatch: UserPatch,
-    bannerImage?: File,
-    profileImage?: File,
-  ) {
-    if (!user.value) return;
-
-    const updatedUser = await patchUser(
-      user.value?.id,
-      { ...userPatch },
-      bannerImage,
-      profileImage,
-    );
-
-    profileStore.setProfileUser({ ...updatedUser });
-
-    // If name was updated we should update any tweets of the user to match new name
-    if (
-      !!userPatch.name &&
-      user.value.username === profileStore.profileUser?.username
-    ) {
-      profileStore.tweetLists.default.tweets =
-        profileStore.tweetLists.default.tweets.map((tweet) => {
-          if (tweet.user?.username === user.value?.username) {
-            return {
-              ...tweet,
-              user: {
-                ...tweet.user,
-                name: userPatch.name,
-              },
-            } as Tweet;
-          }
-
-          return {
-            ...tweet,
-          };
-        });
-    }
-
-    user.value = {
-      ...user.value!,
-      ...updatedUser,
-    };
-  }
-
-  function setUserAuthState(userValue: User, token: string) {
+  function setUserAuthState(userValue: UserFull, token?: string) {
     user.value = userValue;
-    accessToken.value = token;
+    if (token) accessToken.value = token;
   }
 
   function markAuthInitialized() {
     authInitialized.value = true;
-  }
-
-  /**
-   * Locally increment following count of authenticated user
-   */
-  function incrementFollowingCount() {
-    if (user.value) {
-      user.value = {
-        ...user.value,
-        totalFollowing: user.value?.totalFollowing + 1,
-      };
-    }
   }
 
   /**
@@ -118,7 +59,6 @@ export const useAuthStore = defineStore("auth", () => {
     logoutUser,
     setUserAuthState,
     markAuthInitialized,
-    updateUser,
-    incrementFollowingCount,
+    $reset,
   };
 });
