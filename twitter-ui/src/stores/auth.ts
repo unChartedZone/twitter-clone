@@ -1,10 +1,10 @@
 import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
-import type { UserFull } from "@/lib/types/models";
+import type { User } from "@/lib/types/models";
 
 export const useAuthStore = defineStore("auth", () => {
   const accessToken = ref<string>();
-  const user = ref<UserFull>();
+  const user = ref<User>();
   const authInitialized = ref(false);
   const authReadyPromise = new Promise<void>((resolve) => {
     const unwatch = watch(authInitialized, (initialized) => {
@@ -23,7 +23,7 @@ export const useAuthStore = defineStore("auth", () => {
     $reset();
   }
 
-  function setUserAuthState(userValue: UserFull, token?: string) {
+  function setUserAuthState(userValue: User, token?: string) {
     user.value = userValue;
     if (token) accessToken.value = token;
   }

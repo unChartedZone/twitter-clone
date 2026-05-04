@@ -48,6 +48,8 @@ export default function useProfileEditor() {
       return data.user;
     },
     onSuccess: (updatedUser) => {
+      if (updatedUser.username !== authStore.user?.username) return;
+
       // If name was updated we should update any tweets of the user to match new name
       queryClient.invalidateQueries({
         queryKey: ["default-tweets", updatedUser.username],
@@ -55,7 +57,6 @@ export default function useProfileEditor() {
       queryClient.invalidateQueries({
         queryKey: ["profile", updatedUser.username],
       });
-      authStore.setUserAuthState(updatedUser);
     },
   });
   const saving = patchUserMutation.isPending;
