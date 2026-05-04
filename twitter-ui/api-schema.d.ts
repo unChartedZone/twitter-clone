@@ -379,7 +379,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["UserResponse"];
+                        "application/json": components["schemas"]["UserFullResponse"];
                     };
                 };
                 /** @description Missing or invalid token */

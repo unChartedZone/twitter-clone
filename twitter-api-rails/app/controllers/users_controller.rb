@@ -39,7 +39,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(update_user_params)
-      render json: UserBlueprint.render(@user), status: :accepted
+      render json: UserBlueprint.render(@user, root: :user, view: :full), status: :accepted
     else
       render json: @user.errors, status: :unprocessable_entity
     end
