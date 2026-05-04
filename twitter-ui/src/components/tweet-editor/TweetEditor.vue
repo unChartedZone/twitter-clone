@@ -4,7 +4,7 @@ import AvatarCircle from "../AvatarCircle.vue";
 import Textarea from "@/components/common/Textarea.vue";
 import TweetEditorActions from "./TweetEditorActions.vue";
 import TweetMediaGrid from "./TweetMediaGrid.vue";
-import { useTweetEditor } from "@/hooks/useTweetEditor";
+import { useTweetEditor } from "./useTweetEditor";
 
 const authStore = useAuthStore();
 const emit = defineEmits(["closeEditor"]);
